@@ -29,10 +29,7 @@ class MealScreen extends StatelessWidget {
     return Scaffold(
       body: Column(
         children: [
-          MealImageContainer(
-              isAddSource: false,
-              imageUrl: meal.imageUrl,
-              mealsProvider: context.watch<MealsProvider>()),
+          const MealImageContainer(),
           Padding(
             padding: EdgeInsets.symmetric(
               horizontal: SizeConfig.getProportionalWidth(20),

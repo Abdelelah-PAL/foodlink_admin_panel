@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../../../core/constants/colors.dart';
 import '../../../core/constants/fonts.dart';
 import '../../../core/utils/size_config.dart';
@@ -8,12 +9,9 @@ import '../../../services/translation_services.dart';
 import '../../widgets/custom_back_button.dart';
 
 class MealImageContainer extends StatefulWidget {
-  const MealImageContainer(
-      {super.key, required this.isAddSource, this.imageUrl, this.mealsProvider});
-
-  final bool isAddSource;
-  final String? imageUrl;
-  final MealsProvider? mealsProvider;
+  const MealImageContainer({
+    super.key,
+  });
 
   @override
   State<MealImageContainer> createState() => _MealImageContainerState();
@@ -22,6 +20,8 @@ class MealImageContainer extends StatefulWidget {
 class _MealImageContainerState extends State<MealImageContainer> {
   @override
   Widget build(BuildContext context) {
+    final MealsProvider mealsProvider =
+        Provider.of<MealsProvider>(context, listen: true);
     return SafeArea(
       child: Stack(
         children: [
@@ -39,45 +39,44 @@ class _MealImageContainerState extends State<MealImageContainer> {
                   bottom:
                       BorderSide(width: 1, color: AppColors.defaultBorderColor),
                 )),
-            child: !widget.isAddSource &&
-                    widget.imageUrl != null &&
-                    widget.imageUrl!.isNotEmpty
+            child: mealsProvider.pickedFile!= null &&
+                mealsProvider.pickedFile!.path != null &&
+                    mealsProvider.pickedFile!.path.isNotEmpty
                 ? Image.network(
-                    widget.imageUrl!,
+                    mealsProvider.pickedFile!.path,
                     fit: BoxFit.fill,
                   )
                 : null,
           ),
-          if (widget.isAddSource)
-            Positioned.fill(
-              child: Center(
-                child: GestureDetector(
-                  onTap: () async {
-                    await widget.mealsProvider!.pickImageFromSource(context);
-                    Future.microtask(() {
-                      if (mounted) setState(() {});
-                    });
-                  },
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(TranslationService().translate("upload_food_image"),
-                          style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                              fontFamily: AppFonts.primaryFont)),
-                      SizeConfig.customSizedBox(
-                        10,
-                        null,
-                        null,
-                      ),
-                      const Icon(Icons.file_upload_outlined)
-                    ],
-                  ),
+          Positioned.fill(
+            child: Center(
+              child: GestureDetector(
+                onTap: () async {
+                  await mealsProvider.pickImageFromSource(context);
+                  Future.microtask(() {
+                    if (mounted) setState(() {});
+                  });
+                },
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(TranslationService().translate("upload_food_image"),
+                        style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            fontFamily: AppFonts.primaryFont)),
+                    SizeConfig.customSizedBox(
+                      10,
+                      null,
+                      null,
+                    ),
+                    const Icon(Icons.file_upload_outlined)
+                  ],
                 ),
               ),
             ),
-          if (widget.mealsProvider!.imageIsPicked && widget.isAddSource)
+          ),
+          if (mealsProvider.imageIsPicked)
             Container(
               width: SizeConfig.screenWidth,
               height: SizeConfig.getProportionalHeight(203),
@@ -93,7 +92,7 @@ class _MealImageContainerState extends State<MealImageContainer> {
                         width: 1, color: AppColors.defaultBorderColor),
                   )),
               child: Image.file(
-                File(widget.mealsProvider!.pickedFile!.path),
+                File(mealsProvider.pickedFile!.path),
                 fit: BoxFit.fill,
               ),
             ),

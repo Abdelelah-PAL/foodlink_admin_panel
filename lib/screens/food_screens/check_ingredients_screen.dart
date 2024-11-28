@@ -32,10 +32,7 @@ class CheckIngredientsScreen extends StatelessWidget {
         onTap: () => FocusScope.of(context).unfocus(),
         child: Column(
           children: [
-            MealImageContainer(
-                isAddSource: false,
-                imageUrl: meal.imageUrl,
-                mealsProvider: context.watch<MealsProvider>()),
+            MealImageContainer(),
             Padding(
               padding: EdgeInsets.symmetric(
                 horizontal: SizeConfig.getProportionalWidth(20),

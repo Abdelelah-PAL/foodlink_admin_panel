@@ -11,12 +11,10 @@ import '../../providers/authentication_provider.dart';
 import '../../providers/settings_provider.dart';
 import '../../services/translation_services.dart';
 import '../widgets/custom_text.dart';
-import 'sign_up_screen.dart';
 import 'widgets/custom_auth_btn.dart';
 import 'widgets/custom_auth_divider.dart';
 import 'widgets/custom_auth_footer.dart';
 import 'widgets/custom_auth_textfield.dart';
-import 'widgets/custom_auth_textfield_header.dart';
 import 'widgets/custom_error_txt.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -176,6 +174,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         _authController.passwordController.text,
                       );
 
+
                       if (user == null || checkedEmailAdmin == null) {
                         setState(() {
                           _authController.errorText = TranslationService()
@@ -184,6 +183,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         return;
                       } else {
                         if (_authController.rememberMe == true) {
+                          Get.toNamed('/dashboard');
                           _authController.saveLoginInfo(
                             user.user!.email!,
                             _authController.passwordController.text,
@@ -202,7 +202,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 CustomAuthFooter(
                     headingText: "do_not_have_account",
                     tailText: "signup",
-                    onTap: () => {Get.to(() => const SignUpScreen())},
+                    onTap: () => {Get.toNamed('/signup')},
                     settingsProvider: settingsProvider)
               ])),
         ));

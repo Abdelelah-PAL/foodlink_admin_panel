@@ -11,7 +11,6 @@ import '../../providers/settings_provider.dart';
 import '../../providers/admins_provider.dart';
 import '../../services/translation_services.dart';
 import '../widgets/custom_text.dart';
-import 'login_screen.dart';
 import 'widgets/custom_auth_btn.dart';
 import 'widgets/custom_auth_divider.dart';
 import 'widgets/custom_auth_footer.dart';
@@ -139,7 +138,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         setState(() {
                           _authController.changeTextFieldsColors(false);
                         });
-                        Get.to(() => const LoginScreen());
+                        Get.toNamed('/login');
                       }
                     }
                   },
@@ -156,7 +155,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   tailText: "login",
                   settingsProvider: settingsProvider,
                   onTap: () {
-                    Get.toNamed('/LoginScreen');
+                    Get.toNamed('/login');
                   },
                 )
               ],

@@ -3,8 +3,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:foodlink_admin_panel/screens/auth_screens/login_screen.dart';
 import 'package:foodlink_admin_panel/screens/auth_screens/sign_up_screen.dart';
+import 'package:foodlink_admin_panel/screens/dashboard/dashboard.dart';
 import 'package:get/get.dart';
-import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:provider/provider.dart';
 import 'core/constants/colors.dart';
 import 'providers/authentication_provider.dart';
@@ -54,6 +54,7 @@ class MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
+    _loadTranslations();
   }
 
   Future<void> _loadTranslations() async {
@@ -65,31 +66,42 @@ class MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    _loadTranslations();
+    if (_isLoading) {
+      return const MaterialApp(
+        home: Scaffold(
+          body: Center(child: CircularProgressIndicator()),
+        ),
+      );
+    }
+
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-          checkboxTheme: CheckboxThemeData(
-        fillColor: WidgetStateProperty.resolveWith((states) {
-          if (states.contains(WidgetState.selected)) {
-            return AppColors.primaryColor;
-          }
-          return AppColors.backgroundColor;
-        }),
-        checkColor: WidgetStateProperty.all(AppColors.backgroundColor),
-      )),
-      initialRoute: '/SignUpScreen', // Set your initial route here
+        checkboxTheme: CheckboxThemeData(
+          fillColor: WidgetStateProperty.resolveWith((states) {
+            if (states.contains(WidgetState.selected)) {
+              return AppColors.primaryColor;
+            }
+            return AppColors.backgroundColor;
+          }),
+          checkColor: WidgetStateProperty.all(AppColors.backgroundColor),
+        ),
+      ),
+      initialRoute: '/signup', // Initial route
       getPages: [
         GetPage(
-          name: '/SignUpScreen',
+          name: '/signup',
           page: () => const SignUpScreen(),
         ),
         GetPage(
-          name: '/LoginScreen',
-          page: () => const LoginScreen(),
+          name: '/login',
+          page: () => const  LoginScreen(),
+        ),
+        GetPage(
+          name: '/dashboard',
+          page: () => const Dashboard(),
         ),
       ],
     );
   }
 }
-git remote -v

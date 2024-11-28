@@ -39,9 +39,7 @@ class _AddMealScreenState extends State<AddMealScreen> {
           onTap: () => FocusScope.of(context).unfocus(),
           child: Column(
             children: [
-              MealImageContainer(
-                  isAddSource: widget.isAddScreen,
-              ),
+              const MealImageContainer(),
               SizeConfig.customSizedBox(null, 20, null),
               CustomAppTextField(
                 width: 348,
