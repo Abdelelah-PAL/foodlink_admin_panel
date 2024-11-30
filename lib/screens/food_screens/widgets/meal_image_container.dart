@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../../core/constants/colors.dart';
@@ -9,9 +10,7 @@ import '../../../services/translation_services.dart';
 import '../../widgets/custom_back_button.dart';
 
 class MealImageContainer extends StatefulWidget {
-  const MealImageContainer({
-    super.key,
-  });
+  const MealImageContainer({super.key});
 
   @override
   State<MealImageContainer> createState() => _MealImageContainerState();
@@ -21,56 +20,46 @@ class _MealImageContainerState extends State<MealImageContainer> {
   @override
   Widget build(BuildContext context) {
     final MealsProvider mealsProvider =
-        Provider.of<MealsProvider>(context, listen: true);
+    Provider.of<MealsProvider>(context, listen: true);
+
     return SafeArea(
       child: Stack(
         children: [
           Container(
             width: SizeConfig.screenWidth,
-            height: SizeConfig.getProportionalHeight(203),
-            padding: EdgeInsets.zero,
+            height: SizeConfig.getProperVerticalSpace(3),
             decoration: const BoxDecoration(
-                color: AppColors.widgetsColor,
-                borderRadius: BorderRadius.only(
-                  bottomLeft: Radius.circular(15),
-                  bottomRight: Radius.circular(15),
-                ),
-                border: Border(
-                  bottom:
-                      BorderSide(width: 1, color: AppColors.defaultBorderColor),
-                )),
-            child: mealsProvider.pickedFile!= null &&
-                mealsProvider.pickedFile!.path != null &&
-                    mealsProvider.pickedFile!.path.isNotEmpty
-                ? Image.network(
-                    mealsProvider.pickedFile!.path,
-                    fit: BoxFit.fill,
-                  )
-                : null,
+              color: AppColors.widgetsColor,
+              borderRadius: BorderRadius.only(
+                bottomLeft: Radius.circular(15),
+                bottomRight: Radius.circular(15),
+              ),
+              border: Border(
+                bottom:
+                BorderSide(width: 1, color: AppColors.defaultBorderColor),
+              ),
+            ),
           ),
           Positioned.fill(
             child: Center(
               child: GestureDetector(
                 onTap: () async {
-                  await mealsProvider.pickImageFromSource(context);
-                  Future.microtask(() {
-                    if (mounted) setState(() {});
-                  });
+                  await mealsProvider.pickImage();
+                  if (mounted) setState(() {});
                 },
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Text(TranslationService().translate("upload_food_image"),
-                        style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                            fontFamily: AppFonts.primaryFont)),
-                    SizeConfig.customSizedBox(
-                      10,
-                      null,
-                      null,
+                    Text(
+                      TranslationService().translate("upload_food_image"),
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        fontFamily: AppFonts.primaryFont,
+                      ),
                     ),
-                    const Icon(Icons.file_upload_outlined)
+                    SizeConfig.customSizedBox(10, null, null),
+                    const Icon(Icons.file_upload_outlined),
                   ],
                 ),
               ),
@@ -79,24 +68,24 @@ class _MealImageContainerState extends State<MealImageContainer> {
           if (mealsProvider.imageIsPicked)
             Container(
               width: SizeConfig.screenWidth,
-              height: SizeConfig.getProportionalHeight(203),
-              padding: EdgeInsets.zero,
+              height: SizeConfig.getProperVerticalSpace(3),
               decoration: const BoxDecoration(
-                  color: AppColors.widgetsColor,
-                  borderRadius: BorderRadius.only(
-                    bottomLeft: Radius.circular(15),
-                    bottomRight: Radius.circular(15),
-                  ),
-                  border: Border(
-                    bottom: BorderSide(
-                        width: 1, color: AppColors.defaultBorderColor),
-                  )),
-              child: Image.file(
-                File(mealsProvider.pickedFile!.path),
-                fit: BoxFit.fill,
+                color: AppColors.widgetsColor,
+                borderRadius: BorderRadius.only(
+                  bottomLeft: Radius.circular(15),
+                  bottomRight: Radius.circular(15),
+                ),
+                border: Border(
+                  bottom:
+                  BorderSide(width: 1, color: AppColors.defaultBorderColor),
+                ),
               ),
+              child:Image.network(
+                mealsProvider.pickedFile!.path,
+                fit: BoxFit.fill,
+              )
+
             ),
-          const CustomBackButton(),
         ],
       ),
     );

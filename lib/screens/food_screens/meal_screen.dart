@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:foodlink_admin_panel/screens/dashboard/dashboard.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import '../../core/utils/size_config.dart';
@@ -8,7 +9,6 @@ import '../../providers/settings_provider.dart';
 import '../../services/translation_services.dart';
 import '../widgets/custom_button.dart';
 import 'add_meal_screen.dart';
-import 'check_ingredients_screen.dart';
 import 'meals_list_screen.dart';
 import 'widgets/ingredients_row.dart';
 import 'widgets/meal_image_container.dart';
@@ -65,35 +65,21 @@ class MealScreen extends StatelessWidget {
                   children: [
                     CustomButton(
                         onTap: () {
-                          Get.to(MealsListScreen(index: index!));
+                          Get.to(const Dashboard());
                         },
                         text: TranslationService().translate("proceed"),
                         width: 216,
-                        height: 45),
+                        height: 150),
                     SizeConfig.customSizedBox(null, 20, null),
                     CustomButton(
                         onTap: () {
                           MealsProvider().fillDataForEdition(meal);
-                          Get.to(AddMealScreen(
-                              isAddScreen: false,
-                              meal: meal));
+                          Get.to(AddMealScreen(isAddScreen: false, meal: meal));
                         },
                         text: TranslationService().translate("edit"),
                         width: 216,
-                        height: 45),
+                        height: 150),
                     SizeConfig.customSizedBox(null, 20, null),
-                    CustomButton(
-                        onTap: () {
-                          mealsProvider.checkboxValues = List.generate(
-                              meal.ingredients.length, (index) => false);
-                          Get.to(CheckIngredientsScreen(
-                            meal: meal,
-                          ));
-                        },
-                        text:
-                            TranslationService().translate("check_ingredients"),
-                        width: 216,
-                        height: 45),
                   ]))
         ],
       ),

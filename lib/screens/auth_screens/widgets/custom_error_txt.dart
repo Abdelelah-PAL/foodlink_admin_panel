@@ -12,22 +12,12 @@ class CustomErrorTxt extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Align(
-      alignment: settingsProvider.language == 'en'
-          ? Alignment.topLeft
-          : Alignment.topRight,
-      child: Padding(
-        padding: settingsProvider.language == 'en'
-            ? EdgeInsets.only(left: SizeConfig.getProportionalWidth(35))
-            : EdgeInsets.only(right: SizeConfig.getProportionalWidth(35)),
-        child: Text(
-          text,
-          style: TextStyle(
-            fontSize: 12,
-            fontFamily: AppFonts.primaryFont,
-            color: AppColors.errorColor,
-          ),
-        ),
+    return Text(
+      text,
+      style: TextStyle(
+        fontSize: 12,
+        fontFamily: AppFonts.primaryFont,
+        color: AppColors.errorColor,
       ),
     );
   }

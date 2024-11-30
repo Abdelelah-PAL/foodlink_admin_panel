@@ -40,5 +40,6 @@ class AuthService with ChangeNotifier {
         AuthController().errorText = e.message!;
       }
     }
+    return null;
   }
 }

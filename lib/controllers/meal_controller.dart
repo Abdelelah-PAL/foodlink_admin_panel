@@ -41,7 +41,7 @@ class MealController {
   Future<void> addMeal(mealsProvider) async {
     String imageUrl = '';
     if (mealsProvider.imageIsPicked) {
-      imageUrl = await MealsProvider().uploadImage(mealsProvider.pickedFile);
+      imageUrl = await MealsProvider().uploadImage(mealsProvider.pickedFile, "planned_meals_images");
     }
     List<String> ingredients = MealsProvider()
         .ingredientsControllers
@@ -63,7 +63,7 @@ class MealController {
   Future<void> updateMeal(mealsProvider, meal) async {
     String imageUrl = '';
     if (mealsProvider.imageIsPicked) {
-      imageUrl = await MealsProvider().uploadImage(mealsProvider.pickedFile);
+      imageUrl = await MealsProvider().uploadImage(mealsProvider.pickedFile, "planned_meals_images");
     }
     List<String> ingredients = MealsProvider()
         .ingredientsControllers

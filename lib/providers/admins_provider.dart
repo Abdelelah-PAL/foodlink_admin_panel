@@ -21,7 +21,7 @@ class AdminsProvider with ChangeNotifier {
     await _as.addAdminDetails(adminDetails);
   }
 
-  Future<AdminDetails> getAdminByEmail(String email) async {
+  Future<AdminDetails?> getAdminByEmail(String email) async {
     var admin = await _as.getAdminByEmail(email);
     return admin;
   }

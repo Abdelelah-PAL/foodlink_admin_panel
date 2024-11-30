@@ -114,5 +114,7 @@
   "notification_sent": "تم إرسال إشعار بنجاح",
   "no_notifications": "لا يوجد لديك إشعارات",
   "no_updates": "لا يوجد لديك تحديثات",
-  "request_meal": "طلب الوجبة"
+  "request_meal": "طلب الوجبة",
+  "planned_meals": "الوجبات المجدولة",
+  "upload": "رفع"
 }

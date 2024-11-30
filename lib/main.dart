@@ -22,6 +22,7 @@ void main() async {
       options: const FirebaseOptions(
     apiKey: "AIzaSyB2-BqoayC6CbRZMKoK-bP8XZhYJZGRFO8",
     appId: "1:474506091113:web:e4ee7fdbff4369e28f60f8",
+    storageBucket: "foodlink-6c41e.appspot.com",
     messagingSenderId: "474506091113",
     projectId: "foodlink-6c41e",
   ));
@@ -29,6 +30,7 @@ void main() async {
     webProvider:
         ReCaptchaV3Provider('6Lc0uowqAAAAAO0COOKmnMC4_njWWk5c2K7RC-A6'),
   );
+  FirebaseAppCheck.instance.setTokenAutoRefreshEnabled(true);
 
   runApp(MultiProvider(providers: [
     ChangeNotifierProvider(create: (ctx) => GeneralProvider()),
@@ -95,7 +97,7 @@ class MyAppState extends State<MyApp> {
         ),
         GetPage(
           name: '/login',
-          page: () => const  LoginScreen(),
+          page: () => const LoginScreen(),
         ),
         GetPage(
           name: '/dashboard',

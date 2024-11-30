@@ -1,44 +1,39 @@
-import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/foundation.dart';
+import 'package:image_compression/image_compression.dart';
 import 'package:image_picker/image_picker.dart';
-
 import '../models/meal.dart';
 
 
 class MealsServices with ChangeNotifier {
   final _firebaseFireStore = FirebaseFirestore.instance;
 
-  Future<String?> uploadImage(XFile image) async {
-    try {
-      final imageRef =
-          FirebaseStorage.instance.ref().child("meals_images/${image.name}");
-      File file = File(image.path);
-      await imageRef.putFile(file);
-      String downloadURL = await imageRef.getDownloadURL();
-      return downloadURL;
-    } catch (ex) {
-      rethrow;
-    }
+    Future<String?> uploadImage(XFile image, String source) async {
+      try {
+        final bytes = await image.readAsBytes();
+        final input = ImageFile(
+          rawBytes: bytes,
+          filePath: image.path,
+        );
+        final output = compress(ImageFileConfiguration(input: input));
+        final imageRef = FirebaseStorage.instance
+            .ref()
+            .child("$source/${image.name}");
+        await imageRef.putData(output.rawBytes);
+
+        final downloadURL = await imageRef.getDownloadURL();
+        print('Uploaded: $downloadURL');
+        return downloadURL;
+      } catch (ex) {
+        print("Error uploading image: $ex");
+        rethrow;
+      }
   }
-
-  Future<Meal> addMeal(meal) async {
-    try {
-      var addedMeal =
-          await _firebaseFireStore.collection('meals').add(meal.toMap());
-      var mealSnapshot = await addedMeal.get();
-
-      return Meal.fromJson(mealSnapshot.data()!, addedMeal.id);
-    } catch (ex) {
-      rethrow;
-    }
-  }
-
-  Future<List<Meal>> getAllMealsByCategory(String userId) async {
+  Future<List<Meal>> getAllPlannedMeals() async {
     try {
       QuerySnapshot<Map<String, dynamic>> mealQuery = await _firebaseFireStore
-          .collection('suggested_meal')
+          .collection('planned_meals')
           .get();
 
       List<Meal> meals = mealQuery.docs.map((doc) {
@@ -51,33 +46,19 @@ class MealsServices with ChangeNotifier {
     }
   }
 
-  Future<List<Meal>> getFavorites(String userId) async {
+
+  Future<Meal> addMeal(meal) async {
     try {
-      QuerySnapshot<Map<String, dynamic>> mealQuery = await _firebaseFireStore
-          .collection('meals')
-          .where('user_id', isEqualTo: userId)
-          .where('is_favorite', isEqualTo: true)
-          .get();
+      var addedMeal =
+          await _firebaseFireStore.collection('planned_meals').add(meal.toMap());
+      var mealSnapshot = await addedMeal.get();
 
-      List<Meal> favoriteMeals = mealQuery.docs.map((doc) {
-        return Meal.fromJson(doc.data(), doc.id);
-      }).toList();
-
-      return favoriteMeals;
+      return Meal.fromJson(mealSnapshot.data()!, addedMeal.id);
     } catch (ex) {
       rethrow;
     }
   }
 
-  Future<void> toggleIsFavorite(Meal meal, bool isFavorite) async {
-    try {
-      await _firebaseFireStore.collection('meals').doc(meal.documentId).update({
-        'is_favorite': isFavorite,
-      });
-    } catch (ex) {
-      rethrow;
-    }
-  }
 
   Future<Meal> updateMeal(Meal meal) async {
     try {

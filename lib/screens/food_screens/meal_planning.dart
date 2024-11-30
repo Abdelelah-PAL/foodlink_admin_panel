@@ -22,8 +22,8 @@ class MealPlanning extends StatefulWidget {
 class _MealPlanningState extends State<MealPlanning> {
   @override
   void initState() {
-    MealsProvider()
-        .getAllMealsByCategory(AdminsProvider().selectedAdmin!.adminId);
+    // MealsProvider()
+    //     .getAllMealsByCategory(AdminsProvider().selectedAdmin!.adminId);
     super.initState();
   }
 

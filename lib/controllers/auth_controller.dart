@@ -85,6 +85,10 @@ class AuthController {
     rememberMe = !rememberMe;
   }
 
+  void setWrongEmailOrPassword() {
+    errorText = TranslationService().translate("wrong_email_password");
+  }
+
   Future<void> saveLoginInfo(String email, String password) async {
     final prefs = await SharedPreferences.getInstance();
 

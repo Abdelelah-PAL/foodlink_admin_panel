@@ -14,8 +14,6 @@ class IngredientBox extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: SizeConfig.getProportionalWidth(110),
-      height: SizeConfig.getProportionalHeight(40),
       margin: EdgeInsets.symmetric(
         vertical: SizeConfig.getProportionalHeight(10),
         horizontal: SizeConfig.getProportionalWidth(3),
@@ -29,7 +27,6 @@ class IngredientBox extends StatelessWidget {
         textDirection: settingsProvider.language == 'en'
             ? TextDirection.ltr
             : TextDirection.rtl,
-        // For right-to-left text
         textAlign: settingsProvider.language == 'en'
             ? TextAlign.left
             : TextAlign.right,
@@ -58,8 +55,6 @@ class AddIngredientBox extends StatelessWidget {
     return GestureDetector(
       onTap: mealsProvider.increaseIngredients,
       child: Container(
-          width: SizeConfig.getProportionalWidth(80),
-          height: SizeConfig.getProportionalHeight(40),
           margin: EdgeInsets.symmetric(
             vertical: SizeConfig.getProportionalHeight(10),
             horizontal: SizeConfig.getProportionalWidth(3),

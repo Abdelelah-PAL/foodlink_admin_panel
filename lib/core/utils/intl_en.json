@@ -114,5 +114,7 @@
   "notification_sent": "Notification has been sent successfully",
   "no_notifications": "You have no notifications",
   "no_updates": "You have no updates",
-  "request_meal": "Request Meal"
+  "request_meal": "Request Meal",
+  "planned_meals": "Planned Meals",
+  "upload": "Upload"
 }

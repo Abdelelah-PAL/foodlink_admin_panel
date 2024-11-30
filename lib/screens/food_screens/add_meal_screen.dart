@@ -14,9 +14,11 @@ import 'widgets/ingredient_box.dart';
 import 'widgets/meal_image_container.dart';
 
 class AddMealScreen extends StatefulWidget {
-  const AddMealScreen(
-      {super.key, required this.isAddScreen, this.meal,
-     });
+  const AddMealScreen({
+    super.key,
+    required this.isAddScreen,
+    this.meal,
+  });
 
   final bool isAddScreen;
   final Meal? meal;
@@ -28,7 +30,8 @@ class AddMealScreen extends StatefulWidget {
 class _AddMealScreenState extends State<AddMealScreen> {
   @override
   Widget build(BuildContext context) {
-    MealsProvider mealsProvider = Provider.of<MealsProvider>(context, listen: true);
+    MealsProvider mealsProvider =
+    Provider.of<MealsProvider>(context, listen: true);
     SettingsProvider settingsProvider = Provider.of<SettingsProvider>(context);
 
     return Scaffold(
@@ -43,7 +46,7 @@ class _AddMealScreenState extends State<AddMealScreen> {
               SizeConfig.customSizedBox(null, 20, null),
               CustomAppTextField(
                 width: 348,
-                height: 37,
+                height: 100,
                 headerText: "meal_name",
                 icon: Assets.mealNameIcon,
                 controller: MealController().nameController,
@@ -51,75 +54,61 @@ class _AddMealScreenState extends State<AddMealScreen> {
                 iconSizeFactor: 31,
                 settingsProvider: settingsProvider,
               ),
-              settingsProvider.language == 'en'
-                  ? Padding(
-                      padding: EdgeInsets.only(
-                          left: SizeConfig.getProportionalWidth(10)),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Align(
-                            alignment: Alignment.centerLeft,
-                            child: SizeConfig.customSizedBox(
-                                31, 31, Image.asset(Assets.mealIngredients)),
-                          ),
-                          CustomText(
-                            isCenter: false,
-                            text: TranslationService().translate("ingredients"),
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ],
-                      ),
-                    )
-                  : Padding(
-                      padding: EdgeInsets.only(
-                          right: SizeConfig.getProportionalWidth(10)),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          CustomText(
-                            isCenter: false,
-                            text: TranslationService().translate("ingredients"),
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                          ),
-                          Align(
-                            alignment: Alignment.centerRight,
-                            child: SizeConfig.customSizedBox(
-                                31, 31, Image.asset(Assets.mealIngredients)),
-                          ),
-                        ],
-                      ),
+              Padding(
+                padding: EdgeInsets.symmetric(
+                    horizontal: SizeConfig.getProportionalWidth(10)),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  textDirection: settingsProvider.language == 'en'
+                      ? TextDirection.ltr
+                      : TextDirection.rtl,
+                  children: [
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: SizeConfig.customSizedBox(
+                          31, 31, Image.asset(Assets.mealIngredients)),
                     ),
-              SizeConfig.customSizedBox(
-                  347,
-                  130,
-                  Directionality(
-                    textDirection: settingsProvider.language == 'ar'
-                        ? TextDirection.rtl
-                        : TextDirection.ltr,
-                    child: GridView.builder(
-                      gridDelegate:
-                          const SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 3,
-                              crossAxisSpacing: 8,
-                              mainAxisSpacing: 0,
-                              childAspectRatio: 2),
-                      itemCount: mealsProvider.numberOfIngredients,
-                      itemBuilder: (context, index) {
-                        if (index == mealsProvider.numberOfIngredients - 1) {
-                          return  AddIngredientBox(mealsProvider: mealsProvider,);
-                        }
-                        return IngredientBox(
-                            settingsProvider: settingsProvider,
-                            controller: mealsProvider.ingredientsControllers[index]);
-                      },
+                    CustomText(
+                      isCenter: false,
+                      text: TranslationService().translate("ingredients"),
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
                     ),
-                  )),
+                    SizeConfig.customSizedBox(50, null, null),
+                    SizeConfig.customSizedBox(
+                        420,
+                        130,
+                        Directionality(
+                          textDirection: settingsProvider.language == 'ar'
+                              ? TextDirection.rtl
+                              : TextDirection.ltr,
+                          child: GridView.builder(
+                            gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                                mainAxisExtent: 50,
+                                crossAxisCount: 4,
+                                crossAxisSpacing: 4,
+                                mainAxisSpacing: 3,
+                                childAspectRatio: 10),
+                            itemCount: mealsProvider.numberOfIngredients,
+                            itemBuilder: (context, index) {
+                              if (index == mealsProvider.numberOfIngredients - 1) {
+                                return AddIngredientBox(mealsProvider: mealsProvider);
+                              }
+                              return IngredientBox(
+                                  settingsProvider: settingsProvider,
+                                  controller:
+                                  mealsProvider.ingredientsControllers[index]);
+                            },
+                          ),
+                        )),
+
+                  ],
+                ),
+              ),
               CustomAppTextField(
                 width: 348,
-                height: 161,
+                height: 300,
                 headerText: "recipe",
                 icon: Assets.mealRecipe,
                 controller: MealController().recipeController,
@@ -127,19 +116,19 @@ class _AddMealScreenState extends State<AddMealScreen> {
                 iconSizeFactor: 48,
                 settingsProvider: settingsProvider,
               ),
-              SizeConfig.customSizedBox(null, 20, null),
+              SizeConfig.customSizedBox(null, 50, null),
+
               CustomButton(
                 onTap: () async {
                   widget.isAddScreen
-                      ? await MealController()
-                          .addMeal(mealsProvider)
+                      ? await MealController().addMeal(mealsProvider)
                       : await MealController()
-                          .updateMeal(mealsProvider, widget.meal);
+                      .updateMeal(mealsProvider, widget.meal);
                 },
                 text: TranslationService()
                     .translate(widget.isAddScreen ? "confirm" : "edit"),
                 width: SizeConfig.getProportionalWidth(126),
-                height: SizeConfig.getProportionalHeight(45),
+                height: SizeConfig.getProportionalHeight(400),
               )
             ],
           ),

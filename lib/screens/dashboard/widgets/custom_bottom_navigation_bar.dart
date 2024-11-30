@@ -32,7 +32,7 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
   Widget build(BuildContext context) {
     return Container(
       width: SizeConfig.getProportionalWidth(355),
-      height: SizeConfig.getProportionalHeight(61),
+      height: SizeConfig.getProportionalHeight(220),
       margin: EdgeInsets.fromLTRB(
           SizeConfig.getProportionalWidth(20),
           SizeConfig.getProportionalHeight(10),
@@ -45,10 +45,10 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          _buildNavItem(Icons.home_outlined, 0),
-          _buildNavItem(Icons.favorite_outline, 1),
-          _buildNavItem(Icons.calendar_month_outlined, 2),
-          _buildNavItem(Icons.person_outline_outlined, 3),
+          _buildNavItem(Icons.list, 0),
+          _buildNavItem(Icons.fastfood_sharp, 1),
+          _buildNavItem(Icons.add_a_photo_outlined, 2),
+          _buildNavItem(Icons.health_and_safety_sharp, 3),
         ],
       ),
     );

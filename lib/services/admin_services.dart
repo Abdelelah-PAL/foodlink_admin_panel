@@ -60,7 +60,7 @@ class AdminsServices with ChangeNotifier {
     }
   }
 
-  Future<AdminDetails> getAdminByEmail(String email) async {
+  Future<AdminDetails?> getAdminByEmail(String email) async {
     try {
       QuerySnapshot<Map<String, dynamic>> adminQuery = await FirebaseFirestore
           .instance
@@ -68,9 +68,14 @@ class AdminsServices with ChangeNotifier {
           .where('email', isEqualTo: email)
           .limit(1)
           .get();
+     if (adminQuery.docs.isEmpty) {
+       return null;
+     }
+
       AdminDetails admin = adminQuery.docs.map((doc) {
         return AdminDetails.fromJson(doc.data());
       }).first;
+
       return admin;
     } catch (e) {
       rethrow;
