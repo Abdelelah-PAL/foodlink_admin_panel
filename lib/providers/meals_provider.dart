@@ -72,6 +72,7 @@ class MealsProvider with ChangeNotifier {
       rethrow;
     }
   }
+
   Future<String> uploadImage(image, source) async {
     String? downloadUrl = await _ms.uploadImage(image, source);
     return downloadUrl!;

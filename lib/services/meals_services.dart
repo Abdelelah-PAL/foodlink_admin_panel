@@ -9,7 +9,7 @@ import '../models/meal.dart';
 class MealsServices with ChangeNotifier {
   final _firebaseFireStore = FirebaseFirestore.instance;
 
-    Future<String?> uploadImage(XFile image, String source) async {
+    Future<String?> uploadImage(XFile image, String destination) async {
       try {
         final bytes = await image.readAsBytes();
         final input = ImageFile(
@@ -19,8 +19,8 @@ class MealsServices with ChangeNotifier {
         final output = compress(ImageFileConfiguration(input: input));
         final imageRef = FirebaseStorage.instance
             .ref()
-            .child("$source/${image.name}");
-        await imageRef.putData(output.rawBytes);
+            .child("$destination/${image.name}");
+        await imageRef.putData(bytes);
 
         final downloadURL = await imageRef.getDownloadURL();
         print('Uploaded: $downloadURL');

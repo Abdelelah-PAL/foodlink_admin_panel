@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../core/constants/colors.dart';
 import '../../../core/constants/fonts.dart';
-import '../../../core/utils/size_config.dart';
 import '../../../providers/settings_provider.dart';
 
 class CustomErrorTxt extends StatelessWidget {

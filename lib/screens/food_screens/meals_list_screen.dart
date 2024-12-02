@@ -3,7 +3,6 @@ import 'package:foodlink_admin_panel/screens/widgets/custom_text.dart';
 import 'package:provider/provider.dart';
 import '../../core/constants/fonts.dart';
 import '../../core/utils/size_config.dart';
-import '../../providers/meal_categories_provider.dart';
 import '../../providers/meals_provider.dart';
 import '../../services/translation_services.dart';
 import 'widgets/list_meal_tile.dart';

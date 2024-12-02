@@ -5,7 +5,6 @@ import '../../core/constants/colors.dart';
 import '../../core/utils/size_config.dart';
 import '../../providers/meals_provider.dart';
 import '../../providers/settings_provider.dart';
-import '../../providers/admins_provider.dart';
 import '../dashboard/widgets/custom_bottom_navigation_bar.dart';
 import '../widgets/custom_back_button.dart';
 import '../widgets/custom_text.dart';

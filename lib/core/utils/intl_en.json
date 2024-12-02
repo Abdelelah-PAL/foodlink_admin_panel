@@ -116,5 +116,6 @@
   "no_updates": "You have no updates",
   "request_meal": "Request Meal",
   "planned_meals": "Planned Meals",
-  "upload": "Upload"
+  "upload": "Upload",
+  "put_url": "Put URL"
 }

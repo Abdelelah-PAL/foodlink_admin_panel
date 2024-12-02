@@ -53,6 +53,7 @@ class _AddMealScreenState extends State<AddMealScreen> {
                 maxLines: 2,
                 iconSizeFactor: 31,
                 settingsProvider: settingsProvider,
+                isCentered: false,
               ),
               Padding(
                 padding: EdgeInsets.symmetric(
@@ -115,6 +116,7 @@ class _AddMealScreenState extends State<AddMealScreen> {
                 maxLines: 10,
                 iconSizeFactor: 48,
                 settingsProvider: settingsProvider,
+                isCentered: false,
               ),
               SizeConfig.customSizedBox(null, 50, null),
 

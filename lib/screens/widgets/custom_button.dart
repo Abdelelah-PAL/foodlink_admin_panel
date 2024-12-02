@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:foodlink_admin_panel/services/translation_services.dart';
 
 import '../../../core/constants/fonts.dart';
 import '../../core/constants/colors.dart';
@@ -24,7 +25,7 @@ class CustomButton extends StatelessWidget {
             color: AppColors.widgetsColor),
         child: Center(
           child: Text(
-            text,
+            TranslationService().translate(text),
             style:  TextStyle(
                 fontWeight: FontWeight.bold, // Semi-bold weight
                 fontSize: 25,

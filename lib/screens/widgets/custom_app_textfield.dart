@@ -7,25 +7,30 @@ import '../../services/translation_services.dart';
 import 'custom_text.dart';
 
 class CustomAppTextField extends StatelessWidget {
-  const CustomAppTextField(
-      {super.key,
-      required this.width,
-      required this.height,
-      required this.headerText,
-      required this.icon,
-      required this.controller,
-      required this.maxLines,
-      required this.iconSizeFactor,
-      required this.settingsProvider});
+  const CustomAppTextField({super.key,
+    required this.width,
+    required this.height,
+    this.headerText,
+    this.icon,
+    this.hintText,
+    required this.controller,
+    required this.maxLines,
+    required this.iconSizeFactor,
+    required this.settingsProvider,
+    required this.isCentered,
+     this.textAlign,});
 
   final double width;
   final double height;
-  final String headerText;
-  final String icon;
+  final String? headerText;
+  final String? hintText;
+  final String? icon;
   final TextEditingController controller;
   final int maxLines;
   final double iconSizeFactor;
   final SettingsProvider settingsProvider;
+  final bool isCentered;
+  final TextAlign? textAlign;
 
   @override
   Widget build(BuildContext context) {
@@ -33,20 +38,22 @@ class CustomAppTextField extends StatelessWidget {
         textDirection: settingsProvider.language == 'en'
             ? TextDirection.ltr
             : TextDirection.rtl,
-        mainAxisAlignment: MainAxisAlignment.start,
+        mainAxisAlignment: isCentered ? MainAxisAlignment.center : MainAxisAlignment.start,
         children: [
-          Align(
-            alignment: Alignment.centerLeft,
-            child: SizeConfig.customSizedBox(
-                iconSizeFactor, iconSizeFactor, Image.asset(icon)),
+          if(icon != null)Align(
+              alignment: Alignment.centerLeft,
+              child: icon != null
+                  ? SizeConfig.customSizedBox(
+                  iconSizeFactor, iconSizeFactor, Image.asset(icon!))
+                  : null
           ),
-          CustomText(
+          if (headerText != null) CustomText(
             isCenter: false,
-            text: TranslationService().translate(headerText),
+            text: TranslationService().translate(headerText!),
             fontSize: 20,
             fontWeight: FontWeight.bold,
           ),
-          SizeConfig.customSizedBox(50, null, null),
+          if (headerText != null && icon != null) SizeConfig.customSizedBox(15, null, null),
           Container(
             width: SizeConfig.getProportionalWidth(width),
             height: SizeConfig.getProportionalHeight(height),
@@ -59,20 +66,21 @@ class CustomAppTextField extends StatelessWidget {
             child: TextField(
               maxLines: maxLines,
               controller: controller,
-              textAlign: settingsProvider.language == 'en'
+              textAlign: textAlign ?? (settingsProvider.language == 'en'
                   ? TextAlign.left
-                  : TextAlign.right,
+                  : TextAlign.right),
               decoration: InputDecoration(
-                contentPadding: EdgeInsets.fromLTRB(
-                    SizeConfig.getProportionalWidth(10),
-                    SizeConfig.getProportionalHeight(2),
-                    SizeConfig.getProportionalWidth(10),
-                    SizeConfig.getProportionalHeight(2)),
-                hintStyle: TextStyle(
-                    fontSize: 20,
-                    color: AppColors.hintTextColor,
-                    fontFamily: AppFonts.primaryFont),
-                border: InputBorder.none,
+                  contentPadding: EdgeInsets.fromLTRB(
+                      SizeConfig.getProportionalWidth(10),
+                      SizeConfig.getProportionalHeight(0),
+                      SizeConfig.getProportionalWidth(10),
+                      SizeConfig.getProportionalHeight(30)),
+                  hintStyle: TextStyle(
+                      fontSize: 20,
+                      color: AppColors.hintTextColor,
+                      fontFamily: AppFonts.primaryFont),
+                  border: InputBorder.none,
+                  hintText: hintText != null ? TranslationService().translate(hintText!) : null
               ),
             ),
           ),

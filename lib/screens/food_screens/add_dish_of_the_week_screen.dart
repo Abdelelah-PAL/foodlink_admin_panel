@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:foodlink_admin_panel/core/constants/colors.dart';
 import 'package:foodlink_admin_panel/core/utils/size_config.dart';
@@ -34,19 +33,19 @@ class _AddDishOfTheWeekScreenState extends State<AddDishOfTheWeekScreen> {
                   border: Border.all(
                     style: BorderStyle.solid,
                   )),
-              child:Center(
+              child: Center(
                   child: mealsProvider.imageIsPicked == false
                       ? IconButton(
-                      onPressed: MealsProvider().pickImage,
-                      icon: const Icon(Icons.add_a_photo))
+                          onPressed: MealsProvider().pickImage,
+                          icon: const Icon(Icons.add_a_photo))
                       : SizedBox(
-                    width: SizeConfig.getProperVerticalSpace(3),
-                    height: SizeConfig.getProperVerticalSpace(3),
-                    child: Image.network(
-                      mealsProvider.pickedFile!.path,
-                      fit: BoxFit.fill,
-                    ),
-                  )) ,
+                          width: SizeConfig.getProperVerticalSpace(3),
+                          height: SizeConfig.getProperVerticalSpace(3),
+                          child: Image.network(
+                            mealsProvider.pickedFile!.path,
+                            fit: BoxFit.fill,
+                          ),
+                        )),
             ),
           ),
           SizeConfig.customSizedBox(null, 50, null),

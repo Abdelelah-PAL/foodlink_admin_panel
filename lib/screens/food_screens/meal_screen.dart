@@ -9,7 +9,6 @@ import '../../providers/settings_provider.dart';
 import '../../services/translation_services.dart';
 import '../widgets/custom_button.dart';
 import 'add_meal_screen.dart';
-import 'meals_list_screen.dart';
 import 'widgets/ingredients_row.dart';
 import 'widgets/meal_image_container.dart';
 import 'widgets/name_row.dart';
