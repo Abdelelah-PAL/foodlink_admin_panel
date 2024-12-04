@@ -19,7 +19,6 @@ class BeyondCaloriesArticlesServices with ChangeNotifier {
 
       final imageRef =
           FirebaseStorage.instance.ref().child("$source/${image.name}");
-      print(bytes);
       await imageRef.putData(bytes);
 
       final downloadURL = await imageRef.getDownloadURL();

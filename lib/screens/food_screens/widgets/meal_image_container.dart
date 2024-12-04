@@ -46,7 +46,7 @@ class _MealImageContainerState extends State<MealImageContainer> {
             child: Center(
               child: GestureDetector(
                 onTap: () async {
-                    await mealsProvider.pickImage();
+                    await mealsProvider.pickImage("meal");
                     if (mounted) setState(() {});
                    _openPicker();
                 },

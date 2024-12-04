@@ -72,7 +72,7 @@ class CustomAppTextField extends StatelessWidget {
               decoration: InputDecoration(
                   contentPadding: EdgeInsets.fromLTRB(
                       SizeConfig.getProportionalWidth(10),
-                      SizeConfig.getProportionalHeight(0),
+                      SizeConfig.getProportionalHeight(10),
                       SizeConfig.getProportionalWidth(10),
                       SizeConfig.getProportionalHeight(30)),
                   hintStyle: TextStyle(

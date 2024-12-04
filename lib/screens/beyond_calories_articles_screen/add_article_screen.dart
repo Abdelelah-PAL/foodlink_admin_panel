@@ -20,9 +20,9 @@ class _AddArticleScreenState extends State<AddArticleScreen> {
   @override
   Widget build(BuildContext context) {
     final BeyondCaloriesArticlesProvider beyondCaloriesArticlesProvider =
-        Provider.of<BeyondCaloriesArticlesProvider>(context, listen: true);
+    Provider.of<BeyondCaloriesArticlesProvider>(context, listen: true);
     final SettingsProvider settingsProvider =
-        Provider.of<SettingsProvider>(context, listen: true);
+    Provider.of<SettingsProvider>(context, listen: true);
 
     return Scaffold(
       backgroundColor: AppColors.backgroundColor,
@@ -41,16 +41,16 @@ class _AddArticleScreenState extends State<AddArticleScreen> {
                 )),
             child: beyondCaloriesArticlesProvider.imageIsPicked == false
                 ? IconButton(
-                    onPressed: BeyondCaloriesArticlesProvider().pickImage,
-                    icon: const Icon(Icons.add_a_photo))
+                onPressed: BeyondCaloriesArticlesProvider().pickImage,
+                icon: const Icon(Icons.add_a_photo))
                 : SizedBox(
-                    width: SizeConfig.getProperVerticalSpace(3),
-                    height: SizeConfig.getProperVerticalSpace(3),
-                    child: Image.network(
-                      beyondCaloriesArticlesProvider.pickedFile!.path,
-                      fit: BoxFit.fill,
-                    ),
-                  ),
+              width: SizeConfig.getProperVerticalSpace(3),
+              height: SizeConfig.getProperVerticalSpace(3),
+              child: Image.network(
+                beyondCaloriesArticlesProvider.pickedFile!.path,
+                fit: BoxFit.fill,
+              ),
+            ),
           ),
           SizeConfig.customSizedBox(null, 50, null),
           CustomAppTextField(
@@ -67,8 +67,11 @@ class _AddArticleScreenState extends State<AddArticleScreen> {
           ),
           SizeConfig.customSizedBox(null, 50, null),
           CustomButton(
-              onTap: () => BeyondCaloriesArticlesController()
-                  .addArticle(beyondCaloriesArticlesProvider),
+              onTap: () async
+              {
+                await BeyondCaloriesArticlesController()
+                    .addArticle(beyondCaloriesArticlesProvider);
+              },
               text: "confirm",
               width: 200,
               height: 100)

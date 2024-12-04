@@ -34,15 +34,15 @@ class _AddDishOfTheWeekScreenState extends State<AddDishOfTheWeekScreen> {
                     style: BorderStyle.solid,
                   )),
               child: Center(
-                  child: mealsProvider.imageIsPicked == false
+                  child: mealsProvider.DOWIsPicked == false
                       ? IconButton(
-                          onPressed: MealsProvider().pickImage,
+                          onPressed: () => MealsProvider().pickImage("DOW"),
                           icon: const Icon(Icons.add_a_photo))
                       : SizedBox(
                           width: SizeConfig.getProperVerticalSpace(3),
                           height: SizeConfig.getProperVerticalSpace(3),
                           child: Image.network(
-                            mealsProvider.pickedFile!.path,
+                            mealsProvider.pickedDOW!.path,
                             fit: BoxFit.fill,
                           ),
                         )),
@@ -50,8 +50,11 @@ class _AddDishOfTheWeekScreenState extends State<AddDishOfTheWeekScreen> {
           ),
           SizeConfig.customSizedBox(null, 50, null),
           CustomButton(
-              onTap: () => MealsProvider().uploadImage(
-                  mealsProvider.pickedFile!.path, "dish_of_the_week"),
+              onTap: () async {
+                await MealsProvider()
+                    .uploadImage(mealsProvider.pickedDOW!, "dish_of_the_week");
+                MealsProvider().resetValues();
+              },
               text: "upload",
               width: 200,
               height: 100)

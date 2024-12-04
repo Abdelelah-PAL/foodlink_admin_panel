@@ -12,11 +12,11 @@ class MealsServices with ChangeNotifier {
     Future<String?> uploadImage(XFile image, String destination) async {
       try {
         final bytes = await image.readAsBytes();
-        final input = ImageFile(
-          rawBytes: bytes,
-          filePath: image.path,
-        );
-        final output = compress(ImageFileConfiguration(input: input));
+        // final input = ImageFile(
+        //   rawBytes: bytes,
+        //   filePath: image.path,
+        // );
+        // final output = compress(ImageFileConfiguration(input: input));
         final imageRef = FirebaseStorage.instance
             .ref()
             .child("$destination/${image.name}");

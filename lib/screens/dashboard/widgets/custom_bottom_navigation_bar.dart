@@ -49,12 +49,11 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
           _buildNavItem(Icons.fastfood_sharp, 1),
           _buildNavItem(Icons.add_a_photo_outlined, 2),
           _buildNavItem(Icons.article_outlined, 3),
-          _buildNavItem(Icons.health_and_safety_sharp, 4),
+          _buildNavItem(Icons.settings, 4),
         ],
       ),
     );
   }
-
   Widget _buildNavItem(IconData icon, int index) {
     return GestureDetector(
       onTap: () => _onItemTapped(index),

@@ -31,108 +31,110 @@ class _AddMealScreenState extends State<AddMealScreen> {
   @override
   Widget build(BuildContext context) {
     MealsProvider mealsProvider =
-    Provider.of<MealsProvider>(context, listen: true);
+        Provider.of<MealsProvider>(context, listen: true);
     SettingsProvider settingsProvider = Provider.of<SettingsProvider>(context);
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      body: SafeArea(
-        child: GestureDetector(
-          behavior: HitTestBehavior.opaque,
-          onTap: () => FocusScope.of(context).unfocus(),
-          child: Column(
-            children: [
-              const MealImageContainer(),
-              SizeConfig.customSizedBox(null, 20, null),
-              CustomAppTextField(
-                width: 348,
-                height: 100,
-                headerText: "meal_name",
-                icon: Assets.mealNameIcon,
-                controller: MealController().nameController,
-                maxLines: 2,
-                iconSizeFactor: 31,
-                settingsProvider: settingsProvider,
-                isCentered: false,
-              ),
-              Padding(
-                padding: EdgeInsets.symmetric(
-                    horizontal: SizeConfig.getProportionalWidth(10)),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  textDirection: settingsProvider.language == 'en'
-                      ? TextDirection.ltr
-                      : TextDirection.rtl,
-                  children: [
-                    Align(
-                      alignment: Alignment.centerLeft,
-                      child: SizeConfig.customSizedBox(
-                          31, 31, Image.asset(Assets.mealIngredients)),
-                    ),
-                    CustomText(
-                      isCenter: false,
-                      text: TranslationService().translate("ingredients"),
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                    ),
-                    SizeConfig.customSizedBox(50, null, null),
-                    SizeConfig.customSizedBox(
-                        420,
-                        130,
-                        Directionality(
-                          textDirection: settingsProvider.language == 'ar'
-                              ? TextDirection.rtl
-                              : TextDirection.ltr,
-                          child: GridView.builder(
-                            gridDelegate:
-                            const SliverGridDelegateWithFixedCrossAxisCount(
-                                mainAxisExtent: 50,
-                                crossAxisCount: 4,
-                                crossAxisSpacing: 4,
-                                mainAxisSpacing: 3,
-                                childAspectRatio: 10),
-                            itemCount: mealsProvider.numberOfIngredients,
-                            itemBuilder: (context, index) {
-                              if (index == mealsProvider.numberOfIngredients - 1) {
-                                return AddIngredientBox(mealsProvider: mealsProvider);
-                              }
-                              return IngredientBox(
-                                  settingsProvider: settingsProvider,
-                                  controller:
-                                  mealsProvider.ingredientsControllers[index]);
-                            },
-                          ),
-                        )),
-
-                  ],
+      body: SingleChildScrollView(
+        child: SafeArea(
+          child: GestureDetector(
+            behavior: HitTestBehavior.opaque,
+            onTap: () => FocusScope.of(context).unfocus(),
+            child: Column(
+              children: [
+                const MealImageContainer(),
+                SizeConfig.customSizedBox(null, 20, null),
+                CustomAppTextField(
+                  width: 348,
+                  height: 100,
+                  headerText: "meal_name",
+                  icon: Assets.mealNameIcon,
+                  controller: MealController().nameController,
+                  maxLines: 2,
+                  iconSizeFactor: 31,
+                  settingsProvider: settingsProvider,
+                  isCentered: false,
                 ),
-              ),
-              CustomAppTextField(
-                width: 348,
-                height: 300,
-                headerText: "recipe",
-                icon: Assets.mealRecipe,
-                controller: MealController().recipeController,
-                maxLines: 10,
-                iconSizeFactor: 48,
-                settingsProvider: settingsProvider,
-                isCentered: false,
-              ),
-              SizeConfig.customSizedBox(null, 50, null),
-
-              CustomButton(
-                onTap: () async {
-                  widget.isAddScreen
-                      ? await MealController().addMeal(mealsProvider)
-                      : await MealController()
-                      .updateMeal(mealsProvider, widget.meal);
-                },
-                text: TranslationService()
-                    .translate(widget.isAddScreen ? "confirm" : "edit"),
-                width: SizeConfig.getProportionalWidth(126),
-                height: SizeConfig.getProportionalHeight(400),
-              )
-            ],
+                Padding(
+                  padding: EdgeInsets.symmetric(
+                      horizontal: SizeConfig.getProportionalWidth(10)),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    textDirection: settingsProvider.language == 'en'
+                        ? TextDirection.ltr
+                        : TextDirection.rtl,
+                    children: [
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: SizeConfig.customSizedBox(
+                            31, 31, Image.asset(Assets.mealIngredients)),
+                      ),
+                      CustomText(
+                        isCenter: false,
+                        text: TranslationService().translate("ingredients"),
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      SizeConfig.customSizedBox(15, null, null),
+                      SizeConfig.customSizedBox(
+                          420,
+                          130,
+                          Directionality(
+                            textDirection: settingsProvider.language == 'ar'
+                                ? TextDirection.rtl
+                                : TextDirection.ltr,
+                            child: GridView.builder(
+                              gridDelegate:
+                                  const SliverGridDelegateWithFixedCrossAxisCount(
+                                      mainAxisExtent: 50,
+                                      crossAxisCount: 4,
+                                      crossAxisSpacing: 4,
+                                      mainAxisSpacing: 3,
+                                      childAspectRatio: 10),
+                              itemCount: mealsProvider.numberOfIngredients,
+                              itemBuilder: (context, index) {
+                                if (index ==
+                                    mealsProvider.numberOfIngredients - 1) {
+                                  return AddIngredientBox(
+                                      mealsProvider: mealsProvider);
+                                }
+                                return IngredientBox(
+                                    settingsProvider: settingsProvider,
+                                    controller: mealsProvider
+                                        .ingredientsControllers[index]);
+                              },
+                            ),
+                          )),
+                    ],
+                  ),
+                ),
+                CustomAppTextField(
+                  width: 348,
+                  height: 300,
+                  headerText: "recipe",
+                  icon: Assets.mealRecipe,
+                  controller: MealController().recipeController,
+                  maxLines: 10,
+                  iconSizeFactor: 48,
+                  settingsProvider: settingsProvider,
+                  isCentered: false,
+                ),
+                SizeConfig.customSizedBox(null, 50, null),
+                CustomButton(
+                  onTap: () async {
+                    widget.isAddScreen
+                        ? await MealController().addMeal(mealsProvider)
+                        : await MealController()
+                            .updateMeal(mealsProvider, widget.meal);
+                  },
+                  text: TranslationService()
+                      .translate(widget.isAddScreen ? "confirm" : "edit"),
+                  width: SizeConfig.getProportionalWidth(126),
+                  height: SizeConfig.getProportionalHeight(400),
+                )
+              ],
+            ),
           ),
         ),
       ),

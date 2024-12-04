@@ -17,28 +17,28 @@ class MealsProvider with ChangeNotifier {
   final MealsServices _ms = MealsServices();
   bool isLoading = false;
   bool imageIsPicked = false;
+  bool DOWIsPicked = false;
   XFile? pickedFile;
+  XFile? pickedDOW;
   int numberOfIngredients = 2;
   List<TextEditingController> ingredientsControllers = [
     TextEditingController(),
   ];
 
-
   void getAllPlannedMeals() async {
     try {
       isLoading = true;
       meals.clear();
-      List<Meal> fetchedMeals =
-      await _ms.getAllPlannedMeals();
+      List<Meal> fetchedMeals = await _ms.getAllPlannedMeals();
       for (var doc in fetchedMeals) {
         Meal meal = Meal(
-            documentId: doc.documentId,
-            name: doc.name,
-            imageUrl: doc.imageUrl,
-            categoryId: doc.categoryId,
-            ingredients: doc.ingredients,
-            recipe: doc.recipe,
-            );
+          documentId: doc.documentId,
+          name: doc.name,
+          imageUrl: doc.imageUrl,
+          categoryId: doc.categoryId,
+          ingredients: doc.ingredients,
+          recipe: doc.recipe,
+        );
         meals.add(meal);
       }
       isLoading = false;
@@ -59,12 +59,17 @@ class MealsProvider with ChangeNotifier {
     return updatedMeal;
   }
 
-  Future<void> pickImage() async {
+  Future<void> pickImage(String source) async {
     try {
       final file = await ImagePickerWeb.getImageAsBytes();
       if (file != null) {
-        pickedFile = XFile.fromData(file);
-        imageIsPicked = true;
+        if (source == "meal") {
+          pickedFile = XFile.fromData(file);
+          imageIsPicked = true;
+        } else if (source == "DOW") {
+          pickedDOW = XFile.fromData(file);
+          DOWIsPicked = true;
+        }
       }
       notifyListeners();
     } catch (e) {
@@ -80,7 +85,9 @@ class MealsProvider with ChangeNotifier {
 
   void resetValues() {
     imageIsPicked = false;
+    DOWIsPicked = false;
     pickedFile = null;
+    pickedDOW = null;
     numberOfIngredients = 2;
     MealController().recipeController.clear();
     MealController().ingredientsController.clear();
@@ -110,5 +117,4 @@ class MealsProvider with ChangeNotifier {
     });
     notifyListeners();
   }
-
 }
