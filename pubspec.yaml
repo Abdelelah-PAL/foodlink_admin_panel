@@ -27,6 +27,7 @@ dependencies:
   file_picker: ^8.1.4
   image_picker_web: ^4.0.0
   html: ^0.15.5
+  dotted_border: ^2.1.0
 
 
 

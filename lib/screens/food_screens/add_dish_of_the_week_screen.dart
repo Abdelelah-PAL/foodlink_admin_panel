@@ -1,3 +1,4 @@
+import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:foodlink_admin_panel/core/constants/colors.dart';
 import 'package:foodlink_admin_panel/core/utils/size_config.dart';
@@ -24,28 +25,31 @@ class _AddDishOfTheWeekScreenState extends State<AddDishOfTheWeekScreen> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Center(
-            child: Container(
-              width: SizeConfig.getProperVerticalSpace(3),
-              height: SizeConfig.getProperVerticalSpace(3),
-              alignment: Alignment.center,
-              decoration: BoxDecoration(
-                  shape: BoxShape.rectangle,
-                  border: Border.all(
-                    style: BorderStyle.solid,
-                  )),
-              child: Center(
-                  child: mealsProvider.DOWIsPicked == false
-                      ? IconButton(
-                          onPressed: () => MealsProvider().pickImage("DOW"),
-                          icon: const Icon(Icons.add_a_photo))
-                      : SizedBox(
-                          width: SizeConfig.getProperVerticalSpace(3),
-                          height: SizeConfig.getProperVerticalSpace(3),
-                          child: Image.network(
-                            mealsProvider.pickedDOW!.path,
-                            fit: BoxFit.fill,
-                          ),
-                        )),
+            child: DottedBorder(
+              borderType: BorderType.RRect,
+              child: ClipRect(
+                child: Container(
+                  width: SizeConfig.getProperVerticalSpace(3),
+                  height: SizeConfig.getProperVerticalSpace(3),
+                  alignment: Alignment.center,
+                  decoration: const BoxDecoration(
+                      shape: BoxShape.rectangle,
+                     ),
+                  child: Center(
+                      child: mealsProvider.DOWIsPicked == false
+                          ? IconButton(
+                              onPressed: () => MealsProvider().pickImage("DOW"),
+                              icon: const Icon(Icons.add_a_photo))
+                          : SizedBox(
+                              width: SizeConfig.getProperVerticalSpace(3),
+                              height: SizeConfig.getProperVerticalSpace(3),
+                              child: Image.network(
+                                mealsProvider.pickedDOW!.path,
+                                fit: BoxFit.fill,
+                              ),
+                            )),
+                ),
+              ),
             ),
           ),
           SizeConfig.customSizedBox(null, 50, null),

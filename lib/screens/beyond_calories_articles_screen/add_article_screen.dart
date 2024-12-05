@@ -1,3 +1,4 @@
+import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:foodlink_admin_panel/controllers/beyond_calories_article_controller.dart';
 import 'package:foodlink_admin_panel/providers/settings_provider.dart';
@@ -30,25 +31,28 @@ class _AddArticleScreenState extends State<AddArticleScreen> {
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Container(
-            width: SizeConfig.getProperVerticalSpace(3),
-            height: SizeConfig.getProperVerticalSpace(3),
-            alignment: Alignment.center,
-            decoration: BoxDecoration(
-                shape: BoxShape.rectangle,
-                border: Border.all(
-                  style: BorderStyle.solid,
-                )),
-            child: beyondCaloriesArticlesProvider.imageIsPicked == false
-                ? IconButton(
-                onPressed: BeyondCaloriesArticlesProvider().pickImage,
-                icon: const Icon(Icons.add_a_photo))
-                : SizedBox(
-              width: SizeConfig.getProperVerticalSpace(3),
-              height: SizeConfig.getProperVerticalSpace(3),
-              child: Image.network(
-                beyondCaloriesArticlesProvider.pickedFile!.path,
-                fit: BoxFit.fill,
+          DottedBorder(
+            borderType: BorderType.RRect,
+            child: ClipRect(
+              child: Container(
+                width: SizeConfig.getProperVerticalSpace(3),
+                height: SizeConfig.getProperVerticalSpace(3),
+                alignment: Alignment.center,
+                decoration: const BoxDecoration(
+                    shape: BoxShape.rectangle,
+                   ),
+                child: beyondCaloriesArticlesProvider.imageIsPicked == false
+                    ? IconButton(
+                    onPressed: BeyondCaloriesArticlesProvider().pickImage,
+                    icon: const Icon(Icons.add_a_photo))
+                    : SizedBox(
+                  width: SizeConfig.getProperVerticalSpace(3),
+                  height: SizeConfig.getProperVerticalSpace(3),
+                  child: Image.network(
+                    beyondCaloriesArticlesProvider.pickedFile!.path,
+                    fit: BoxFit.fill,
+                  ),
+                ),
               ),
             ),
           ),
