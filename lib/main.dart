@@ -27,10 +27,7 @@ void main() async {
     messagingSenderId: "474506091113",
     projectId: "foodlink-6c41e",
   ));
-  await FirebaseAppCheck.instance.activate(
-    webProvider:
-        ReCaptchaV3Provider('6Lc0uowqAAAAAO0COOKmnMC4_njWWk5c2K7RC-A6'),
-  );
+
   FirebaseAppCheck.instance.setTokenAutoRefreshEnabled(true);
 
   runApp(MultiProvider(providers: [

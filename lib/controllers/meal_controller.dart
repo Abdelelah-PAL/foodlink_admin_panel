@@ -41,7 +41,8 @@ class MealController {
   Future<void> addMeal(mealsProvider) async {
     String imageUrl = '';
     if (mealsProvider.imageIsPicked) {
-      imageUrl = await MealsProvider().uploadImage(mealsProvider.pickedFile, "planned_meals_images");
+      imageUrl = await MealsProvider()
+          .uploadImage(mealsProvider.pickedFile, "planned_meals_images");
     }
     List<String> ingredients = MealsProvider()
         .ingredientsControllers
@@ -50,11 +51,11 @@ class MealController {
         .toList();
 
     var addedMeal = await MealsProvider().addMeal(Meal(
-        name: MealController().nameController.text,
-        ingredients: ingredients,
-        recipe: MealController().recipeController.text,
-        imageUrl: imageUrl.isNotEmpty ? imageUrl : null,
-        ));
+      name: MealController().nameController.text,
+      ingredients: ingredients,
+      recipe: MealController().recipeController.text,
+      imageUrl: imageUrl.isNotEmpty ? imageUrl : null,
+    ));
 
     mealsProvider.resetValues();
     Get.to(MealScreen(meal: addedMeal));
@@ -63,7 +64,8 @@ class MealController {
   Future<void> updateMeal(mealsProvider, meal) async {
     String imageUrl = '';
     if (mealsProvider.imageIsPicked) {
-      imageUrl = await MealsProvider().uploadImage(mealsProvider.pickedFile, "planned_meals_images");
+      imageUrl = await MealsProvider()
+          .uploadImage(mealsProvider.pickedFile, "planned_meals_images");
     }
     List<String> ingredients = MealsProvider()
         .ingredientsControllers
@@ -72,13 +74,13 @@ class MealController {
         .toList();
 
     var updatedMeal = await MealsProvider().updateMeal(Meal(
-        documentId: meal.documentId,
-        categoryId: meal.categoryId,
-        name: MealController().nameController.text,
-        ingredients: ingredients,
-        recipe: MealController().recipeController.text,
-        imageUrl: imageUrl.isNotEmpty ? imageUrl : meal.imageUrl,
-        ));
+      documentId: meal.documentId,
+      categoryId: meal.categoryId,
+      name: MealController().nameController.text,
+      ingredients: ingredients,
+      recipe: MealController().recipeController.text,
+      imageUrl: imageUrl.isNotEmpty ? imageUrl : meal.imageUrl,
+    ));
 
     Get.to(MealScreen(meal: updatedMeal));
   }

@@ -1,3 +1,4 @@
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:image_picker_web/image_picker_web.dart';
@@ -18,8 +19,8 @@ class MealsProvider with ChangeNotifier {
   bool isLoading = false;
   bool imageIsPicked = false;
   bool DOWIsPicked = false;
-  XFile? pickedFile;
-  XFile? pickedDOW;
+  FilePickerResult? pickedFile;
+  FilePickerResult? pickedDOW;
   int numberOfIngredients = 2;
   List<TextEditingController> ingredientsControllers = [
     TextEditingController(),
@@ -61,13 +62,15 @@ class MealsProvider with ChangeNotifier {
 
   Future<void> pickImage(String source) async {
     try {
-      final file = await ImagePickerWeb.getImageAsBytes();
+      FilePickerResult? file = await FilePicker.platform.pickFiles(
+        type: FileType.image,
+      );
       if (file != null) {
         if (source == "meal") {
-          pickedFile = XFile.fromData(file);
+          pickedFile = file;
           imageIsPicked = true;
         } else if (source == "DOW") {
-          pickedDOW = XFile.fromData(file);
+          pickedDOW = file;
           DOWIsPicked = true;
         }
       }

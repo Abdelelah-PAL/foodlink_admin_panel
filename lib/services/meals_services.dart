@@ -1,17 +1,19 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:image_compression/image_compression.dart';
 import 'package:image_picker/image_picker.dart';
 import '../models/meal.dart';
+import 'dart:html' as html;
 
 
 class MealsServices with ChangeNotifier {
   final _firebaseFireStore = FirebaseFirestore.instance;
 
-    Future<String?> uploadImage(XFile image, String destination) async {
-      try {
-        final bytes = await image.readAsBytes();
+    Future<String?> uploadImage(FilePickerResult image, String destination) async {
+        String downloadURL = '';
+        Uint8List? fileBytes = image.files.first.bytes;
         // final input = ImageFile(
         //   rawBytes: bytes,
         //   filePath: image.path,
@@ -19,16 +21,20 @@ class MealsServices with ChangeNotifier {
         // final output = compress(ImageFileConfiguration(input: input));
         final imageRef = FirebaseStorage.instance
             .ref()
-            .child("$destination/${image.name}");
-        await imageRef.putData(bytes);
+            .child("$destination/${image.names[0]}");
+        print('moew');
+        try {
+          await imageRef.putData(fileBytes!);
+        }
+        catch(ex){
+          print(ex.toString());
+        }
+        print('moew2');
+        downloadURL = await imageRef.getDownloadURL();
+        print('moew3');
 
-        final downloadURL = await imageRef.getDownloadURL();
-        print('Uploaded: $downloadURL');
         return downloadURL;
-      } catch (ex) {
-        print("Error uploading image: $ex");
-        rethrow;
-      }
+
   }
   Future<List<Meal>> getAllPlannedMeals() async {
     try {

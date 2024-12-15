@@ -83,10 +83,10 @@ class _MealImageContainerState extends State<MealImageContainer> {
                   BorderSide(width: 1, color: AppColors.defaultBorderColor),
                 ),
               ),
-              child:Image.network(
-                mealsProvider.pickedFile!.path,
-                fit: BoxFit.fill,
-              )
+                child: Image.memory(
+                  mealsProvider.pickedFile!.files.first.bytes!,
+                  fit: BoxFit.fill,
+                )
 
             ),
         ],
