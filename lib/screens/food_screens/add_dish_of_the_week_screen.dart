@@ -19,9 +19,9 @@ class _AddDishOfTheWeekScreenState extends State<AddDishOfTheWeekScreen> {
   @override
   Widget build(BuildContext context) {
     MealsProvider mealsProvider =
-    Provider.of<MealsProvider>(context, listen: true);
+        Provider.of<MealsProvider>(context, listen: true);
     SettingsProvider settingsProvider =
-    Provider.of<SettingsProvider>(context, listen: true);
+        Provider.of<SettingsProvider>(context, listen: true);
     return Scaffold(
       backgroundColor: AppColors.backgroundColor,
       body: Column(
@@ -40,18 +40,17 @@ class _AddDishOfTheWeekScreenState extends State<AddDishOfTheWeekScreen> {
                     shape: BoxShape.rectangle,
                   ),
                   child: Center(
-                      child: mealsProvider.DOWIsPicked == false
+                      child: mealsProvider.dOWIsPicked == false
                           ? IconButton(
-                          onPressed: () => MealsProvider().pickImage("DOW"),
-                          icon: const Icon(Icons.add_a_photo))
+                              onPressed: () => MealsProvider().pickImage("DOW"),
+                              icon: const Icon(Icons.add_a_photo))
                           : SizedBox(
-                          width: SizeConfig.getProperVerticalSpace(3),
-                          height: SizeConfig.getProperVerticalSpace(3),
-                          child: Image.memory(
-                            mealsProvider.pickedDOW!.files.first.bytes!,
-                            fit: BoxFit.fill,
-                          )
-                      )),
+                              width: SizeConfig.getProperVerticalSpace(3),
+                              height: SizeConfig.getProperVerticalSpace(3),
+                              child: Image.memory(
+                                mealsProvider.pickedDOW!.files.first.bytes!,
+                                fit: BoxFit.fill,
+                              ))),
                 ),
               ),
             ),

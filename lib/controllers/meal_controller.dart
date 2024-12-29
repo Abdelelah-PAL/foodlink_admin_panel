@@ -50,14 +50,17 @@ class MealController {
         .where((text) => text.isNotEmpty)
         .toList();
 
-    var addedMeal = await MealsProvider().addMeal(Meal(
-      name: MealController().nameController.text,
-      ingredients: ingredients,
-      recipe: MealController().recipeController.text,
-      imageUrl: imageUrl.isNotEmpty ? imageUrl : null,
-    ));
+    final addedMeal = await MealsProvider().addMeal(
+      Meal(
+        name: MealController().nameController.text,
+        ingredients: ingredients,
+        recipe: MealController().recipeController.text,
+        imageUrl: imageUrl.isNotEmpty ? imageUrl : null,
+      ),
+    );
 
     mealsProvider.resetValues();
+    if (addedMeal == null) return;
     Get.to(MealScreen(meal: addedMeal));
   }
 
@@ -81,6 +84,7 @@ class MealController {
       recipe: MealController().recipeController.text,
       imageUrl: imageUrl.isNotEmpty ? imageUrl : meal.imageUrl,
     ));
+    if (updatedMeal == null) return;
 
     Get.to(MealScreen(meal: updatedMeal));
   }

@@ -20,13 +20,14 @@ import 'services/translation_services.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
-      options: const FirebaseOptions(
-    apiKey: "AIzaSyB2-BqoayC6CbRZMKoK-bP8XZhYJZGRFO8",
-    appId: "1:474506091113:web:e4ee7fdbff4369e28f60f8",
-    storageBucket: "foodlink-6c41e.appspot.com",
-    messagingSenderId: "474506091113",
-    projectId: "foodlink-6c41e",
-  ));
+    options: const FirebaseOptions(
+      apiKey: "AIzaSyB2-BqoayC6CbRZMKoK-bP8XZhYJZGRFO8",
+      appId: "1:474506091113:web:e4ee7fdbff4369e28f60f8",
+      storageBucket: "foodlink-6c41e.appspot.com",
+      messagingSenderId: "474506091113",
+      projectId: "foodlink-6c41e",
+    ),
+  );
 
   FirebaseAppCheck.instance.setTokenAutoRefreshEnabled(true);
 
