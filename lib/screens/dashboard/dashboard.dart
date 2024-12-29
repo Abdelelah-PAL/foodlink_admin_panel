@@ -22,8 +22,7 @@ class _DashboardState extends State<Dashboard> {
 
   @override
   Widget build(BuildContext context) {
-    DashboardProvider dashboardProviderWatcher =
-        context.watch<DashboardProvider>();
+    final dashboardProviderWatcher = context.watch<DashboardProvider>();
 
     return Scaffold(
       backgroundColor: AppColors.backgroundColor,
@@ -33,7 +32,9 @@ class _DashboardState extends State<Dashboard> {
         child: DashboardController()
             .dashBoardList[dashboardProviderWatcher.selectedIndex],
       ),
-      bottomNavigationBar: const CustomBottomNavigationBar(fromDashboard: true,),
+      bottomNavigationBar: const CustomBottomNavigationBar(
+        fromDashboard: true,
+      ),
     );
   }
 }

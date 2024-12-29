@@ -20,26 +20,31 @@ import 'services/translation_services.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
-      options: const FirebaseOptions(
-    apiKey: "AIzaSyB2-BqoayC6CbRZMKoK-bP8XZhYJZGRFO8",
-    appId: "1:474506091113:web:e4ee7fdbff4369e28f60f8",
-    storageBucket: "foodlink-6c41e.appspot.com",
-    messagingSenderId: "474506091113",
-    projectId: "foodlink-6c41e",
-  ));
+    options: const FirebaseOptions(
+      apiKey: "AIzaSyB2-BqoayC6CbRZMKoK-bP8XZhYJZGRFO8",
+      authDomain: "foodlink-6c41e.firebaseapp.com",
+      projectId: "foodlink-6c41e",
+      storageBucket: "foodlink-6c41e.firebasestorage.app",
+      messagingSenderId: "474506091113",
+      appId: "1:474506091113:web:e4ee7fdbff4369e28f60f8",
+      measurementId: "G-6RNQKRNZQ0",
+    ),
+  );
 
   FirebaseAppCheck.instance.setTokenAutoRefreshEnabled(true);
 
-  runApp(MultiProvider(providers: [
-    ChangeNotifierProvider(create: (ctx) => GeneralProvider()),
-    ChangeNotifierProvider(create: (ctx) => AuthProvider()),
-    ChangeNotifierProvider(create: (ctx) => AdminsProvider()),
-    ChangeNotifierProvider(create: (ctx) => MealCategoriesProvider()),
-    ChangeNotifierProvider(create: (ctx) => DashboardProvider()),
-    ChangeNotifierProvider(create: (ctx) => MealsProvider()),
-    ChangeNotifierProvider(create: (ctx) => SettingsProvider()),
-    ChangeNotifierProvider(create: (ctx) => BeyondCaloriesArticlesProvider()),
-  ], child: const MyApp()));
+  runApp(
+    MultiProvider(providers: [
+      ChangeNotifierProvider(create: (ctx) => GeneralProvider()),
+      ChangeNotifierProvider(create: (ctx) => AuthProvider()),
+      ChangeNotifierProvider(create: (ctx) => AdminsProvider()),
+      ChangeNotifierProvider(create: (ctx) => MealCategoriesProvider()),
+      ChangeNotifierProvider(create: (ctx) => DashboardProvider()),
+      ChangeNotifierProvider(create: (ctx) => MealsProvider()),
+      ChangeNotifierProvider(create: (ctx) => SettingsProvider()),
+      ChangeNotifierProvider(create: (ctx) => BeyondCaloriesArticlesProvider()),
+    ], child: const MyApp()),
+  );
 }
 
 class MyApp extends StatefulWidget {
@@ -88,10 +93,10 @@ class MyAppState extends State<MyApp> {
           checkColor: WidgetStateProperty.all(AppColors.backgroundColor),
         ),
       ),
-      initialRoute: '/signup', // Initial route
+      initialRoute: '/',
       getPages: [
         GetPage(
-          name: '/signup',
+          name: '/',
           page: () => const SignUpScreen(),
         ),
         GetPage(

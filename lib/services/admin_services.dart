@@ -13,13 +13,11 @@ class AdminsServices with ChangeNotifier {
         name: adminDetails.name,
       );
 
-
       await _firebaseFireStore.collection('admin_details').add(admin.toMap());
     } catch (ex) {
       rethrow;
     }
   }
-
 
   Future<QuerySnapshot<Map<String, dynamic>>> getAdminById(String id) async {
     try {
@@ -45,8 +43,7 @@ class AdminsServices with ChangeNotifier {
 
       if (querySnapshot.docs.isNotEmpty) {
         var docId = querySnapshot.docs.first.id;
-        if (querySnapshot.docs.first['name'] == null &&
-            name.isNotEmpty) {
+        if (querySnapshot.docs.first['name'] == null && name.isNotEmpty) {
           await _firebaseFireStore
               .collection('admin_details')
               .doc(docId)
@@ -62,15 +59,14 @@ class AdminsServices with ChangeNotifier {
 
   Future<AdminDetails?> getAdminByEmail(String email) async {
     try {
-      QuerySnapshot<Map<String, dynamic>> adminQuery = await FirebaseFirestore
-          .instance
+      QuerySnapshot<Map<String, dynamic>> adminQuery = await _firebaseFireStore
           .collection('admin_details')
           .where('email', isEqualTo: email)
           .limit(1)
           .get();
-     if (adminQuery.docs.isEmpty) {
-       return null;
-     }
+      if (adminQuery.docs.isEmpty) {
+        return null;
+      }
 
       AdminDetails admin = adminQuery.docs.map((doc) {
         return AdminDetails.fromJson(doc.data());

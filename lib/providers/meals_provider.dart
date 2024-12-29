@@ -1,7 +1,5 @@
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:image_picker_web/image_picker_web.dart';
 import '../controllers/meal_controller.dart';
 import '../models/meal.dart';
 import '../services/meals_services.dart';
@@ -18,7 +16,7 @@ class MealsProvider with ChangeNotifier {
   final MealsServices _ms = MealsServices();
   bool isLoading = false;
   bool imageIsPicked = false;
-  bool DOWIsPicked = false;
+  bool dOWIsPicked = false;
   FilePickerResult? pickedFile;
   FilePickerResult? pickedDOW;
   int numberOfIngredients = 2;
@@ -71,7 +69,7 @@ class MealsProvider with ChangeNotifier {
           imageIsPicked = true;
         } else if (source == "DOW") {
           pickedDOW = file;
-          DOWIsPicked = true;
+          dOWIsPicked = true;
         }
       }
       notifyListeners();
@@ -81,14 +79,12 @@ class MealsProvider with ChangeNotifier {
     }
   }
 
-  Future<String> uploadImage(image, source) async {
-    String? downloadUrl = await _ms.uploadImage(image, source);
-    return downloadUrl!;
-  }
+  Future<String?> uploadImage(FilePickerResult path, String tag) async =>
+      _ms.uploadImage(path, tag);
 
   void resetValues() {
     imageIsPicked = false;
-    DOWIsPicked = false;
+    dOWIsPicked = false;
     pickedFile = null;
     pickedDOW = null;
     numberOfIngredients = 2;

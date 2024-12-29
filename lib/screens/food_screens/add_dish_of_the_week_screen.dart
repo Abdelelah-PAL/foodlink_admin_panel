@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:foodlink_admin_panel/controllers/meal_controller.dart';
@@ -18,10 +20,9 @@ class AddDishOfTheWeekScreen extends StatefulWidget {
 class _AddDishOfTheWeekScreenState extends State<AddDishOfTheWeekScreen> {
   @override
   Widget build(BuildContext context) {
-    MealsProvider mealsProvider =
-    Provider.of<MealsProvider>(context, listen: true);
+    final mealsProvider = context.watch<MealsProvider>();
     SettingsProvider settingsProvider =
-    Provider.of<SettingsProvider>(context, listen: true);
+        Provider.of<SettingsProvider>(context, listen: true);
     return Scaffold(
       backgroundColor: AppColors.backgroundColor,
       body: Column(
@@ -40,33 +41,45 @@ class _AddDishOfTheWeekScreenState extends State<AddDishOfTheWeekScreen> {
                     shape: BoxShape.rectangle,
                   ),
                   child: Center(
-                      child: mealsProvider.DOWIsPicked == false
-                          ? IconButton(
-                          onPressed: () => MealsProvider().pickImage("DOW"),
-                          icon: const Icon(Icons.add_a_photo))
-                          : SizedBox(
-                          width: SizeConfig.getProperVerticalSpace(3),
-                          height: SizeConfig.getProperVerticalSpace(3),
-                          child: Image.memory(
-                            mealsProvider.pickedDOW!.files.first.bytes!,
-                            fit: BoxFit.fill,
-                          )
-                      )),
+                    child: mealsProvider.dOWIsPicked == false
+                        ? IconButton(
+                            onPressed: () => mealsProvider.pickImage("DOW"),
+                            icon: const Icon(Icons.add_a_photo))
+                        : SizedBox(
+                            width: SizeConfig.getProperVerticalSpace(3),
+                            height: SizeConfig.getProperVerticalSpace(3),
+                            child: Image.memory(
+                              mealsProvider.pickedDOW!.files.first.bytes!,
+                              fit: BoxFit.fill,
+                            ),
+                          ),
+                  ),
                 ),
               ),
             ),
           ),
           SizeConfig.customSizedBox(null, 50, null),
           CustomButton(
-              onTap: () async {
-                await MealsProvider()
-                    .uploadImage(mealsProvider.pickedDOW!, "dish_of_the_week");
+            onTap: () async {
+              try {
+                if (mealsProvider.pickedDOW == null) {
+                  throw Exception('pickedDOW is null');
+                }
+                await mealsProvider.uploadImage(
+                  mealsProvider.pickedDOW!,
+                  "dish_of_the_week",
+                );
+                if (!context.mounted) return;
                 MealController().showSuccessDialog(context, settingsProvider);
-                MealsProvider().resetValues();
-              },
-              text: "upload",
-              width: 200,
-              height: 100)
+                mealsProvider.resetValues();
+              } catch (e) {
+                log('uploadImage :: $e');
+              }
+            },
+            text: "upload",
+            width: 200,
+            height: 100,
+          )
         ],
       ),
     );

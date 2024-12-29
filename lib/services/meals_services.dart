@@ -1,83 +1,72 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:file_picker/file_picker.dart';
-import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutter/foundation.dart';
-import 'package:image_compression/image_compression.dart';
-import 'package:image_picker/image_picker.dart';
-import '../models/meal.dart';
-import 'dart:html' as html;
+import 'dart:developer';
 
+import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:file_picker/file_picker.dart';
+
+import 'package:foodlink_admin_panel/models/meal.dart';
 
 class MealsServices with ChangeNotifier {
-  final _firebaseFireStore = FirebaseFirestore.instance;
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final FirebaseStorage _storage = FirebaseStorage.instance;
 
-    Future<String?> uploadImage(FilePickerResult image, String destination) async {
-        String downloadURL = '';
-        Uint8List? fileBytes = image.files.first.bytes;
-        // final input = ImageFile(
-        //   rawBytes: bytes,
-        //   filePath: image.path,
-        // );
-        // final output = compress(ImageFileConfiguration(input: input));
-        final imageRef = FirebaseStorage.instance
-            .ref()
-            .child("$destination/${image.names[0]}");
-        print('moew');
-        try {
-          await imageRef.putData(fileBytes!);
-        }
-        catch(ex){
-          print(ex.toString());
-        }
-        print('moew2');
-        downloadURL = await imageRef.getDownloadURL();
-        print('moew3');
+  Future<String?> uploadImage(
+    FilePickerResult path,
+    String tag,
+  ) async {
+    try {
+      final fileBytes = path.files.first.bytes;
+      final fileName = path.files.first.name;
 
-        return downloadURL;
+      if (fileBytes == null || fileName.isEmpty) {
+        throw Exception("Invalid file data.");
+      }
 
+      final imageRef = _storage.ref().child("$tag/$fileName");
+
+      await imageRef.putData(fileBytes);
+
+      return await imageRef.getDownloadURL();
+    } catch (ex) {
+      log("Error uploading image: ${ex.toString()}");
+      return null;
+    }
   }
+
   Future<List<Meal>> getAllPlannedMeals() async {
     try {
-      QuerySnapshot<Map<String, dynamic>> mealQuery = await _firebaseFireStore
-          .collection('planned_meals')
-          .get();
-
-      List<Meal> meals = mealQuery.docs.map((doc) {
+      final querySnapshot = await _firestore.collection('planned_meals').get();
+      return querySnapshot.docs.map((doc) {
         return Meal.fromJson(doc.data(), doc.id);
       }).toList();
-
-      return meals;
     } catch (ex) {
+      log("Error fetching planned meals: ${ex.toString()}");
       rethrow;
     }
   }
 
-
-  Future<Meal> addMeal(meal) async {
+  Future<Meal> addMeal(Meal meal) async {
     try {
-      var addedMeal =
-          await _firebaseFireStore.collection('planned_meals').add(meal.toMap());
-      var mealSnapshot = await addedMeal.get();
-
-      return Meal.fromJson(mealSnapshot.data()!, addedMeal.id);
+      final mealRef =
+          await _firestore.collection('planned_meals').add(meal.toMap());
+      final mealSnapshot = await mealRef.get();
+      return Meal.fromJson(mealSnapshot.data()!, mealRef.id);
     } catch (ex) {
+      log("Error adding meal: ${ex.toString()}");
       rethrow;
     }
   }
-
 
   Future<Meal> updateMeal(Meal meal) async {
     try {
-      await _firebaseFireStore.collection('meals').doc(meal.documentId).set(
-            meal.toMap(),
-            SetOptions(merge: false),
-          );
-      var docRef = _firebaseFireStore.collection('meals').doc(meal.documentId);
-      var docSnapshot = await docRef.get();
+      final mealRef = _firestore.collection('meals').doc(meal.documentId);
+      await mealRef.set(meal.toMap(), SetOptions(merge: false));
 
-      Meal updatedMeal = Meal.fromJson(docSnapshot.data()!, meal.documentId);
-      return updatedMeal;
+      final updatedSnapshot = await mealRef.get();
+      return Meal.fromJson(updatedSnapshot.data()!, meal.documentId);
     } catch (ex) {
+      log("Error updating meal: ${ex.toString()}");
       rethrow;
     }
   }
