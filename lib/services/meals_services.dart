@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -10,22 +12,24 @@ class MealsServices with ChangeNotifier {
   final FirebaseStorage _storage = FirebaseStorage.instance;
 
   Future<String?> uploadImage(
-      FilePickerResult image, String destination) async {
+    FilePickerResult path,
+    String tag,
+  ) async {
     try {
-      final fileBytes = image.files.first.bytes;
-      final fileName = image.files.first.name;
+      final fileBytes = path.files.first.bytes;
+      final fileName = path.files.first.name;
 
       if (fileBytes == null || fileName.isEmpty) {
         throw Exception("Invalid file data.");
       }
 
-      final imageRef = _storage.ref().child("$destination/$fileName");
+      final imageRef = _storage.ref().child("$tag/$fileName");
 
       await imageRef.putData(fileBytes);
 
       return await imageRef.getDownloadURL();
     } catch (ex) {
-      debugPrint("Error uploading image: ${ex.toString()}");
+      log("Error uploading image: ${ex.toString()}");
       return null;
     }
   }
@@ -37,24 +41,24 @@ class MealsServices with ChangeNotifier {
         return Meal.fromJson(doc.data(), doc.id);
       }).toList();
     } catch (ex) {
-      debugPrint("Error fetching planned meals: ${ex.toString()}");
+      log("Error fetching planned meals: ${ex.toString()}");
       rethrow;
     }
   }
 
-  Future<Meal?> addMeal(Meal meal) async {
+  Future<Meal> addMeal(Meal meal) async {
     try {
       final mealRef =
           await _firestore.collection('planned_meals').add(meal.toMap());
       final mealSnapshot = await mealRef.get();
       return Meal.fromJson(mealSnapshot.data()!, mealRef.id);
     } catch (ex) {
-      debugPrint("Error adding meal: ${ex.toString()}");
-      return null;
+      log("Error adding meal: ${ex.toString()}");
+      rethrow;
     }
   }
 
-  Future<Meal?> updateMeal(Meal meal) async {
+  Future<Meal> updateMeal(Meal meal) async {
     try {
       final mealRef = _firestore.collection('meals').doc(meal.documentId);
       await mealRef.set(meal.toMap(), SetOptions(merge: false));
@@ -62,8 +66,8 @@ class MealsServices with ChangeNotifier {
       final updatedSnapshot = await mealRef.get();
       return Meal.fromJson(updatedSnapshot.data()!, meal.documentId);
     } catch (ex) {
-      debugPrint("Error updating meal: ${ex.toString()}");
-      return null;
+      log("Error updating meal: ${ex.toString()}");
+      rethrow;
     }
   }
 }

@@ -47,7 +47,7 @@ class _LoginScreenState extends State<LoginScreen> {
               padding: EdgeInsets.symmetric(
                   horizontal: SizeConfig.getProportionalWidth(10)),
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     SizeConfig.customSizedBox(
                         179, 179, Image.asset(Assets.pureLogo)),
@@ -63,8 +63,8 @@ class _LoginScreenState extends State<LoginScreen> {
                           color: AppColors.fontColor,
                         )),
                     CustomErrorTxt(
-                      text:
-                      TranslationService().translate(_authController.errorText),
+                      text: TranslationService()
+                          .translate(_authController.errorText),
                       settingsProvider: settingsProvider,
                     ),
                     SizeConfig.customSizedBox(null, 6, null),
@@ -81,7 +81,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                     CustomAuthenticationTextField(
                       hintText:
-                      TranslationService().translate('enter_password'),
+                          TranslationService().translate('enter_password'),
                       settingsProvider: settingsProvider,
                       obscureText: true,
                       textEditingController: _authController.passwordController,
@@ -170,29 +170,28 @@ class _LoginScreenState extends State<LoginScreen> {
 
                           var checkedEmailAdmin = await AdminsProvider()
                               .getAdminByEmail(
-                              _authController.emailController.text);
+                                  _authController.emailController.text);
                           var admin = await AuthProvider().login(
                             _authController.emailController.text,
                             _authController.passwordController.text,
                           );
 
-
                           if (admin == null || checkedEmailAdmin == null) {
                             setState(() {
-                            _authController.setWrongEmailOrPassword();
+                              _authController.setWrongEmailOrPassword();
                             });
 
-                        return;
-                        } else {
-                        if (_authController.rememberMe == true) {
-                        Get.toNamed('/dashboard');
-                        _authController.saveLoginInfo(
-                        admin.user!.email!,
-                        _authController.passwordController.text,
-                        );
+                            return;
+                          } else {
+                            if (_authController.rememberMe == true) {
+                              Get.toNamed('/dashboard');
+                              _authController.saveLoginInfo(
+                                admin.user!.email!,
+                                _authController.passwordController.text,
+                              );
+                            }
+                          }
                         }
-                        }
-                      }
                       },
                     ),
                     Padding(
@@ -204,7 +203,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     CustomAuthFooter(
                         headingText: "do_not_have_account",
                         tailText: "signup",
-                        onTap: () => {Get.toNamed('/signup')},
+                        onTap: () => {Get.toNamed('/')},
                         settingsProvider: settingsProvider)
                   ])),
         ));

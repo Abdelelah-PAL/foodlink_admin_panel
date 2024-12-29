@@ -20,36 +20,6 @@
   <link rel="manifest" href="manifest.json">
 </head>
 <body>
-
-<script src="https://www.gstatic.com/firebasejs/9.0.3/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/12.3.7/firebase-storage.js"></script>
-<script src="https://www.gstatic.com/firebasejs/5.5.1/firebase-firestore.js"></script>
-<script>
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.14.0/firebase-app.js";
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.3.7/firebase-storage.js";
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/5.5.1/firebase-firestore.js";
-    const firebaseConfig = {
-      apiKey: "AIzaSyB2-BqoayC6CbRZMKoK-bP8XZhYJZGRFO8",
-      authDomain: "foodlink-6c41e.firebaseapp.com",
-      projectId: "foodlink-6c41e",
-      storageBucket: "foodlink-6c41e.appspot.com",
-      messagingSenderId: "474506091113",
-      appId: "1:474506091113:web:e4ee7fdbff4369e28f60f8",
-      measurementId: "G-6RNQKRNZQ0",
-    };
-
-    // Initialize Firebase
-    const app = initializeApp(firebaseConfig);
-</script>
-
-<!-- Register service worker -->
-<script>
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('/flutter_service_worker.js').catch((error) => {
-        console.error('Service Worker registration failed:', error);
-      });
-    }
-</script>
 <script src="flutter_bootstrap.js" async></script>
 </body>
 </html>

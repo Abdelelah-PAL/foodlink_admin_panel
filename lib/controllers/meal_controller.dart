@@ -39,7 +39,7 @@ class MealController {
   }
 
   Future<void> addMeal(mealsProvider) async {
-    String imageUrl = '';
+    String? imageUrl;
     if (mealsProvider.imageIsPicked) {
       imageUrl = await MealsProvider()
           .uploadImage(mealsProvider.pickedFile, "planned_meals_images");
@@ -50,22 +50,19 @@ class MealController {
         .where((text) => text.isNotEmpty)
         .toList();
 
-    final addedMeal = await MealsProvider().addMeal(
-      Meal(
-        name: MealController().nameController.text,
-        ingredients: ingredients,
-        recipe: MealController().recipeController.text,
-        imageUrl: imageUrl.isNotEmpty ? imageUrl : null,
-      ),
-    );
+    var addedMeal = await MealsProvider().addMeal(Meal(
+      name: MealController().nameController.text,
+      ingredients: ingredients,
+      recipe: MealController().recipeController.text,
+      imageUrl: (imageUrl?.isNotEmpty ?? false) ? imageUrl : null,
+    ));
 
     mealsProvider.resetValues();
-    if (addedMeal == null) return;
     Get.to(MealScreen(meal: addedMeal));
   }
 
   Future<void> updateMeal(mealsProvider, meal) async {
-    String imageUrl = '';
+    String? imageUrl;
     if (mealsProvider.imageIsPicked) {
       imageUrl = await MealsProvider()
           .uploadImage(mealsProvider.pickedFile, "planned_meals_images");
@@ -82,9 +79,8 @@ class MealController {
       name: MealController().nameController.text,
       ingredients: ingredients,
       recipe: MealController().recipeController.text,
-      imageUrl: imageUrl.isNotEmpty ? imageUrl : meal.imageUrl,
+      imageUrl: (imageUrl?.isNotEmpty ?? false) ? imageUrl : meal.imageUrl,
     ));
-    if (updatedMeal == null) return;
 
     Get.to(MealScreen(meal: updatedMeal));
   }

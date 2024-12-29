@@ -48,13 +48,13 @@ class MealsProvider with ChangeNotifier {
     }
   }
 
-  Future<Meal?> addMeal(Meal meal) async {
+  Future<Meal> addMeal(Meal meal) async {
     var addedMeal = await _ms.addMeal(meal);
     return addedMeal;
   }
 
-  Future<Meal?> updateMeal(Meal meal) async {
-    final updatedMeal = await _ms.updateMeal(meal);
+  Future<Meal> updateMeal(Meal meal) async {
+    Meal updatedMeal = await _ms.updateMeal(meal);
     return updatedMeal;
   }
 
@@ -79,10 +79,8 @@ class MealsProvider with ChangeNotifier {
     }
   }
 
-  Future<String> uploadImage(image, source) async {
-    String? downloadUrl = await _ms.uploadImage(image, source);
-    return downloadUrl!;
-  }
+  Future<String?> uploadImage(FilePickerResult path, String tag) async =>
+      _ms.uploadImage(path, tag);
 
   void resetValues() {
     imageIsPicked = false;
