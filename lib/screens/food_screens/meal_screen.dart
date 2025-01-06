@@ -19,70 +19,71 @@ class MealScreen extends StatelessWidget {
 
   final Meal meal;
   final int? index;
-
-  @override
+   @override
   Widget build(BuildContext context) {
     SettingsProvider settingsProvider = Provider.of<SettingsProvider>(context);
     MealsProvider mealsProvider =
         Provider.of<MealsProvider>(context, listen: true);
     return Scaffold(
-      body: Column(
-        children: [
-          MealImageContainer(
-            imageUrl: meal.imageUrl,
-          ),
-          Padding(
-            padding: EdgeInsets.symmetric(
-              horizontal: SizeConfig.getProportionalWidth(20),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            MealImageContainer(
+              imageUrl: meal.imageUrl,
             ),
-            child: Column(
-              children: [
-                NameRow(
-                  name: meal.name,
-                  fontSize: 30,
-                  textWidth: 250,
-                  settingsProvider: settingsProvider,
-                ),
-                IngredientsRow(
-                  meal: meal,
-                  fontSize: 20,
-                  textWidth: 250,
-                  maxLines: 7,
-                  settingsProvider: settingsProvider,
-                ),
-                SizeConfig.customSizedBox(null, 20, null),
-                RecipeRow(
-                    meal: meal,
-                    fontSize: 15,
-                    settingsProvider: settingsProvider)
-              ],
-            ),
-          ),
-          Padding(
-              padding:
-                  EdgeInsets.only(bottom: SizeConfig.getProportionalHeight(20)),
+            Padding(
+              padding: EdgeInsets.symmetric(
+                horizontal: SizeConfig.getProportionalWidth(20),
+              ),
               child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    CustomButton(
-                        onTap: () {
-                          Get.to(const Dashboard());
-                        },
-                        text: TranslationService().translate("proceed"),
-                        width: 216,
-                        height: 150),
-                    SizeConfig.customSizedBox(null, 20, null),
-                    CustomButton(
-                        onTap: () {
-                          MealsProvider().fillDataForEdition(meal);
-                          Get.to(AddMealScreen(isAddScreen: false, meal: meal));
-                        },
-                        text: TranslationService().translate("edit"),
-                        width: 216,
-                        height: 150),
-                    SizeConfig.customSizedBox(null, 20, null),
-                  ]))
-        ],
+                children: [
+                  NameRow(
+                    name: meal.name,
+                    fontSize: 30,
+                    textWidth: 250,
+                    settingsProvider: settingsProvider,
+                  ),
+                  IngredientsRow(
+                    meal: meal,
+                    fontSize: 20,
+                    textWidth: 250,
+                    maxLines: 7,
+                    settingsProvider: settingsProvider,
+                  ),
+                  SizeConfig.customSizedBox(null, 20, null),
+                  RecipeRow(
+                      meal: meal,
+                      fontSize: 15,
+                      settingsProvider: settingsProvider)
+                ],
+              ),
+            ),
+            Padding(
+                padding:
+                    EdgeInsets.only(bottom: SizeConfig.getProportionalHeight(20)),
+                child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      CustomButton(
+                          onTap: () {
+                            Get.to(const Dashboard());
+                          },
+                          text: TranslationService().translate("proceed"),
+                          width: 216,
+                          height: 150),
+                      SizeConfig.customSizedBox(null, 20, null),
+                      CustomButton(
+                          onTap: () {
+                            MealsProvider().fillDataForEdition(meal);
+                            Get.to(AddMealScreen(isAddScreen: false, meal: meal));
+                          },
+                          text: TranslationService().translate("edit"),
+                          width: 216,
+                          height: 150),
+                      SizeConfig.customSizedBox(null, 20, null),
+                    ]))
+          ],
+        ),
       ),
     );
   }

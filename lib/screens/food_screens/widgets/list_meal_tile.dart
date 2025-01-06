@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:foodlink_admin_panel/providers/meals_provider.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import '../../../core/constants/colors.dart';
@@ -79,12 +80,25 @@ class _ListMealTileState extends State<ListMealTile> {
                               settingsProvider: settingsProvider,
                             ),
                             SizeConfig.customSizedBox(null, 10, null),
-                            IngredientsRow(
-                              meal: widget.meal,
-                              fontSize: 14,
-                              textWidth: 80,
-                              maxLines: 3,
-                              settingsProvider: settingsProvider,
+                            Row(
+                              textDirection: settingsProvider.language == 'en'
+                                  ? TextDirection.ltr
+                                  : TextDirection.rtl,
+                              children: [
+                                IngredientsRow(
+                                  meal: widget.meal,
+                                  fontSize: 14,
+                                  textWidth: 80,
+                                  maxLines: 3,
+                                  settingsProvider: settingsProvider,
+                                ),
+                                IconButton(onPressed: () async{
+                                  await MealsProvider().deleteMeal(widget.meal.documentId!);
+                                  setState(() {
+                                    MealsProvider().getAllPlannedMeals();
+                                  });
+                                }, icon: const Icon(Icons.delete)),
+                              ],
                             ),
                           ],
                         ),

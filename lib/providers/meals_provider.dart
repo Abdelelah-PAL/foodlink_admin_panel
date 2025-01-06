@@ -58,6 +58,10 @@ class MealsProvider with ChangeNotifier {
     return updatedMeal;
   }
 
+  Future<void> deleteMeal(String docId) async {
+    await _ms.deleteMeal(docId);
+  }
+
   Future<void> pickImage(String source) async {
     try {
       FilePickerResult? file = await FilePicker.platform.pickFiles(

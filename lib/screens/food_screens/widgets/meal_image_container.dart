@@ -123,14 +123,11 @@ class _MealImageContainerState extends State<MealImageContainer> {
       Reference reference = FirebaseStorage.instance
           .ref()
           .child("/planned_meals_images/$fileName");
-      print('dasdsasdasd');
-
       final UploadTask uploadTask = reference.putData(uploadFile);
       await uploadTask;
 
       uploadTask.whenComplete(() => print('meow'));
 
-      print('dasdsasdasd2');
     }
   }
 }

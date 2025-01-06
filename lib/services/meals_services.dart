@@ -70,4 +70,7 @@ class MealsServices with ChangeNotifier {
       rethrow;
     }
   }
+  Future<void> deleteMeal(String docId) async {
+    await _firestore.collection('planned_meals').doc(docId).delete();
+  }
 }
