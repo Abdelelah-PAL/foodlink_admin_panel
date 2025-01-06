@@ -117,5 +117,7 @@
   "request_meal": "طلب الوجبة",
   "planned_meals": "الوجبات المجدولة",
   "upload": "رفع",
-  "put_url": "ضع الرابط"
+  "put_url": "ضع الرابط",
+  "image_uploaded": "تم رفع الصورة بنجاح",
+  "pick_date": "حدد التاريخ"
 }

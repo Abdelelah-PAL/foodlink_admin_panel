@@ -31,7 +31,7 @@ class _AddMealScreenState extends State<AddMealScreen> {
   @override
   Widget build(BuildContext context) {
     MealsProvider mealsProvider =
-        Provider.of<MealsProvider>(context, listen: true);
+    Provider.of<MealsProvider>(context, listen: true);
     SettingsProvider settingsProvider = Provider.of<SettingsProvider>(context);
 
     return Scaffold(
@@ -45,16 +45,32 @@ class _AddMealScreenState extends State<AddMealScreen> {
               children: [
                 const MealImageContainer(),
                 SizeConfig.customSizedBox(null, 20, null),
-                CustomAppTextField(
-                  width: 348,
-                  height: 100,
-                  headerText: "meal_name",
-                  icon: Assets.mealNameIcon,
-                  controller: MealController().nameController,
-                  maxLines: 2,
-                  iconSizeFactor: 31,
-                  settingsProvider: settingsProvider,
-                  isCentered: false,
+                Row(
+                  textDirection: settingsProvider.language == 'en'
+                      ? TextDirection.ltr
+                      : TextDirection.rtl,
+                  children: [
+                    CustomAppTextField(
+                      width: 348,
+                      height: 100,
+                      headerText: "meal_name",
+                      icon: Assets.mealNameIcon,
+                      controller: MealController().nameController,
+                      maxLines: 2,
+                      iconSizeFactor: 31,
+                      settingsProvider: settingsProvider,
+                      isCentered: false,
+                    ),
+                    SizeConfig.customSizedBox(100, null, null),
+                    CustomButton(
+                        onTap: () async {
+                          await MealController().selectDate(context);
+                        },
+                        text: "pick_date",
+                        width: 200,
+                        height: 100),
+
+                  ],
                 ),
                 Padding(
                   padding: EdgeInsets.symmetric(
@@ -86,12 +102,12 @@ class _AddMealScreenState extends State<AddMealScreen> {
                                 : TextDirection.ltr,
                             child: GridView.builder(
                               gridDelegate:
-                                  const SliverGridDelegateWithFixedCrossAxisCount(
-                                      mainAxisExtent: 50,
-                                      crossAxisCount: 4,
-                                      crossAxisSpacing: 4,
-                                      mainAxisSpacing: 3,
-                                      childAspectRatio: 10),
+                              const SliverGridDelegateWithFixedCrossAxisCount(
+                                  mainAxisExtent: 50,
+                                  crossAxisCount: 4,
+                                  crossAxisSpacing: 4,
+                                  mainAxisSpacing: 3,
+                                  childAspectRatio: 10),
                               itemCount: mealsProvider.numberOfIngredients,
                               itemBuilder: (context, index) {
                                 if (index ==
@@ -126,7 +142,7 @@ class _AddMealScreenState extends State<AddMealScreen> {
                     widget.isAddScreen
                         ? await MealController().addMeal(mealsProvider)
                         : await MealController()
-                            .updateMeal(mealsProvider, widget.meal);
+                        .updateMeal(mealsProvider, widget.meal);
                   },
                   text: TranslationService()
                       .translate(widget.isAddScreen ? "confirm" : "edit"),

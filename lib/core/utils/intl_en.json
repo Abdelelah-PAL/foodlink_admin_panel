@@ -117,5 +117,7 @@
   "request_meal": "Request Meal",
   "planned_meals": "Planned Meals",
   "upload": "Upload",
-  "put_url": "Put URL"
+  "put_url": "Put URL",
+  "image_uploaded": "Image has been uploaded successfully",
+  "pick_date": "Pick Date"
 }

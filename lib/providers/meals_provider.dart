@@ -37,6 +37,8 @@ class MealsProvider with ChangeNotifier {
           categoryId: doc.categoryId,
           ingredients: doc.ingredients,
           recipe: doc.recipe,
+          date: doc.date,
+          day: doc.day,
         );
         meals.add(meal);
       }
