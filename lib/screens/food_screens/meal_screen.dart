@@ -47,7 +47,7 @@ class MealScreen extends StatelessWidget {
                     meal: meal,
                     fontSize: 20,
                     textWidth: 250,
-                    maxLines: 7,
+                    maxLines: 20,
                     settingsProvider: settingsProvider,
                   ),
                   SizeConfig.customSizedBox(null, 20, null),

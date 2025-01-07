@@ -5,7 +5,7 @@ class Meal {
   String? imageUrl;
   List<String> ingredients;
   String? recipe;
-  String? date;
+  DateTime? date;
   String? day;
 
   Meal({
@@ -27,7 +27,7 @@ class Meal {
       imageUrl: json['image_url'],
       ingredients: List<String>.from(json['ingredients']),
       recipe: json['recipe'],
-      date: json['date'],
+      date: json['date'].toDate(),
       day: json['day'],
     );
   }

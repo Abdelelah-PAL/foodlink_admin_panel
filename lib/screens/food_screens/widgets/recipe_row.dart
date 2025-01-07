@@ -25,9 +25,9 @@ class RecipeRow extends StatelessWidget {
               Image.asset(Assets.mealRecipe),
               SizeConfig.customSizedBox(
                 250,
-                200,
+                300,
                 Text(
-                  maxLines: 10,
+                  maxLines: 20,
                   meal.recipe!,
                   textAlign: TextAlign.start,
                   style: TextStyle(
@@ -44,9 +44,9 @@ class RecipeRow extends StatelessWidget {
             children: [
               SizeConfig.customSizedBox(
                 250,
-                200,
+                300,
                 Text(
-                  maxLines: 10,
+                  maxLines: 20,
                   meal.recipe!,
                   textAlign: TextAlign.right,
                   textDirection: TextDirection.rtl,

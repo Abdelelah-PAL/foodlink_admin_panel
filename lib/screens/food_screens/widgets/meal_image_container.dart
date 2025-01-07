@@ -47,7 +47,7 @@ class _MealImageContainerState extends State<MealImageContainer> {
           widget.imageUrl != null
               ? Container(
                   width: SizeConfig.screenWidth,
-              height: SizeConfig.getProperVerticalSpace(2),
+                  height: SizeConfig.getProperVerticalSpace(2),
                   decoration: const BoxDecoration(
                     color: AppColors.widgetsColor,
                     borderRadius: BorderRadius.only(
@@ -61,15 +61,15 @@ class _MealImageContainerState extends State<MealImageContainer> {
                   ),
                   child: Image.network(
                     widget.imageUrl!,
-                    fit: BoxFit.fill,
-                  ))
+                    fit: BoxFit.cover, // Keep BoxFit.cover for best result
+                  ),
+                )
               : Positioned.fill(
                   child: Center(
                     child: GestureDetector(
                       onTap: () async {
                         await mealsProvider.pickImage("meal");
                         if (mounted) setState(() {});
-                        _openPicker();
                       },
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
@@ -92,7 +92,7 @@ class _MealImageContainerState extends State<MealImageContainer> {
           if (mealsProvider.imageIsPicked)
             Container(
                 width: SizeConfig.screenWidth,
-                height: SizeConfig.getProperVerticalSpace(3),
+                height: SizeConfig.getProperVerticalSpace(2),
                 decoration: const BoxDecoration(
                   color: AppColors.widgetsColor,
                   borderRadius: BorderRadius.only(
@@ -106,28 +106,10 @@ class _MealImageContainerState extends State<MealImageContainer> {
                 ),
                 child: Image.memory(
                   mealsProvider.pickedFile!.files.first.bytes!,
-                  fit: BoxFit.fill,
+                  fit: BoxFit.cover, // Use BoxFit.cover here as well
                 )),
         ],
       ),
     );
-  }
-
-  void _openPicker() async {
-    FilePickerResult? result;
-    result = await FilePicker.platform.pickFiles(type: FileType.image);
-    if (result != null) {
-      Uint8List uploadFile = result.files.single.bytes!;
-      String fileName = result.files.single.name;
-
-      Reference reference = FirebaseStorage.instance
-          .ref()
-          .child("/planned_meals_images/$fileName");
-      final UploadTask uploadTask = reference.putData(uploadFile);
-      await uploadTask;
-
-      uploadTask.whenComplete(() => print('meow'));
-
-    }
   }
 }

@@ -6,7 +6,6 @@ import '../providers/meals_provider.dart';
 import '../screens/food_screens/meal_screen.dart';
 import '../screens/widgets/custom_text.dart';
 import '../services/meals_services.dart';
-import 'package:intl/intl.dart';
 
 class MealController {
   static final MealController _instance = MealController._internal();
@@ -20,7 +19,7 @@ class MealController {
   TextEditingController recipeController = TextEditingController();
   TextEditingController addNoteController = TextEditingController();
   TextEditingController noteController = TextEditingController();
-  String? formattedDate;
+  DateTime? selectedDate;
   String? selectedDay;
   String? day;
   MealsServices ms = MealsServices();
@@ -59,7 +58,7 @@ class MealController {
       recipe: MealController().recipeController.text,
       imageUrl: (imageUrl?.isNotEmpty ?? false) ? imageUrl : null,
       day: day,
-      date: formattedDate
+      date: selectedDate
     ));
 
     mealsProvider.resetValues();
@@ -136,17 +135,15 @@ class MealController {
   }
 
   Future<void> selectDate(BuildContext context) async {
-    DateTime? selectedDate;
     final DateTime? picked = await showDatePicker(
       context: context,
       initialDate: selectedDate ?? DateTime.now(),
-      firstDate: DateTime(2000), // Earliest date available
-      lastDate: DateTime(2100), // Latest date available
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2100),
     );
 
     if (picked != null && picked != selectedDate) {
       selectedDate = picked;
-      formattedDate = DateFormat('d MMMM yyyy').format(selectedDate!);
       day = getDayOfWeek(selectedDate!);
     }
   }
@@ -161,6 +158,6 @@ class MealController {
       "Saturday",
       "Sunday",
     ];
-    return days[date.weekday - 1]; // Subtract 1 to match the list index
+    return days[date.weekday - 1];
   }
 }
