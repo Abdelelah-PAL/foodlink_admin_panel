@@ -24,8 +24,6 @@ class _AppHeaderState extends State<AppHeader> {
     SettingsProvider settingsProvider = Provider.of<SettingsProvider>(context);
     AdminsProvider adminsProvider =
         Provider.of<AdminsProvider>(context, listen: true);
-    DashboardProvider dashboardProviderWatcher =
-        context.watch<DashboardProvider>();
     String greeting = TranslationService().translate("greeting");
     greeting = greeting.replaceFirst(
         '{name}', adminsProvider.selectedAdmin!.name!);

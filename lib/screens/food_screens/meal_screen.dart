@@ -19,7 +19,8 @@ class MealScreen extends StatelessWidget {
 
   final Meal meal;
   final int? index;
-   @override
+
+  @override
   Widget build(BuildContext context) {
     SettingsProvider settingsProvider = Provider.of<SettingsProvider>(context);
 
@@ -51,15 +52,15 @@ class MealScreen extends StatelessWidget {
                   ),
                   SizeConfig.customSizedBox(null, 20, null),
                   RecipeRow(
-                      meal: meal,
-                      fontSize: 15,
-                      settingsProvider: settingsProvider)
+                    meal: meal,
+                    fontSize: 15,
+                  )
                 ],
               ),
             ),
             Padding(
-                padding:
-                    EdgeInsets.only(bottom: SizeConfig.getProportionalHeight(20)),
+                padding: EdgeInsets.only(
+                    bottom: SizeConfig.getProportionalHeight(20)),
                 child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -74,7 +75,8 @@ class MealScreen extends StatelessWidget {
                       CustomButton(
                           onTap: () {
                             MealsProvider().fillDataForEdition(meal);
-                            Get.to(AddMealScreen(isAddScreen: false, meal: meal));
+                            Get.to(
+                                AddMealScreen(isAddScreen: false, meal: meal));
                           },
                           text: TranslationService().translate("edit"),
                           width: 216,
