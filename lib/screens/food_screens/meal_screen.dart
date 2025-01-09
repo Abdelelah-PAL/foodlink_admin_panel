@@ -22,8 +22,7 @@ class MealScreen extends StatelessWidget {
    @override
   Widget build(BuildContext context) {
     SettingsProvider settingsProvider = Provider.of<SettingsProvider>(context);
-    MealsProvider mealsProvider =
-        Provider.of<MealsProvider>(context, listen: true);
+
     return Scaffold(
       body: SingleChildScrollView(
         child: Column(
@@ -47,7 +46,7 @@ class MealScreen extends StatelessWidget {
                     meal: meal,
                     fontSize: 20,
                     textWidth: 250,
-                    maxLines: 20,
+                    maxLines: 100,
                     settingsProvider: settingsProvider,
                   ),
                   SizeConfig.customSizedBox(null, 20, null),

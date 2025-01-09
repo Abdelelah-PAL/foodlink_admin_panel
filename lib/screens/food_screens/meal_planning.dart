@@ -3,7 +3,6 @@ import 'package:provider/provider.dart';
 import '../../core/constants/assets.dart';
 import '../../core/constants/colors.dart';
 import '../../core/utils/size_config.dart';
-import '../../providers/meals_provider.dart';
 import '../../providers/settings_provider.dart';
 import '../dashboard/widgets/custom_bottom_navigation_bar.dart';
 import '../widgets/custom_back_button.dart';
@@ -30,7 +29,6 @@ class _MealPlanningState extends State<MealPlanning> {
   Widget build(BuildContext context) {
     SettingsProvider settingsProvider =
         Provider.of<SettingsProvider>(context, listen: true);
-    MealsProvider mealsProvider = Provider.of<MealsProvider>(context);
 
     return Scaffold(
       appBar: PreferredSize(

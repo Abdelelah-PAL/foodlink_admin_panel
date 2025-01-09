@@ -7,6 +7,7 @@ class Meal {
   String? recipe;
   DateTime? date;
   String? day;
+  bool isPlanned ;
 
   Meal({
     this.documentId,
@@ -17,6 +18,7 @@ class Meal {
     this.recipe,
     this.date,
     this.day,
+    this.isPlanned =true
   });
 
   factory Meal.fromJson(Map<String, dynamic> json, docId) {
@@ -29,6 +31,7 @@ class Meal {
       recipe: json['recipe'],
       date: json['date'].toDate(),
       day: json['day'],
+      isPlanned: true,
     );
   }
 
@@ -41,6 +44,7 @@ class Meal {
       'recipe': recipe,
       'date': date,
       'day': day,
+      'is_planned':true,
     };
   }
 }
