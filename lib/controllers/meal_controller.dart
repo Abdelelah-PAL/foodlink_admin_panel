@@ -52,14 +52,14 @@ class MealController {
         .where((text) => text.isNotEmpty)
         .toList();
 
+
     var addedMeal = await MealsProvider().addMeal(Meal(
-      name: MealController().nameController.text,
-      ingredients: ingredients,
-      recipe: MealController().recipeController.text,
-      imageUrl: (imageUrl?.isNotEmpty ?? false) ? imageUrl : null,
-      day: day,
-      date: selectedDate
-    ));
+        name: nameController.text,
+        ingredients: ingredients,
+        recipe: recipeController.text,
+        imageUrl: (imageUrl?.isNotEmpty ?? false) ? imageUrl : null,
+        day: day,
+        date: selectedDate));
 
     mealsProvider.resetValues();
     Get.to(MealScreen(meal: addedMeal));
@@ -80,9 +80,9 @@ class MealController {
     var updatedMeal = await MealsProvider().updateMeal(Meal(
       documentId: meal.documentId,
       categoryId: meal.categoryId,
-      name: MealController().nameController.text,
+      name: nameController.text,
       ingredients: ingredients,
-      recipe: MealController().recipeController.text,
+      recipe: recipeController.text,
       imageUrl: (imageUrl?.isNotEmpty ?? false) ? imageUrl : meal.imageUrl,
     ));
 
@@ -94,7 +94,7 @@ class MealController {
     return meal;
   }
 
-  void showSuccessDialog(BuildContext context, settingsProvider) {
+  void showSuccessUploadingDialog(BuildContext context, settingsProvider) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -128,6 +128,36 @@ class MealController {
                           size: 30, color: Colors.green),
                     ],
             ),
+          ),
+        );
+      },
+    );
+  }
+
+  void showFailedAddDialog(BuildContext context, settingsProvider) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10.0),
+          ),
+          child: SizeConfig.customSizedBox(
+            350,
+            56,
+            Row(
+                textDirection: settingsProvider.language == 'en'
+                    ? TextDirection.ltr
+                    : TextDirection.rtl,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: const [
+                  Icon(Icons.error, size: 30, color: Colors.green),
+                  CustomText(
+                      isCenter: true,
+                      text: 'fill_info',
+                      fontSize: 20,
+                      fontWeight: FontWeight.normal)
+                ]),
           ),
         );
       },

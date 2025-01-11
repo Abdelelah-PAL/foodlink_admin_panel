@@ -70,7 +70,7 @@ class _AddDishOfTheWeekScreenState extends State<AddDishOfTheWeekScreen> {
                   "dish_of_the_week",
                 );
                 if (!context.mounted) return;
-                MealController().showSuccessDialog(context, settingsProvider);
+                MealController().showSuccessUploadingDialog(context, settingsProvider);
                 mealsProvider.resetValues();
               } catch (e) {
                 log('uploadImage :: $e');

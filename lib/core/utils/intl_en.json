@@ -119,5 +119,6 @@
   "upload": "Upload",
   "put_url": "Put URL",
   "image_uploaded": "Image has been uploaded successfully",
-  "pick_date": "Pick Date"
+  "pick_date": "Pick Date",
+  "fill_info": "Fill all the information to proceed"
 }

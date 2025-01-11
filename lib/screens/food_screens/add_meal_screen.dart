@@ -31,7 +31,7 @@ class _AddMealScreenState extends State<AddMealScreen> {
   @override
   Widget build(BuildContext context) {
     MealsProvider mealsProvider =
-    Provider.of<MealsProvider>(context, listen: true);
+        Provider.of<MealsProvider>(context, listen: true);
     SettingsProvider settingsProvider = Provider.of<SettingsProvider>(context);
 
     return Scaffold(
@@ -69,7 +69,6 @@ class _AddMealScreenState extends State<AddMealScreen> {
                         text: "pick_date",
                         width: 200,
                         height: 100),
-
                   ],
                 ),
                 Padding(
@@ -102,12 +101,12 @@ class _AddMealScreenState extends State<AddMealScreen> {
                                 : TextDirection.ltr,
                             child: GridView.builder(
                               gridDelegate:
-                              const SliverGridDelegateWithFixedCrossAxisCount(
-                                  mainAxisExtent: 50,
-                                  crossAxisCount: 4,
-                                  crossAxisSpacing: 4,
-                                  mainAxisSpacing: 3,
-                                  childAspectRatio: 10),
+                                  const SliverGridDelegateWithFixedCrossAxisCount(
+                                      mainAxisExtent: 50,
+                                      crossAxisCount: 4,
+                                      crossAxisSpacing: 4,
+                                      mainAxisSpacing: 3,
+                                      childAspectRatio: 10),
                               itemCount: mealsProvider.numberOfIngredients,
                               itemBuilder: (context, index) {
                                 if (index ==
@@ -140,9 +139,39 @@ class _AddMealScreenState extends State<AddMealScreen> {
                 CustomButton(
                   onTap: () async {
                     widget.isAddScreen
-                        ? await MealController().addMeal(mealsProvider)
-                        : await MealController()
-                        .updateMeal(mealsProvider, widget.meal);
+                        ? {
+                            if (MealController().nameController.text.isEmpty ||
+                                MealController()
+                                    .recipeController
+                                    .text
+                                    .isEmpty ||
+                                MealController().day == null ||
+                                MealController().day!.isEmpty ||
+                                MealController().selectedDate == null)
+                              {
+                                MealController().showFailedAddDialog(
+                                    context, settingsProvider),
+                              }
+                            else
+                              await MealController().addMeal(mealsProvider)
+                          }
+                        : {
+                            if (MealController().nameController.text.isEmpty ||
+                                MealController()
+                                    .recipeController
+                                    .text
+                                    .isEmpty ||
+                                MealController().day == null ||
+                                MealController().day!.isEmpty ||
+                                MealController().selectedDate == null)
+                              {
+                                MealController().showFailedAddDialog(
+                                    context, settingsProvider),
+                              }
+                            else
+                              await MealController()
+                                  .updateMeal(mealsProvider, widget.meal)
+                          };
                   },
                   text: TranslationService()
                       .translate(widget.isAddScreen ? "confirm" : "edit"),
