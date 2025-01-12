@@ -120,5 +120,7 @@
   "put_url": "Put URL",
   "image_uploaded": "Image has been uploaded successfully",
   "pick_date": "Pick Date",
-  "fill_info": "Fill all the information to proceed"
+  "fill_info": "Fill all the information to proceed",
+  "logout":"Logout",
+  "article_added": "Article has been added successfully"
 }

@@ -21,9 +21,9 @@ class _AddArticleScreenState extends State<AddArticleScreen> {
   @override
   Widget build(BuildContext context) {
     final BeyondCaloriesArticlesProvider beyondCaloriesArticlesProvider =
-    Provider.of<BeyondCaloriesArticlesProvider>(context, listen: true);
+        Provider.of<BeyondCaloriesArticlesProvider>(context, listen: true);
     final SettingsProvider settingsProvider =
-    Provider.of<SettingsProvider>(context, listen: true);
+        Provider.of<SettingsProvider>(context, listen: true);
 
     return Scaffold(
       backgroundColor: AppColors.backgroundColor,
@@ -39,20 +39,21 @@ class _AddArticleScreenState extends State<AddArticleScreen> {
                 height: SizeConfig.getProperVerticalSpace(3),
                 alignment: Alignment.center,
                 decoration: const BoxDecoration(
-                    shape: BoxShape.rectangle,
-                   ),
+                  shape: BoxShape.rectangle,
+                ),
                 child: beyondCaloriesArticlesProvider.imageIsPicked == false
                     ? IconButton(
-                    onPressed: BeyondCaloriesArticlesProvider().pickImage,
-                    icon: const Icon(Icons.add_a_photo))
+                        onPressed: BeyondCaloriesArticlesProvider().pickImage,
+                        icon: const Icon(Icons.add_a_photo))
                     : SizedBox(
-                  width: SizeConfig.getProperVerticalSpace(3),
-                  height: SizeConfig.getProperVerticalSpace(3),
-                  child: Image.network(
-                    beyondCaloriesArticlesProvider.pickedFile!.path,
-                    fit: BoxFit.fill,
-                  ),
-                ),
+                        width: SizeConfig.getProperVerticalSpace(3),
+                        height: SizeConfig.getProperVerticalSpace(3),
+                        child: Image.memory(
+                          beyondCaloriesArticlesProvider
+                              .pickedFile!.files.first.bytes!,
+                          fit: BoxFit.fill,
+                        ),
+                      ),
               ),
             ),
           ),
@@ -71,10 +72,21 @@ class _AddArticleScreenState extends State<AddArticleScreen> {
           ),
           SizeConfig.customSizedBox(null, 50, null),
           CustomButton(
-              onTap: () async
-              {
+              onTap: () async {
+                if (beyondCaloriesArticlesProvider.pickedFile == null ||
+                    BeyondCaloriesArticlesController()
+                        .urlController
+                        .text
+                        .isEmpty) {
+                  BeyondCaloriesArticlesController()
+                      .showFailedAddDialog(context, settingsProvider);
+                  return;
+                }
                 await BeyondCaloriesArticlesController()
                     .addArticle(beyondCaloriesArticlesProvider);
+                beyondCaloriesArticlesProvider.resetValues();
+                BeyondCaloriesArticlesController()
+                    .showSuccessDialog(context, settingsProvider);
               },
               text: "confirm",
               width: 200,

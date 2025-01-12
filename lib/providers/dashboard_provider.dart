@@ -23,4 +23,9 @@ class DashboardProvider with ChangeNotifier {
     isExpanded = !isExpanded;
     notifyListeners();
   }
+
+  void changeIndex(value) {
+    selectedIndex = value;
+    notifyListeners();
+  }
 }

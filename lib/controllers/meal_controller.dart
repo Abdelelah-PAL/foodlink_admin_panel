@@ -52,7 +52,6 @@ class MealController {
         .where((text) => text.isNotEmpty)
         .toList();
 
-
     var addedMeal = await MealsProvider().addMeal(Meal(
         name: nameController.text,
         ingredients: ingredients,
@@ -106,28 +105,18 @@ class MealController {
             205,
             56,
             Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: settingsProvider.language == 'en'
-                  ? [
-                      const Icon(Icons.check_circle,
-                          size: 30, color: Colors.green),
-                      const CustomText(
-                          isCenter: true,
-                          text: 'image_uploaded',
-                          fontSize: 20,
-                          fontWeight: FontWeight.normal)
-                    ]
-                  : [
-                      const CustomText(
-                          isCenter: true,
-                          text: 'image_uploaded',
-                          fontSize: 20,
-                          fontWeight: FontWeight.normal),
-                      SizeConfig.customSizedBox(10, null, null),
-                      const Icon(Icons.check_circle,
-                          size: 30, color: Colors.green),
-                    ],
-            ),
+                mainAxisAlignment: MainAxisAlignment.center,
+                textDirection: settingsProvider.language == 'en'
+                    ? TextDirection.ltr
+                    : TextDirection.rtl,
+                children: const [
+                  Icon(Icons.check_circle, size: 30, color: Colors.green),
+                  CustomText(
+                      isCenter: true,
+                      text: 'image_uploaded',
+                      fontSize: 20,
+                      fontWeight: FontWeight.normal)
+                ]),
           ),
         );
       },

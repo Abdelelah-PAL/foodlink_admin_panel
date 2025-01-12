@@ -1,9 +1,8 @@
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:foodlink_admin_panel/controllers/beyond_calories_article_controller.dart';
 import 'package:foodlink_admin_panel/models/beyond_calories_article.dart';
 import 'package:foodlink_admin_panel/services/beyond_calories_articles_services.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:image_picker_web/image_picker_web.dart';
 
 class BeyondCaloriesArticlesProvider with ChangeNotifier {
   static final BeyondCaloriesArticlesProvider _instance = BeyondCaloriesArticlesProvider._internal();
@@ -15,7 +14,7 @@ class BeyondCaloriesArticlesProvider with ChangeNotifier {
   final BeyondCaloriesArticlesServices _as = BeyondCaloriesArticlesServices();
   bool isLoading = false;
   bool imageIsPicked = false;
-  XFile? pickedFile;
+  FilePickerResult? pickedFile;
 
 
   void getAllArticles() async {
@@ -52,11 +51,13 @@ class BeyondCaloriesArticlesProvider with ChangeNotifier {
 
   Future<void> pickImage() async {
     try {
-      final file = await ImagePickerWeb.getImageAsBytes();
+      FilePickerResult? file = await FilePicker.platform.pickFiles(
+        type: FileType.image,
+      );
       if (file != null) {
-        pickedFile = XFile.fromData(file);
-        imageIsPicked = true;
-      }
+          pickedFile = file;
+          imageIsPicked = true;
+        }
       notifyListeners();
     } catch (e) {
       print("Error picking image: $e");
@@ -64,10 +65,9 @@ class BeyondCaloriesArticlesProvider with ChangeNotifier {
     }
   }
 
-  Future<String> uploadImage(image, source) async {
-    String? downloadUrl = await _as.uploadImage(image, source);
-    return downloadUrl!;
-  }
+
+  Future<String?> uploadImage(FilePickerResult path) async =>
+      _as.uploadImage(path);
 
   void resetValues() {
     imageIsPicked = false;

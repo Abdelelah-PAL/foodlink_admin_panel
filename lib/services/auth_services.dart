@@ -1,4 +1,8 @@
 import 'package:flutter/foundation.dart';
+import 'package:foodlink_admin_panel/controllers/dashboard_controller.dart';
+import 'package:foodlink_admin_panel/providers/dashboard_provider.dart';
+import 'package:foodlink_admin_panel/screens/auth_screens/login_screen.dart';
+import 'package:get/get.dart';
 import '../controllers/auth_controller.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -41,5 +45,14 @@ class AuthService with ChangeNotifier {
       }
     }
     return null;
+  }
+  void logout() async {
+    try {
+      await FirebaseAuth.instance.signOut();
+      DashboardProvider().changeIndex(0);
+      Get.to(const LoginScreen());
+    } catch (e) {
+      print('Error logging out: $e');
+    }
   }
 }

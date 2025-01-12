@@ -1,35 +1,36 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
-import 'package:image_compression/image_compression.dart';
-import 'package:image_picker/image_picker.dart';
 import '../models/beyond_calories_article.dart';
 
 class BeyondCaloriesArticlesServices with ChangeNotifier {
   final _firebaseFireStore = FirebaseFirestore.instance;
+  final FirebaseStorage _storage = FirebaseStorage.instance;
 
-  Future<String?> uploadImage(XFile image, String source) async {
+  Future<String?> uploadImage(
+      FilePickerResult path,
+      ) async {
     try {
-      final bytes = await image.readAsBytes();
-      final input = ImageFile(
-        rawBytes: bytes,
-        filePath: image.path,
-      );
-      final output = compress(ImageFileConfiguration(input: input));
+      final fileBytes = path.files.first.bytes;
+      final fileName = path.files.first.name;
 
-      final imageRef =
-          FirebaseStorage.instance.ref().child("$source/${image.name}");
-      await imageRef.putData(bytes);
+      if (fileBytes == null || fileName.isEmpty) {
+        throw Exception("Invalid file data.");
+      }
 
-      final downloadURL = await imageRef.getDownloadURL();
-      print('Uploaded: $downloadURL');
-      return downloadURL;
+      final imageRef = _storage.ref().child("articles/$fileName");
+
+      await imageRef.putData(fileBytes);
+
+      return await imageRef.getDownloadURL();
     } catch (ex) {
-      print("Error uploading image: $ex");
-      rethrow;
+      log("Error uploading image: ${ex.toString()}");
+      return null;
     }
   }
-
   Future<List<BeyondCaloriesArticle>> getAllArticles() async {
     try {
       QuerySnapshot<Map<String, dynamic>> articleQuery =
