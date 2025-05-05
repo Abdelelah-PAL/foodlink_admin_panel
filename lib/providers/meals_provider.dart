@@ -85,8 +85,13 @@ class MealsProvider with ChangeNotifier {
     }
   }
 
-  Future<String?> uploadImage(FilePickerResult path, String tag) async =>
-      _ms.uploadImage(path, tag);
+  Future<String?> uploadImage(FilePickerResult path, String tag) async {
+    return _ms.uploadImage(path, tag);
+  }
+
+  Future<void> saveImageMetadata(String imageUrl, double dx, double dy) async {
+    _ms.saveImageMetadata(imageUrl: imageUrl, dx: dx, dy: dy);
+  }
 
   void resetValues() {
     imageIsPicked = false;

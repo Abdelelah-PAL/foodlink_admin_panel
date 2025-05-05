@@ -34,6 +34,24 @@ class MealsServices with ChangeNotifier {
     }
   }
 
+  Future<void> saveImageMetadata({
+    required String imageUrl,
+    required double dx,
+    required double dy,
+  }) async {
+    try {
+      final data = {
+        "imageUrl": imageUrl,
+        "position": {"x": dx, "y": dy},
+        "uploadedAt": FieldValue.serverTimestamp(),
+      };
+
+      await FirebaseFirestore.instance.collection("dish_of_the_week").add(data);
+    } catch (ex) {
+      log("Error saving image metadata: ${ex.toString()}");
+    }
+  }
+
   Future<List<Meal>> getAllPlannedMeals() async {
     try {
       final querySnapshot = await _firestore.collection('planned_meals').get();
