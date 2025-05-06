@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:foodlink_admin_panel/controllers/meal_controller.dart';
 import 'package:foodlink_admin_panel/core/constants/assets.dart';
 import 'package:foodlink_admin_panel/core/constants/colors.dart';
+import 'package:foodlink_admin_panel/core/utils/size_config.dart';
 import 'package:foodlink_admin_panel/providers/meals_provider.dart';
 import 'package:foodlink_admin_panel/providers/settings_provider.dart';
 import 'package:foodlink_admin_panel/screens/widgets/custom_button.dart';
@@ -18,6 +19,7 @@ class AddDishOfTheWeekScreen extends StatefulWidget {
 class _AddDishOfTheWeekScreenState extends State<AddDishOfTheWeekScreen> {
   Offset _position = Offset.zero;
   late MealsProvider mealsProvider;
+  final GlobalKey imageKey = GlobalKey();
 
   @override
   void initState() {
@@ -37,7 +39,6 @@ class _AddDishOfTheWeekScreenState extends State<AddDishOfTheWeekScreen> {
   Widget build(BuildContext context) {
     mealsProvider = context.watch<MealsProvider>();
     final settingsProvider = context.watch<SettingsProvider>();
-    final GlobalKey imageKey = GlobalKey();
 
     return Scaffold(
       backgroundColor: AppColors.backgroundColor,
@@ -68,8 +69,8 @@ class _AddDishOfTheWeekScreenState extends State<AddDishOfTheWeekScreen> {
                 },
                 child: Image.memory(
                   mealsProvider.pickedDOW!.files.first.bytes!,
-                  width: 100,
-                  height: 100,
+                  width: SizeConfig.getProperHorizontalSpace(7),
+                  height: SizeConfig.getProperVerticalSpace(5),
                 ),
               ),
             ),
@@ -87,20 +88,30 @@ class _AddDishOfTheWeekScreenState extends State<AddDishOfTheWeekScreen> {
                       }
 
                       var imageUrl = await mealsProvider.uploadImage(
-                          mealsProvider.pickedDOW!, "dish_of_the_week");
+                        mealsProvider.pickedDOW!,
+                        "dish_of_the_week",
+                      );
 
-                      final RenderBox imageBox =
-                      imageKey.currentContext?.findRenderObject() as RenderBox;
-
+                      final RenderBox imageBox = imageKey.currentContext?.findRenderObject() as RenderBox;
                       final Offset imageTopLeft = imageBox.localToGlobal(Offset.zero);
                       final Offset relativePosition = _position - imageTopLeft;
 
-                      final x = relativePosition.dx;
-                      final y = relativePosition.dy;
+                      final double x = relativePosition.dx / imageBox.size.width;
+                      final double y = relativePosition.dy / imageBox.size.height;
 
-                      log('Relative Image position: x=$x, y=$y');
+                      final double width = SizeConfig.getProperHorizontalSpace(7) / imageBox.size.width;
+                      final double height = SizeConfig.getProperVerticalSpace(5) / imageBox.size.height;
 
-                      await mealsProvider.saveImageMetadata(imageUrl!, x, y);
+                      log('Normalized position: x=$x, y=$y');
+                      log('Normalized size: width=$width, height=$height');
+
+                      await mealsProvider.saveImageMetadata(
+                        imageUrl!,
+                        x,
+                        y,
+                        width,
+                        height,
+                      );
 
                       if (!context.mounted) return;
                       MealController().showSuccessUploadingDialog(context, settingsProvider);

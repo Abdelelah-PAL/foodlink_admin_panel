@@ -38,11 +38,15 @@ class MealsServices with ChangeNotifier {
     required String imageUrl,
     required double dx,
     required double dy,
+    required double width,
+    required double height,
   }) async {
     try {
       final data = {
         "imageUrl": imageUrl,
         "position": {"x": dx, "y": dy},
+        "width": width,
+        "height": height,
         "uploadedAt": FieldValue.serverTimestamp(),
       };
 
@@ -88,6 +92,7 @@ class MealsServices with ChangeNotifier {
       rethrow;
     }
   }
+
   Future<void> deleteMeal(String docId) async {
     await _firestore.collection('planned_meals').doc(docId).delete();
   }
