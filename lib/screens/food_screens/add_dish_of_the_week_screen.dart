@@ -99,8 +99,8 @@ class _AddDishOfTheWeekScreenState extends State<AddDishOfTheWeekScreen> {
                       final double x = relativePosition.dx / imageBox.size.width;
                       final double y = relativePosition.dy / imageBox.size.height;
 
-                      final double width = SizeConfig.getProperHorizontalSpace(7) / imageBox.size.width;
-                      final double height = SizeConfig.getProperVerticalSpace(5) / imageBox.size.height;
+                      final double width = SizeConfig.getProperHorizontalSpace(7);
+                      final double height = SizeConfig.getProperVerticalSpace(5);
 
                       log('Normalized position: x=$x, y=$y');
                       log('Normalized size: width=$width, height=$height');
