@@ -92,15 +92,19 @@ class _AddDishOfTheWeekScreenState extends State<AddDishOfTheWeekScreen> {
                         "dish_of_the_week",
                       );
 
-                      final RenderBox imageBox = imageKey.currentContext?.findRenderObject() as RenderBox;
+                      final RenderBox imageBox =
+                      imageKey.currentContext?.findRenderObject() as RenderBox;
                       final Offset imageTopLeft = imageBox.localToGlobal(Offset.zero);
                       final Offset relativePosition = _position - imageTopLeft;
 
                       final double x = relativePosition.dx / imageBox.size.width;
                       final double y = relativePosition.dy / imageBox.size.height;
 
-                      final double width = SizeConfig.getProperHorizontalSpace(7);
-                      final double height = SizeConfig.getProperVerticalSpace(5);
+                      final double rawWidth = SizeConfig.getProperHorizontalSpace(7);
+                      final double rawHeight = SizeConfig.getProperVerticalSpace(5);
+
+                      final double width = rawWidth / imageBox.size.width;
+                      final double height = rawHeight / imageBox.size.height;
 
                       log('Normalized position: x=$x, y=$y');
                       log('Normalized size: width=$width, height=$height');
