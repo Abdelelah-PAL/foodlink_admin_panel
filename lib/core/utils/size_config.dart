@@ -27,14 +27,12 @@ class SizeConfig {
     }
   }
 
-  static double getProportionalWidth(double width) {
-    width = (width * 2.4) / 100;
-    return (width / defaultSize!) * screenWidth!;
+  static double getProportionalWidth(double inputWidth) {
+    return (inputWidth / 375.0) * screenWidth!;
   }
 
-  static double getProportionalHeight(double height) {
-    height = (height * 1.09) / 100;
-    return (height / defaultSize!) * screenHeight!;
+  static double getProportionalHeight(double inputHeight) {
+    return (inputHeight / 812.0) * screenHeight!;
   }
 
   static double getProperVerticalSpace(double value) {

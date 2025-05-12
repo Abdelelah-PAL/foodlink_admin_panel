@@ -109,8 +109,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                   ),
                                   borderRadius: BorderRadius.circular(4),
                                 ),
-                                width: SizeConfig.getProportionalWidth(20),
-                                height: SizeConfig.getProportionalHeight(20),
+                                width: SizeConfig.getProportionalWidth(10),
+                                height: SizeConfig.getProportionalHeight(10),
                                 child: Checkbox(
                                   activeColor: AppColors.backgroundColor,
                                   checkColor: AppColors.fontColor,
@@ -122,7 +122,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                   },
                                   side: const BorderSide(
                                       color: AppColors
-                                          .textFieldBorderColor), // Transparent to not show the default borde
+                                          .textFieldBorderColor),
                                 ),
                               ),
                               Padding(
@@ -194,12 +194,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         }
                       },
                     ),
-                    Padding(
-                      padding: EdgeInsets.symmetric(
-                        vertical: SizeConfig.getProportionalHeight(50),
-                      ),
-                      child: const CustomAuthDivider(),
-                    ),
+
                     CustomAuthFooter(
                         headingText: "do_not_have_account",
                         tailText: "signup",

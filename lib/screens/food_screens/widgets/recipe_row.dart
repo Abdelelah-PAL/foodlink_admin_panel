@@ -1,53 +1,73 @@
 import 'package:flutter/material.dart';
-import '../../../controllers/meal_controller.dart';
+import '../../../controllers/general_controller.dart';
 import '../../../core/constants/assets.dart';
+import '../../../core/constants/colors.dart';
 import '../../../core/utils/size_config.dart';
 import '../../../models/meal.dart';
+import '../../../providers/settings_provider.dart';
 
 class RecipeRow extends StatelessWidget {
-  const RecipeRow(
-      {super.key,
-      required this.meal,
-      required this.fontSize,
-     });
+  const RecipeRow({
+    super.key,
+    required this.meal,
+    required this.fontSize,
+    required this.settingsProvider,
+    required this.text,
+  });
 
   final Meal meal;
   final double fontSize;
+  final SettingsProvider settingsProvider;
+  final String text;
 
   @override
   Widget build(BuildContext context) {
-    String writtenLanguage = MealController().detectLanguage(meal.recipe!);
-    return Row(
-      textDirection: writtenLanguage == 'en'
-          ? TextDirection.ltr
-          : TextDirection.rtl,
-      mainAxisAlignment: writtenLanguage == 'en'
-          ? MainAxisAlignment.end
-          : MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Image.asset(Assets.mealRecipe),
-        SizeConfig.customSizedBox(
-          250,
-          200,
-          SingleChildScrollView(
-            child: Text(
-              maxLines: 100,
-              meal.recipe!,
-              textDirection: writtenLanguage == 'en'
-                  ? TextDirection.ltr
-                  : TextDirection.rtl,
-              textAlign: writtenLanguage == 'en'
-                  ? TextAlign.end
-                  : TextAlign.start,
-              style: TextStyle(
-                  fontSize: fontSize,
-                  fontFamily:
-                      writtenLanguage == 'en' ? 'salsa' : 'MyriadArabic'),
+    String writtenLanguage = GeneralController().detectLanguage(text);
+    return Container(
+      padding:
+          EdgeInsets.symmetric(horizontal: SizeConfig.getProportionalWidth(10)),
+      width: 348,
+      height: 200,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(15),
+        border: Border.all(width: 1.0, color: AppColors.widgetsColor),
+      ),
+      child: Row(
+        textDirection: settingsProvider.language == 'en'
+            ? TextDirection.ltr
+            : TextDirection.rtl,
+        mainAxisAlignment: settingsProvider.language == 'en'
+            ? MainAxisAlignment.start
+            : MainAxisAlignment.end,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Image.asset(
+            Assets.mealRecipe,
+            scale: 1.3,
+          ),
+          SizeConfig.customSizedBox(
+            270,
+            225,
+            SingleChildScrollView(
+              scrollDirection: Axis.vertical,
+              child: Text(
+                maxLines: 100,
+                text,
+                textDirection: writtenLanguage == 'en'
+                    ? TextDirection.ltr
+                    : TextDirection.rtl,
+                textAlign: settingsProvider.language == 'en'
+                    ? TextAlign.end
+                    : TextAlign.start,
+                style: TextStyle(
+                    fontSize: fontSize,
+                    fontFamily:
+                        writtenLanguage == 'en' ? 'salsa' : 'MyriadArabic'),
+              ),
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

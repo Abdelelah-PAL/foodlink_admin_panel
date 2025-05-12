@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:foodlink_admin_panel/screens/dashboard/dashboard.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import '../../core/utils/size_config.dart';
@@ -7,12 +6,14 @@ import '../../models/meal.dart';
 import '../../providers/meals_provider.dart';
 import '../../providers/settings_provider.dart';
 import '../../services/translation_services.dart';
+import '../dashboard/dashboard.dart';
 import '../widgets/custom_button.dart';
 import 'add_meal_screen.dart';
-import 'widgets/ingredients_row.dart';
+import 'widgets/ingredients_meal_view.dart';
 import 'widgets/meal_image_container.dart';
 import 'widgets/name_row.dart';
-import 'widgets/recipe_row.dart';
+import 'widgets/recipe_meal_view.dart';
+import 'widgets/source_meal_view.dart';
 
 class MealScreen extends StatelessWidget {
   const MealScreen({super.key, required this.meal, this.index});
@@ -32,29 +33,40 @@ class MealScreen extends StatelessWidget {
               imageUrl: meal.imageUrl,
             ),
             Padding(
-              padding: EdgeInsets.symmetric(
-                horizontal: SizeConfig.getProportionalWidth(20),
+              padding: EdgeInsets.only(
+                left: SizeConfig.getProportionalWidth(20),
+                right: SizeConfig.getProportionalWidth(20),
+                bottom: SizeConfig.getProportionalHeight(70),
+                top: SizeConfig.getProportionalHeight(20),
               ),
               child: Column(
+                crossAxisAlignment: settingsProvider.language == 'en'
+                    ? CrossAxisAlignment.start
+                    : CrossAxisAlignment.end,
                 children: [
                   NameRow(
                     name: meal.name,
-                    fontSize: 30,
-                    textWidth: 250,
-                    settingsProvider: settingsProvider,
-                  ),
-                  IngredientsRow(
-                    meal: meal,
                     fontSize: 20,
-                    textWidth: 250,
-                    maxLines: 100,
+                    textWidth: 280,
+                    settingsProvider: settingsProvider,
+
+                  ),
+                  SizeConfig.customSizedBox(null, 30, null),
+                  IngredientsMealView(
+                    meal: meal,
                     settingsProvider: settingsProvider,
                   ),
-                  SizeConfig.customSizedBox(null, 20, null),
-                  RecipeRow(
+                  SizeConfig.customSizedBox(null, 30, null),
+                  RecipeMealView(
                     meal: meal,
                     fontSize: 15,
-                  )
+                    settingsProvider: settingsProvider,
+                  ),
+                  SizeConfig.customSizedBox(null, 30, null),
+                  SourceMealView(
+                      meal: meal,
+                      settingsProvider: settingsProvider,
+                      )
                 ],
               ),
             ),
@@ -65,22 +77,23 @@ class MealScreen extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       CustomButton(
-                          onTap: () {
-                            Get.to(const Dashboard());
-                          },
-                          text: TranslationService().translate("proceed"),
-                          width: 216,
-                          height: 150),
+                        onTap: () {
+                          Get.to(const Dashboard());
+                        },
+                        text: TranslationService().translate("proceed"),
+                        width: 137,
+                        height: 45,
+                      ),
                       SizeConfig.customSizedBox(null, 20, null),
                       CustomButton(
-                          onTap: () {
-                            MealsProvider().fillDataForEdition(meal);
-                            Get.to(
-                                AddMealScreen(isAddScreen: false, meal: meal));
-                          },
-                          text: TranslationService().translate("edit"),
-                          width: 216,
-                          height: 150),
+                        onTap: () {
+                          MealsProvider().fillDataForEdition(meal);
+                          Get.to(AddMealScreen(isAddScreen: false, meal: meal));
+                        },
+                        text: TranslationService().translate("edit"),
+                        width: 137,
+                        height: 45,
+                      ),
                       SizeConfig.customSizedBox(null, 20, null),
                     ]))
           ],

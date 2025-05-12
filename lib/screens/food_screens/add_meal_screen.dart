@@ -7,11 +7,13 @@ import '../../models/meal.dart';
 import '../../providers/meals_provider.dart';
 import '../../providers/settings_provider.dart';
 import '../../services/translation_services.dart';
+import '../widgets/custom_app_iconic_textfield.dart';
 import '../widgets/custom_app_textfield.dart';
 import '../widgets/custom_button.dart';
 import '../widgets/custom_text.dart';
 import 'widgets/ingredient_box.dart';
 import 'widgets/meal_image_container.dart';
+import 'widgets/step_box.dart';
 
 class AddMealScreen extends StatefulWidget {
   const AddMealScreen({
@@ -124,16 +126,74 @@ class _AddMealScreenState extends State<AddMealScreen> {
                     ],
                   ),
                 ),
-                CustomAppTextField(
+                Padding(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: SizeConfig.getProportionalWidth(26),
+                  ),
+                  child: Row(
+                    textDirection: settingsProvider.language == 'en'
+                        ? TextDirection.ltr
+                        : TextDirection.rtl,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      SizeConfig.customSizedBox(
+                          31, 31, Image.asset(Assets.mealRecipe)),
+                      CustomText(
+                        isCenter: false,
+                        text: TranslationService().translate("recipe"),
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ],
+                  ),
+                ),
+                Container(
+                    width: SizeConfig.getProportionalWidth(347),
+                    height: SizeConfig.getProportionalHeight(150),
+                    margin: EdgeInsets.symmetric(
+                        horizontal: SizeConfig.getProportionalWidth(26)),
+                    child: ListView.builder(
+                      itemCount: mealsProvider.numberOfSteps,
+                      itemBuilder: (context, index) {
+                        if (index == mealsProvider.numberOfSteps - 1) {
+                          return AddStepBox(
+                            mealsProvider: mealsProvider,
+                          );
+                        }
+                        return StepBox(
+                            settingsProvider: settingsProvider,
+                            controller:
+                            mealsProvider.stepsControllers[index]);
+                      },
+                    )),
+                SizeConfig.customSizedBox(null, 20, null),
+                CustomAppIconicTextField(
                   width: 348,
-                  height: 300,
-                  headerText: "recipe",
-                  icon: Assets.mealRecipe,
-                  controller: MealController().recipeController,
-                  maxLines: 10,
-                  iconSizeFactor: 48,
+                  height: 37,
+                  headerText: "source",
+                  icon: Assets.mealSource,
+                  controller: MealController().sourceController,
+                  maxLines: 2,
+                  iconSizeFactor: 28,
                   settingsProvider: settingsProvider,
-                  isCentered: false,
+                  iconPadding: 26,
+                  enabled: true,
+                  textAlign: TextAlign.left,
+                ),
+                SizeConfig.customSizedBox(null, 20, null),
+                CustomButton(
+                  onTap: () async {
+                    widget.isAddScreen
+                        ? await MealController()
+                        .addMeal(mealsProvider)
+                        : await MealController()
+                        .updateMeal(mealsProvider, widget.meal!);
+                  },
+                  text: TranslationService()
+                      .translate(widget.isAddScreen ? "confirm" : "edit"),
+                  width: SizeConfig.getProportionalWidth(126),
+                  height: SizeConfig.getProportionalHeight(45),
                 ),
                 SizeConfig.customSizedBox(null, 50, null),
                 CustomButton(

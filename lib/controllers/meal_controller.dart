@@ -19,13 +19,26 @@ class MealController {
   TextEditingController recipeController = TextEditingController();
   TextEditingController addNoteController = TextEditingController();
   TextEditingController noteController = TextEditingController();
+  TextEditingController sourceController = TextEditingController();
+
   DateTime? selectedDate;
   String? selectedDay;
   String? day;
   MealsServices ms = MealsServices();
-
+  List<TextEditingController> stepsControllers = [
+    TextEditingController(),
+  ];
   List<String> missingIngredients = [];
-
+  List<String> ingredients = MealsProvider()
+      .ingredientsControllers
+      .map((controller) => controller.text)
+      .where((text) => text.isNotEmpty)
+      .toList();
+  List<String> steps = MealsProvider()
+      .stepsControllers
+      .map((controller) => controller.text)
+      .where((text) => text.isNotEmpty)
+      .toList();
   String detectLanguage(String string) {
     String languageCode = 'en';
 
@@ -55,7 +68,7 @@ class MealController {
     var addedMeal = await MealsProvider().addMeal(Meal(
         name: nameController.text,
         ingredients: ingredients,
-        recipe: recipeController.text,
+        recipe: steps,
         imageUrl: (imageUrl?.isNotEmpty ?? false) ? imageUrl : null,
         day: day,
         date: selectedDate));
@@ -81,7 +94,7 @@ class MealController {
       categoryId: meal.categoryId,
       name: nameController.text,
       ingredients: ingredients,
-      recipe: recipeController.text,
+      recipe: steps,
       imageUrl: (imageUrl?.isNotEmpty ?? false) ? imageUrl : meal.imageUrl,
     ));
 

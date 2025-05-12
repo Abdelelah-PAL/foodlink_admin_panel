@@ -14,7 +14,7 @@ class CustomAuthBtn extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        height: SizeConfig.getProportionalHeight(120),
+        height: SizeConfig.getProportionalHeight(48),
         width: SizeConfig.getProportionalWidth(312),
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(5),

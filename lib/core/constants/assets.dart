@@ -34,6 +34,7 @@ class Assets {
   static String mealNameIcon = "$rootIcons/meal_name_icon.png";
   static String mealIngredients = "$rootIcons/meal_ingredients.png";
   static String mealRecipe = "$rootIcons/meal_recipe.png";
+  static String mealSource = "$rootIcons/meal_source.png";
   static String editInfo = "$rootIcons/edit_info.png";
   static String contactUs = "$rootIcons/contact_us.png";
   static String support = "$rootIcons/support.png";

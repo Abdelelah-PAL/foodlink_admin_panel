@@ -32,7 +32,7 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
   Widget build(BuildContext context) {
     return Container(
       width: SizeConfig.getProportionalWidth(355),
-      height: SizeConfig.getProportionalHeight(220),
+      height: SizeConfig.getProportionalHeight(61),
       margin: EdgeInsets.fromLTRB(
           SizeConfig.getProportionalWidth(20),
           SizeConfig.getProportionalHeight(10),

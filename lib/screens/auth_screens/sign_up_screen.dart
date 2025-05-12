@@ -143,12 +143,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     }
                   },
                 ),
-                Padding(
-                  padding: EdgeInsets.symmetric(
-                    vertical: SizeConfig.getProportionalHeight(50),
-                  ),
-                  child: const CustomAuthDivider(),
-                ),
+
                 CustomAuthFooter(
                   headingText: "have_account",
                   tailText: "login",

@@ -20,7 +20,11 @@ class MealsProvider with ChangeNotifier {
   FilePickerResult? pickedFile;
   FilePickerResult? pickedDOW;
   int numberOfIngredients = 2;
+  int numberOfSteps = 2;
   List<TextEditingController> ingredientsControllers = [
+    TextEditingController(),
+  ];
+  List<TextEditingController> stepsControllers = [
     TextEditingController(),
   ];
 
@@ -127,6 +131,12 @@ class MealsProvider with ChangeNotifier {
       }
       ingredientsControllers[index].text = meal.ingredients[index];
     });
+    notifyListeners();
+  }
+
+  void increaseSteps() {
+    numberOfSteps++;
+    stepsControllers.add(TextEditingController());
     notifyListeners();
   }
 }

@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:foodlink_admin_panel/providers/settings_provider.dart';
+import 'package:foodlink_admin_panel/screens/food_screens/widgets/plan_meal_tile.dart';
 import 'package:foodlink_admin_panel/screens/widgets/custom_text.dart';
 import 'package:provider/provider.dart';
 import '../../core/constants/fonts.dart';
 import '../../core/utils/size_config.dart';
+import '../../models/meal.dart';
 import '../../providers/meals_provider.dart';
 import '../../services/translation_services.dart';
 import 'widgets/list_meal_tile.dart';
@@ -27,6 +30,8 @@ class _MealsListScreenState extends State<MealsListScreen> {
   @override
   Widget build(BuildContext context) {
     MealsProvider mealsProviderWatcher = context.watch<MealsProvider>();
+    SettingsProvider settingsProvider = context.watch<SettingsProvider>();
+
     return mealsProviderWatcher.isLoading
         ? const Center(child: CircularProgressIndicator())
         : Scaffold(
@@ -68,10 +73,14 @@ class _MealsListScreenState extends State<MealsListScreen> {
                             itemCount: mealsProvider.meals.length,
                             scrollDirection: Axis.vertical,
                             itemBuilder: (ctx, index) {
-                              return ListMealTile(
+                              Meal meal = mealsProvider.meals[index];
+                              return PlanMealTile(
                                 meal: mealsProvider.meals[index],
-                                favorites: false,
                                 index: index,
+                                day: meal.day!,
+                                date: meal.date!,
+                                mealsProvider: mealsProvider,
+                                settingsProvider: settingsProvider,
                               );
                             },
                           ),

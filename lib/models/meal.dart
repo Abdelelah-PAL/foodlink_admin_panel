@@ -4,10 +4,12 @@ class Meal {
   String name;
   String? imageUrl;
   List<String> ingredients;
-  String? recipe;
+  List<String>? recipe;
+  String? userId;
+  bool? isFavorite;
   DateTime? date;
   String? day;
-  bool isPlanned ;
+  String? source;
 
   Meal({
     this.documentId,
@@ -16,9 +18,11 @@ class Meal {
     this.imageUrl,
     required this.ingredients,
     this.recipe,
+    this.userId,
+    this.isFavorite = false,
     this.date,
     this.day,
-    this.isPlanned =true
+    this.source,
   });
 
   factory Meal.fromJson(Map<String, dynamic> json, docId) {
@@ -28,10 +32,12 @@ class Meal {
       name: json['name'],
       imageUrl: json['image_url'],
       ingredients: List<String>.from(json['ingredients']),
-      recipe: json['recipe'],
-      date: json['date'].toDate(),
+      recipe: List<String>.from(json['recipe']),
+      userId: json['user_id'],
+      isFavorite: json['is_favorite'],
+      date: json['date']?.toDate(),
       day: json['day'],
-      isPlanned: true,
+      source: json['source'],
     );
   }
 
@@ -42,9 +48,11 @@ class Meal {
       'image_url': imageUrl,
       'ingredients': ingredients,
       'recipe': recipe,
+      'user_id': userId,
+      'is_favorite': isFavorite,
       'date': date,
       'day': day,
-      'is_planned':true,
+      'source': source,
     };
   }
 }
