@@ -59,7 +59,7 @@ class _AddArticleScreenState extends State<AddArticleScreen> {
           ),
           SizeConfig.customSizedBox(null, 50, null),
           CustomAppTextField(
-            width: 500,
+            width: 300,
             height: 100,
             hintText: "put_url",
             icon: Assets.web,
@@ -89,8 +89,8 @@ class _AddArticleScreenState extends State<AddArticleScreen> {
                     .showSuccessDialog(context, settingsProvider);
               },
               text: "confirm",
-              width: 200,
-              height: 100)
+              width: 100,
+              height: 50)
         ],
       ),
     );

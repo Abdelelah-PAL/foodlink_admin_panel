@@ -167,5 +167,8 @@
   "number__required": "Password must contain at least one number",
   "character_required": "Password must contain at least one special character (!@#\\$&*~)",
   "logout": "logout",
-  "enter_name": "Username"
+  "enter_name": "Username",
+  "planned_meals": "Planned Meals",
+  "pick_date": "Pick a date",
+  "put_url": "PUT URL"
 }

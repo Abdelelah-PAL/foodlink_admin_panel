@@ -44,12 +44,14 @@ class MealScreen extends StatelessWidget {
                     ? CrossAxisAlignment.start
                     : CrossAxisAlignment.end,
                 children: [
-                  NameRow(
-                    name: meal.name,
-                    fontSize: 20,
-                    textWidth: 280,
-                    settingsProvider: settingsProvider,
-
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: SizeConfig.getProportionalWidth(10)),
+                    child: NameRow(
+                      name: meal.name,
+                      fontSize: 20,
+                      textWidth: 280,
+                      settingsProvider: settingsProvider,
+                    ),
                   ),
                   SizeConfig.customSizedBox(null, 30, null),
                   IngredientsMealView(

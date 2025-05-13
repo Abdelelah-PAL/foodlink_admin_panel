@@ -34,8 +34,8 @@ class _CustomAuthenticationTextFieldState
       padding:
           EdgeInsets.symmetric(vertical: SizeConfig.getProportionalHeight(12)),
       child: Container(
-        width: SizeConfig.getProportionalWidth(312),
-        height: SizeConfig.getProportionalHeight(48),
+        width: SizeConfig.getProperHorizontalSpace(2),
+        height: SizeConfig.getProperVerticalSpace(10),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
           border: Border.all(width: 1.0, color: widget.borderColor),

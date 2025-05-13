@@ -18,7 +18,7 @@ class CustomSettingTile extends StatelessWidget {
     SettingsProvider settingsProvider =
     Provider.of<SettingsProvider>(context, listen: true);
     return Container(
-      height: SizeConfig.getProportionalHeight(200),
+      height: SizeConfig.getProportionalHeight(100),
       margin: EdgeInsets.symmetric(
         vertical: SizeConfig.getProportionalHeight(2),
       ),

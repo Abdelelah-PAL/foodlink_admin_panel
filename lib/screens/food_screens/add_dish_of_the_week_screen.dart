@@ -125,8 +125,8 @@ class _AddDishOfTheWeekScreenState extends State<AddDishOfTheWeekScreen> {
                     }
                   },
                   text: "Upload",
-                  width: 200,
-                  height: 100,
+                  width: 100,
+                  height: 50,
                 ),
               ],
             ),

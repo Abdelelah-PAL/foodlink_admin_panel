@@ -34,13 +34,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
             fontWeight: FontWeight.bold),
         SizeConfig.customSizedBox(null, 25, null),
         const ProfileCircle(
-          height: 200,
+          height: 100,
           width: 200,
           iconSize: 50,
         ),
         SizeConfig.customSizedBox(null, 50, null),
         CustomSettingsContainer(
-            height: 500,
+            height: 300,
             settingsProvider: settingsProvider,
             children: [
               CustomSettingTile(

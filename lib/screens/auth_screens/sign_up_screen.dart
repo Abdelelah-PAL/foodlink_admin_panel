@@ -49,32 +49,32 @@ class _SignUpScreenState extends State<SignUpScreen> {
       backgroundColor: AppColors.backgroundColor,
       body: Padding(
         padding: EdgeInsets.symmetric(
-            horizontal: SizeConfig.getProportionalWidth(10),
-            vertical: SizeConfig.getProportionalWidth(45)),
+            horizontal: SizeConfig.getProperHorizontalSpace(4),
+            vertical: SizeConfig.getProperVerticalSpace(10)),
         child: SingleChildScrollView(
           child: GestureDetector(
             behavior: HitTestBehavior.opaque,
             onTap: () => FocusScope.of(context).unfocus(),
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 SizeConfig.customSizedBox(
                     179, 179, Image.asset(Assets.pureLogo)),
                 Padding(
-                  padding: EdgeInsets.only(
-                      top: SizeConfig.getProportionalHeight(10),
-                      bottom: SizeConfig.getProportionalHeight(13)),
-                  child:
-                  const CustomText(
-                    isCenter: true,
-                    text: "create_an_account",
-                    fontSize: 24,
-                    fontWeight: FontWeight.normal,
-                    color: AppColors.fontColor,
-                  )
-                ),
+                    padding: EdgeInsets.only(
+                        top: SizeConfig.getProportionalHeight(10),
+                        bottom: SizeConfig.getProportionalHeight(13)),
+                    child: const CustomText(
+                      isCenter: true,
+                      text: "create_an_account",
+                      fontSize: 24,
+                      fontWeight: FontWeight.normal,
+                      color: AppColors.fontColor,
+                    )),
                 CustomErrorTxt(
-                    text: TranslationService()
-                        .translate(_authController.errorText),
+                  text:
+                      TranslationService().translate(_authController.errorText),
                   settingsProvider: settingsProvider,
                 ),
                 CustomAuthenticationTextField(
@@ -102,9 +102,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   hintText: TranslationService().translate('confirm_password'),
                   obscureText: true,
                   textEditingController:
-                  _authController.confirmedPasswordController,
+                      _authController.confirmedPasswordController,
                   borderColor:
-                  _authController.confirmPasswordTextFieldBorderColor,
+                      _authController.confirmPasswordTextFieldBorderColor,
                   settingsProvider: settingsProvider,
                 ),
                 SizeConfig.customSizedBox(null, 50, null),
@@ -125,7 +125,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     } else {
                       if (_authController.isMatched) {
                         var admin =
-                        await AuthProvider().signUpWithEmailAndPassword(
+                            await AuthProvider().signUpWithEmailAndPassword(
                           _authController.emailController.text,
                           _authController.passwordController.text,
                         );
@@ -143,7 +143,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     }
                   },
                 ),
-
                 CustomAuthFooter(
                   headingText: "have_account",
                   tailText: "login",

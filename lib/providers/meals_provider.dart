@@ -21,6 +21,9 @@ class MealsProvider with ChangeNotifier {
   FilePickerResult? pickedDOW;
   int numberOfIngredients = 2;
   int numberOfSteps = 2;
+  DateTime? selectedDate;
+  String? day;
+
   List<TextEditingController> ingredientsControllers = [
     TextEditingController(),
   ];
@@ -138,5 +141,33 @@ class MealsProvider with ChangeNotifier {
     numberOfSteps++;
     stepsControllers.add(TextEditingController());
     notifyListeners();
+  }
+
+  Future<void> selectDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: selectedDate ?? DateTime.now(),
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2100),
+    );
+
+    if (picked != null && picked != selectedDate) {
+      selectedDate = picked;
+      day = getDayOfWeek(selectedDate!);
+    }
+    notifyListeners();
+  }
+
+  String getDayOfWeek(DateTime date) {
+    const days = [
+      "Monday",
+      "Tuesday",
+      "Wednesday",
+      "Thursday",
+      "Friday",
+      "Saturday",
+      "Sunday",
+    ];
+    return days[date.weekday - 1];
   }
 }

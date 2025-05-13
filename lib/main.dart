@@ -93,15 +93,15 @@ class MyAppState extends State<MyApp> {
           checkColor: WidgetStateProperty.all(AppColors.backgroundColor),
         ),
       ),
-      initialRoute: '/',
+      initialRoute: '/login',
       getPages: [
-        GetPage(
-          name: '/',
-          page: () => const SignUpScreen(),
-        ),
         GetPage(
           name: '/login',
           page: () => const LoginScreen(),
+        ),
+        GetPage(
+          name: '/',
+          page: () => const SignUpScreen(),
         ),
         GetPage(
           name: '/dashboard',

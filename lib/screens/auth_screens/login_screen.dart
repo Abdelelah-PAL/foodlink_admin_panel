@@ -36,6 +36,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+    SizeConfig().init(context);
     SettingsProvider settingsProvider = Provider.of<SettingsProvider>(context);
     return Scaffold(
         backgroundColor: AppColors.backgroundColor,
@@ -45,9 +46,11 @@ class _LoginScreenState extends State<LoginScreen> {
           onTap: () => FocusScope.of(context).unfocus(),
           child: Padding(
               padding: EdgeInsets.symmetric(
-                  horizontal: SizeConfig.getProportionalWidth(10)),
+                horizontal: SizeConfig.getProperHorizontalSpace(4),
+              ),
               child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     SizeConfig.customSizedBox(
                         179, 179, Image.asset(Assets.pureLogo)),
@@ -121,8 +124,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                     });
                                   },
                                   side: const BorderSide(
-                                      color: AppColors
-                                          .textFieldBorderColor),
+                                      color: AppColors.textFieldBorderColor),
                                 ),
                               ),
                               Padding(
@@ -194,7 +196,6 @@ class _LoginScreenState extends State<LoginScreen> {
                         }
                       },
                     ),
-
                     CustomAuthFooter(
                         headingText: "do_not_have_account",
                         tailText: "signup",
