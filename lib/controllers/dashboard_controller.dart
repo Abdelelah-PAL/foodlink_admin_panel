@@ -25,7 +25,7 @@ class DashboardController {
   List<Widget> dashBoardList = [
     const MealsListScreen(),
     const AddMealScreen(
-      isAddScreen: true,
+      isAddScreen: true, isUpdateScreen: false,
     ),
     const AddDishOfTheWeekScreen(),
     const AddArticleScreen(),

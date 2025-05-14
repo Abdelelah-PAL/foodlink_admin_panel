@@ -5,10 +5,17 @@ import '../../../core/constants/fonts.dart';
 import '../../../core/utils/size_config.dart';
 import '../../../providers/meals_provider.dart';
 import '../../../services/translation_services.dart';
+import '../../widgets/custom_back_button.dart';
 
 class MealImageContainer extends StatefulWidget {
-  const MealImageContainer({super.key, this.imageUrl});
+  const MealImageContainer(
+      {super.key,
+      this.imageUrl,
+      required this.isAddSource,
+      required this.isUpdateSource});
 
+  final bool isAddSource;
+  final bool isUpdateSource;
   final String? imageUrl;
 
   @override
@@ -24,25 +31,58 @@ class _MealImageContainerState extends State<MealImageContainer> {
     final MealsProvider mealsProvider =
         Provider.of<MealsProvider>(context, listen: true);
     return SafeArea(
-      child: Stack(
-        children: [
-          Container(
-            width: SizeConfig.screenWidth,
-            height: SizeConfig.getProperVerticalSpace(2),
-            decoration: const BoxDecoration(
-              color: AppColors.widgetsColor,
-              borderRadius: BorderRadius.only(
-                bottomLeft: Radius.circular(15),
-                bottomRight: Radius.circular(15),
-              ),
-              border: Border(
-                bottom:
-                    BorderSide(width: 1, color: AppColors.defaultBorderColor),
-              ),
-            ),
-          ),
-          widget.imageUrl != null
-              ? Container(
+      child: widget.isUpdateSource
+          ? Stack(
+              children: [
+                Container(
+                  width: SizeConfig.screenWidth,
+                  height: SizeConfig.getProperVerticalSpace(2),
+                  padding: EdgeInsets.zero,
+                  decoration: const BoxDecoration(
+                      color: AppColors.widgetsColor,
+                      borderRadius: BorderRadius.only(
+                        bottomLeft: Radius.circular(15),
+                        bottomRight: Radius.circular(15),
+                      ),
+                      border: Border(
+                        bottom: BorderSide(
+                            width: 1, color: AppColors.defaultBorderColor),
+                      )),
+                  child: mealsProvider.imageIsPicked
+                      ? Image.memory(
+                          mealsProvider.pickedFile!.files.first.bytes!,
+                          fit: BoxFit.cover,
+                        )
+                      : widget.imageUrl != null && widget.imageUrl!.isNotEmpty
+                          ? Image.network(
+                              widget.imageUrl!,
+                              fit: BoxFit.fill,
+                            )
+                          : null,
+                ),
+                Padding(
+                  padding: EdgeInsets.only(
+                      top: SizeConfig.getProperVerticalSpace(12)),
+                  child: Center(
+                    child: IconButton(
+                      onPressed: () async {
+                        await mealsProvider.pickImage("meal");
+                        if (mounted) setState(() {});
+                      },
+                      icon: const Icon(
+                        Icons.camera_alt_outlined,
+                        color: Colors.white,
+                        size: 40,
+                      ),
+                    ),
+                  ),
+                ),
+                const CustomBackButton(),
+              ],
+            )
+          : Stack(
+              children: [
+                Container(
                   width: SizeConfig.screenWidth,
                   height: SizeConfig.getProperVerticalSpace(2),
                   decoration: const BoxDecoration(
@@ -56,57 +96,82 @@ class _MealImageContainerState extends State<MealImageContainer> {
                           width: 1, color: AppColors.defaultBorderColor),
                     ),
                   ),
-                  child: Image.network(
-                    widget.imageUrl!,
-                    fit: BoxFit.cover, // Keep BoxFit.cover for best result
+                ),
+                Container(
+                  width: SizeConfig.screenWidth,
+                  height: SizeConfig.getProperVerticalSpace(2),
+                  decoration: const BoxDecoration(
+                    color: AppColors.widgetsColor,
+                    borderRadius: BorderRadius.only(
+                      bottomLeft: Radius.circular(15),
+                      bottomRight: Radius.circular(15),
+                    ),
+                    border: Border(
+                      bottom: BorderSide(
+                          width: 1, color: AppColors.defaultBorderColor),
+                    ),
                   ),
-                )
-              : Positioned.fill(
-                  child: Center(
-                    child: GestureDetector(
-                      onTap: () async {
-                        await mealsProvider.pickImage("meal");
-                        if (mounted) setState(() {});
-                      },
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Text(
-                            TranslationService().translate("upload_food_image"),
-                            style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                              fontFamily: AppFonts.primaryFont,
+                  child: !widget.isAddSource &&
+                          widget.imageUrl != null &&
+                          widget.imageUrl!.isNotEmpty
+                      ? Image.network(
+                          widget.imageUrl!,
+                          fit: BoxFit.fill,
+                        )
+                      : null,
+                ),
+                if (widget.isAddSource)
+                  Positioned.fill(
+                    child: Center(
+                      child: GestureDetector(
+                        onTap: () async {
+                          await mealsProvider.pickImage("meal");
+                          if (mounted) setState(() {});
+                        },
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text(
+                                TranslationService()
+                                    .translate("upload_food_image"),
+                                style: TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                    fontFamily: AppFonts.primaryFont)),
+                            SizeConfig.customSizedBox(
+                              10,
+                              null,
+                              null,
                             ),
-                          ),
-                          SizeConfig.customSizedBox(10, null, null),
-                          const Icon(Icons.file_upload_outlined),
-                        ],
+                            const Icon(Icons.file_upload_outlined)
+                          ],
+                        ),
                       ),
                     ),
                   ),
-                ),
-          if (mealsProvider.imageIsPicked)
-            Container(
-                width: SizeConfig.screenWidth,
-                height: SizeConfig.getProperVerticalSpace(2),
-                decoration: const BoxDecoration(
-                  color: AppColors.widgetsColor,
-                  borderRadius: BorderRadius.only(
-                    bottomLeft: Radius.circular(15),
-                    bottomRight: Radius.circular(15),
+                if (mealsProvider.imageIsPicked && widget.isAddSource)
+                  Container(
+                    width: SizeConfig.screenWidth,
+                    height: SizeConfig.getProperVerticalSpace(2),
+                    padding: EdgeInsets.zero,
+                    decoration: const BoxDecoration(
+                        color: AppColors.widgetsColor,
+                        borderRadius: BorderRadius.only(
+                          bottomLeft: Radius.circular(15),
+                          bottomRight: Radius.circular(15),
+                        ),
+                        border: Border(
+                          bottom: BorderSide(
+                              width: 1, color: AppColors.defaultBorderColor),
+                        )),
+                    child: Image.memory(
+                      mealsProvider.pickedFile!.files.first.bytes!,
+                      fit: BoxFit.cover,
+                    ),
                   ),
-                  border: Border(
-                    bottom: BorderSide(
-                        width: 1, color: AppColors.defaultBorderColor),
-                  ),
-                ),
-                child: Image.memory(
-                  mealsProvider.pickedFile!.files.first.bytes!,
-                  fit: BoxFit.cover, // Use BoxFit.cover here as well
-                )),
-        ],
-      ),
+                const CustomBackButton(),
+              ],
+            ),
     );
   }
 }

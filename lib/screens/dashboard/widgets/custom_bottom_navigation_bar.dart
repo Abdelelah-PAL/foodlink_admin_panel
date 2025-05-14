@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:foodlink_admin_panel/providers/meals_provider.dart';
 import 'package:get/get.dart';
 import '../../../core/constants/colors.dart';
 import '../../../core/utils/size_config.dart';
@@ -22,6 +23,9 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
     setState(() {
       _selectedIndex = index;
       DashboardProvider().onItemTapped(index);
+      if(index == 1) {
+        MealsProvider().resetValues();
+      }
     });
     if(!widget.fromDashboard) {
       Get.to(const Dashboard());

@@ -38,15 +38,15 @@ class MealsProvider with ChangeNotifier {
       List<Meal> fetchedMeals = await _ms.getAllPlannedMeals();
       for (var doc in fetchedMeals) {
         Meal meal = Meal(
-          documentId: doc.documentId,
-          name: doc.name,
-          imageUrl: doc.imageUrl,
-          categoryId: doc.categoryId,
-          ingredients: doc.ingredients,
-          recipe: doc.recipe,
-          date: doc.date,
-          day: doc.day,
-        );
+            documentId: doc.documentId,
+            name: doc.name,
+            imageUrl: doc.imageUrl,
+            categoryId: doc.categoryId,
+            ingredients: doc.ingredients,
+            recipe: doc.recipe,
+            date: doc.date,
+            day: doc.day,
+            source: doc.source);
         meals.add(meal);
       }
       isLoading = false;
@@ -103,18 +103,21 @@ class MealsProvider with ChangeNotifier {
   }
 
   void resetValues() {
+    selectedDate = null;
     imageIsPicked = false;
-    dOWIsPicked = false;
     pickedFile = null;
-    pickedDOW = null;
     numberOfIngredients = 2;
-    MealController().recipeController.clear();
-    MealController().ingredientsController.clear();
+    numberOfSteps = 2;
+    MealController().sourceController.clear();
     MealController().nameController.clear();
     ingredientsControllers = [
       TextEditingController(),
     ];
+    stepsControllers = [
+      TextEditingController(),
+    ];
     ingredientsControllers.map((controller) => {controller.clear()});
+    stepsControllers.map((controller) => {controller.clear()});
     notifyListeners();
   }
 
@@ -126,13 +129,22 @@ class MealsProvider with ChangeNotifier {
 
   void fillDataForEdition(meal) {
     MealController().nameController.text = meal.name;
-    MealController().recipeController.text = meal.recipe ?? "";
+    MealController().sourceController.text = meal.source ?? "";
+    selectedDate = meal.date;
+    day = getDayOfWeek(meal.date);
     numberOfIngredients = meal.ingredients.length + 1;
     meal.ingredients.asMap().forEach((index, controller) {
       if (index + 1 > ingredientsControllers.length) {
         ingredientsControllers.add(TextEditingController());
       }
       ingredientsControllers[index].text = meal.ingredients[index];
+    });
+    numberOfSteps = meal.recipe.length + 1;
+    meal.recipe.asMap().forEach((index, controller) {
+      if (index + 1 > stepsControllers.length) {
+        stepsControllers.add(TextEditingController());
+      }
+      stepsControllers[index].text = meal.recipe[index];
     });
     notifyListeners();
   }
@@ -169,5 +181,8 @@ class MealsProvider with ChangeNotifier {
       "Sunday",
     ];
     return days[date.weekday - 1];
+  }
+  Future<void> deleteImage(imageUrl) async {
+    await _ms.deleteImage(imageUrl);
   }
 }

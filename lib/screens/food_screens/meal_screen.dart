@@ -30,7 +30,7 @@ class MealScreen extends StatelessWidget {
         child: Column(
           children: [
             MealImageContainer(
-              imageUrl: meal.imageUrl,
+              imageUrl: meal.imageUrl, isAddSource: false, isUpdateSource: false,
             ),
             Padding(
               padding: EdgeInsets.only(
@@ -90,7 +90,7 @@ class MealScreen extends StatelessWidget {
                       CustomButton(
                         onTap: () {
                           MealsProvider().fillDataForEdition(meal);
-                          Get.to(AddMealScreen(isAddScreen: false, meal: meal));
+                          Get.to(AddMealScreen(isAddScreen: false, meal: meal, isUpdateScreen: true,));
                         },
                         text: TranslationService().translate("edit"),
                         width: 137,

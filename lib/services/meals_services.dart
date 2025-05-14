@@ -80,11 +80,16 @@ class MealsServices with ChangeNotifier {
 
   Future<Meal> updateMeal(Meal meal) async {
     try {
-      final mealRef = _firestore.collection('meals').doc(meal.documentId);
-      await mealRef.set(meal.toMap(), SetOptions(merge: false));
+      await _firestore.collection('planned_meals').doc(meal.documentId).set(
+        meal.toMap(),
+        SetOptions(merge: false),
+      );
+      print(meal);
+      var docRef = _firestore.collection('planned_meals').doc(meal.documentId);
+      var docSnapshot = await docRef.get();
 
-      final updatedSnapshot = await mealRef.get();
-      return Meal.fromJson(updatedSnapshot.data()!, meal.documentId);
+      Meal updatedMeal = Meal.fromJson(docSnapshot.data()!, meal.documentId);
+      return updatedMeal;
     } catch (ex) {
       log("Error updating meal: ${ex.toString()}");
       rethrow;
@@ -93,5 +98,14 @@ class MealsServices with ChangeNotifier {
 
   Future<void> deleteMeal(String docId) async {
     await _firestore.collection('planned_meals').doc(docId).delete();
+  }
+
+  Future<void> deleteImage(String imageUrl) async {
+    try {
+      Reference ref = FirebaseStorage.instance.refFromURL(imageUrl);
+      await ref.delete();
+    } catch (e) {
+      rethrow;
+    }
   }
 }

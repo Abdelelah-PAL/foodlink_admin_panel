@@ -39,6 +39,7 @@ class MealController {
       .map((controller) => controller.text)
       .where((text) => text.isNotEmpty)
       .toList();
+
   String detectLanguage(String string) {
     String languageCode = 'en';
 
@@ -64,39 +65,53 @@ class MealController {
         .map((controller) => controller.text)
         .where((text) => text.isNotEmpty)
         .toList();
+    List<String> steps = MealsProvider()
+        .stepsControllers
+        .map((controller) => controller.text)
+        .where((text) => text.isNotEmpty)
+        .toList();
 
     var addedMeal = await MealsProvider().addMeal(Meal(
         name: nameController.text,
         ingredients: ingredients,
         recipe: steps,
+        source: sourceController.text,
         imageUrl: (imageUrl?.isNotEmpty ?? false) ? imageUrl : null,
-        day: day,
-        date: selectedDate));
+        day: mealsProvider.day,
+        date: mealsProvider.selectedDate));
 
     mealsProvider.resetValues();
     Get.to(MealScreen(meal: addedMeal));
   }
 
   Future<void> updateMeal(mealsProvider, meal) async {
-    String? imageUrl;
+    String? imageUrl = '';
     if (mealsProvider.imageIsPicked) {
-      imageUrl = await MealsProvider()
-          .uploadImage(mealsProvider.pickedFile, "planned_meals_images");
+      if (meal.imageUrl != null) {
+        await MealsProvider().deleteImage(meal.imageUrl);
+      }
+      imageUrl = await MealsProvider().uploadImage(mealsProvider.pickedFile, "planned_meals_images");
     }
     List<String> ingredients = MealsProvider()
         .ingredientsControllers
         .map((controller) => controller.text)
         .where((text) => text.isNotEmpty)
         .toList();
-
+    List<String> steps = MealsProvider()
+        .stepsControllers
+        .map((controller) => controller.text)
+        .where((text) => text.isNotEmpty)
+        .toList();
     var updatedMeal = await MealsProvider().updateMeal(Meal(
-      documentId: meal.documentId,
-      categoryId: meal.categoryId,
-      name: nameController.text,
-      ingredients: ingredients,
-      recipe: steps,
-      imageUrl: (imageUrl?.isNotEmpty ?? false) ? imageUrl : meal.imageUrl,
-    ));
+        documentId: meal.documentId,
+        name: nameController.text,
+        ingredients: ingredients,
+        recipe: steps,
+        source: sourceController.text,
+        imageUrl: (imageUrl?.isNotEmpty ?? false) ? imageUrl : null,
+        day: mealsProvider.day,
+        date: mealsProvider.selectedDate));
+    mealsProvider.resetValues();
 
     Get.to(MealScreen(meal: updatedMeal));
   }

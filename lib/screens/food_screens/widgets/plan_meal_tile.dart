@@ -14,7 +14,6 @@ import '../meal_screen.dart';
 import 'ingredients_row.dart';
 import 'name_row.dart';
 
-
 class PlanMealTile extends StatefulWidget {
   const PlanMealTile({
     super.key,
@@ -55,19 +54,20 @@ class _PlanMealTileState extends State<PlanMealTile> {
 
   @override
   Widget build(BuildContext context) {
-    SettingsProvider settingsProvider =  Provider.of<SettingsProvider>(context, listen: true);
+    SettingsProvider settingsProvider =
+        Provider.of<SettingsProvider>(context, listen: true);
 
     String formattedDate = settingsProvider.language == "en"
         ? intl.DateFormat.yMMMMd('en_US')
-        .format(widget.date)
-        .split(' ')
-        .reversed
-        .join(' ')
+            .format(widget.date)
+            .split(' ')
+            .reversed
+            .join(' ')
         : intl.DateFormat.yMMMMd('ar_SA')
-        .format(widget.date)
-        .split(' ')
-        .reversed
-        .join(' ');
+            .format(widget.date)
+            .split(' ')
+            .reversed
+            .join(' ');
     return Column(
         crossAxisAlignment: SettingsProvider().language == "en"
             ? CrossAxisAlignment.start
@@ -100,7 +100,7 @@ class _PlanMealTileState extends State<PlanMealTile> {
           ),
           Padding(
               padding:
-              EdgeInsets.only(bottom: SizeConfig.getProportionalHeight(15)),
+                  EdgeInsets.only(bottom: SizeConfig.getProportionalHeight(15)),
               child: Stack(
                 children: [
                   GestureDetector(
@@ -112,24 +112,24 @@ class _PlanMealTileState extends State<PlanMealTile> {
                       children: [
                         Expanded(
                             child: Container(
-                              width: SizeConfig.getProportionalWidth(182),
-                              height: SizeConfig.getProportionalHeight(250),
-                              decoration: BoxDecoration(
-                                border: Border.all(
-                                    width: 1, color: AppColors.defaultBorderColor),
-                                borderRadius: BorderRadius.circular(15),
-                              ),
-                              child: widget.meal.imageUrl != null &&
+                          width: SizeConfig.getProportionalWidth(182),
+                          height: SizeConfig.getProportionalHeight(250),
+                          decoration: BoxDecoration(
+                            border: Border.all(
+                                width: 1, color: AppColors.defaultBorderColor),
+                            borderRadius: BorderRadius.circular(15),
+                          ),
+                          child: widget.meal.imageUrl != null &&
                                   widget.meal.imageUrl!.isNotEmpty
-                                  ? ClipRRect(
-                                borderRadius: BorderRadius.circular(15),
-                                child: Image.network(
-                                  widget.meal.imageUrl!,
-                                  fit: BoxFit.fill,
-                                ),
-                              )
-                                  : const Icon(Icons.camera_alt_outlined),
-                            )),
+                              ? ClipRRect(
+                                  borderRadius: BorderRadius.circular(15),
+                                  child: Image.network(
+                                    widget.meal.imageUrl!,
+                                    fit: BoxFit.fill,
+                                  ),
+                                )
+                              : const Icon(Icons.camera_alt_outlined),
+                        )),
                         SizeConfig.customSizedBox(10, null, null),
                         Expanded(
                           child: Column(
