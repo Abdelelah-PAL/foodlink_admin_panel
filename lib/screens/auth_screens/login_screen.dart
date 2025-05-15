@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:foodlink_admin_panel/providers/admins_provider.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import '../../controllers/auth_controller.dart';
@@ -7,6 +6,7 @@ import '../../core/constants/assets.dart';
 import '../../core/constants/colors.dart';
 import '../../core/constants/fonts.dart';
 import '../../core/utils/size_config.dart';
+import '../../providers/admins_provider.dart';
 import '../../providers/authentication_provider.dart';
 import '../../providers/settings_provider.dart';
 import '../../services/translation_services.dart';
@@ -195,6 +195,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         }
                       },
                     ),
+                    SizeConfig.customSizedBox(null, 10, null),
                     CustomAuthFooter(
                         headingText: "do_not_have_account",
                         tailText: "signup",

@@ -143,6 +143,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     }
                   },
                 ),
+                SizeConfig.customSizedBox(null, 10, null),
                 CustomAuthFooter(
                   headingText: "have_account",
                   tailText: "login",
