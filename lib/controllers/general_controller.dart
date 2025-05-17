@@ -35,8 +35,7 @@ class GeneralController {
     }
   }
 
-  void showCustomDialog(BuildContext context, SettingsProvider settingsProvider,
-      String text, IconData icon, Color color, double? width) {
+  void showCustomDialog(BuildContext context, SettingsProvider settingsProvider, String text, IconData icon, Color color, double? width) {
     showDialog(
       context: context,
       builder: (BuildContext context) {

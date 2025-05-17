@@ -171,5 +171,13 @@
   "planned_meals": "Planned Meals",
   "pick_date": "Pick a date",
   "put_url": "PUT URL",
-  "fill_info": "Fill Information"
+  "fill_info": "Fill Information",
+  "meal_plan": "Chosen Meal Plan",
+  "upload": "Upload",
+  "image_uploaded": "Image has been uploaded successfully",
+  "article_added": "Article has been added successfully",
+  "features": "Application Features",
+  "active": "Active",
+  "premium": "Premium",
+  "delete": "Delete"
 }

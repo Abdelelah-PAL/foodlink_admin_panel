@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:foodlink_admin_panel/providers/storage_provider.dart';
 import 'package:provider/provider.dart';
 import '../../controllers/meal_controller.dart';
 import '../../core/constants/assets.dart';
@@ -40,6 +41,8 @@ class _AddMealScreenState extends State<AddMealScreen> {
   Widget build(BuildContext context) {
     MealsProvider mealsProvider =
     Provider.of<MealsProvider>(context, listen: true);
+    StorageProvider storageProvider = Provider.of<StorageProvider>(
+        context, listen: true);
     SettingsProvider settingsProvider = Provider.of<SettingsProvider>(context);
 
     return Scaffold(
@@ -199,37 +202,33 @@ class _AddMealScreenState extends State<AddMealScreen> {
                       widget.isAddScreen
                           ? {
                       if (MealController()
-                            .nameController
-                            .text
-                            .isEmpty ||
-                            mealsProvider.day == null ||
-                            mealsProvider.day!.isEmpty ||
-                            mealsProvider.selectedDate == null)
-                          {
-                            MealController().showFailedAddDialog(
-                                context, settingsProvider),
-                          }
-                        else
-                          await MealController().addMeal(mealsProvider)
+                          .nameController
+                          .text
+                          .isEmpty ||
+                      mealsProvider.day == null ||
+                      mealsProvider.day!.isEmpty ||
+                      mealsProvider.selectedDate == null)
+                      {
+                      MealController().showFailedAddDialog(
+                      context, settingsProvider),
                       }
-                          : {
-                        if (MealController()
-                            .nameController
-                            .text
-                            .isEmpty ||
-                            mealsProvider.day == null ||
-                            mealsProvider.day!.isEmpty ||
-                            mealsProvider.selectedDate == null)
-                          {
-                            print(MealController().nameController.text),
-                            print(mealsProvider.day),
-                            print(mealsProvider.selectedDate),
-                            MealController().showFailedAddDialog(
-                                context, settingsProvider),
-                          }
-                        else
-                          await MealController()
-                              .updateMeal(mealsProvider, widget.meal)
+                      else
+                      await MealController().addMeal(mealsProvider, storageProvider)
+                    }: {
+                      if (MealController()
+                          .nameController
+                          .text
+                          .isEmpty ||
+                      mealsProvider.day == null ||
+                      mealsProvider.day!.isEmpty ||
+                      mealsProvider.selectedDate == null)
+                      {
+                      MealController().showFailedAddDialog(
+                      context, settingsProvider),
+                      }
+                      else
+                      await MealController()
+                          .updateMeal(mealsProvider, widget.meal)
                       };
                     },
                     text: TranslationService()

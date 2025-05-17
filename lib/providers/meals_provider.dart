@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../controllers/meal_controller.dart';
 import '../models/meal.dart';
 import '../services/meals_services.dart';
+import 'storage_provider.dart';
 
 class MealsProvider with ChangeNotifier {
   static final MealsProvider _instance = MealsProvider._internal();
@@ -15,10 +16,6 @@ class MealsProvider with ChangeNotifier {
   List<Meal> favoriteMeals = [];
   final MealsServices _ms = MealsServices();
   bool isLoading = false;
-  bool imageIsPicked = false;
-  bool dOWIsPicked = false;
-  FilePickerResult? pickedFile;
-  FilePickerResult? pickedDOW;
   int numberOfIngredients = 2;
   int numberOfSteps = 2;
   DateTime? selectedDate;
@@ -71,41 +68,11 @@ class MealsProvider with ChangeNotifier {
     await _ms.deleteMeal(docId);
   }
 
-  Future<void> pickImage(String source) async {
-    try {
-      FilePickerResult? file = await FilePicker.platform.pickFiles(
-        type: FileType.image,
-      );
-      if (file != null) {
-        if (source == "meal") {
-          pickedFile = file;
-          imageIsPicked = true;
-        } else if (source == "DOW") {
-          pickedDOW = file;
-          dOWIsPicked = true;
-        }
-      }
-      notifyListeners();
-    } catch (e) {
-      print("Error picking image: $e");
-      rethrow;
-    }
-  }
 
-  Future<String?> uploadImage(FilePickerResult path, String tag) async {
-    return _ms.uploadImage(path, tag);
-  }
-
-  Future<void> saveImageMetadata(String imageUrl, double dx, double dy,
-      double width, double height) async {
-    _ms.saveImageMetadata(
-        imageUrl: imageUrl, dx: dx, dy: dy, width: width, height: height);
-  }
-
-  void resetValues() {
+  void resetValues(StorageProvider storageProvider) {
     selectedDate = null;
-    imageIsPicked = false;
-    pickedFile = null;
+    storageProvider.mealImageIsPicked = false;
+    storageProvider.pickedMealImage = null;
     numberOfIngredients = 2;
     numberOfSteps = 2;
     MealController().sourceController.clear();
@@ -181,8 +148,5 @@ class MealsProvider with ChangeNotifier {
       "Sunday",
     ];
     return days[date.weekday - 1];
-  }
-  Future<void> deleteImage(imageUrl) async {
-    await _ms.deleteImage(imageUrl);
   }
 }

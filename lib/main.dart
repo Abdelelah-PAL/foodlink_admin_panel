@@ -1,7 +1,8 @@
 import 'package:firebase_app_check/firebase_app_check.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:foodlink_admin_panel/providers/beyond_calories_articles_provider.dart';
+import 'package:foodlink_admin_panel/providers/features_provider.dart';
+import 'package:foodlink_admin_panel/providers/storage_provider.dart';
 import 'package:foodlink_admin_panel/screens/auth_screens/login_screen.dart';
 import 'package:foodlink_admin_panel/screens/auth_screens/sign_up_screen.dart';
 import 'package:foodlink_admin_panel/screens/dashboard/dashboard.dart';
@@ -42,7 +43,8 @@ void main() async {
       ChangeNotifierProvider(create: (ctx) => DashboardProvider()),
       ChangeNotifierProvider(create: (ctx) => MealsProvider()),
       ChangeNotifierProvider(create: (ctx) => SettingsProvider()),
-      ChangeNotifierProvider(create: (ctx) => BeyondCaloriesArticlesProvider()),
+      ChangeNotifierProvider(create: (ctx) => FeaturesProvider()),
+      ChangeNotifierProvider(create: (ctx) => StorageProvider()),
     ], child: const MyApp()),
   );
 }

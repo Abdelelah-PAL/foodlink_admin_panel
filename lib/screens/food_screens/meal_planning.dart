@@ -4,6 +4,7 @@ import '../../core/constants/assets.dart';
 import '../../core/constants/colors.dart';
 import '../../core/utils/size_config.dart';
 import '../../providers/settings_provider.dart';
+import '../../providers/storage_provider.dart';
 import '../dashboard/widgets/custom_bottom_navigation_bar.dart';
 import '../widgets/custom_back_button.dart';
 import '../widgets/custom_text.dart';
@@ -29,7 +30,8 @@ class _MealPlanningState extends State<MealPlanning> {
   Widget build(BuildContext context) {
     SettingsProvider settingsProvider =
         Provider.of<SettingsProvider>(context, listen: true);
-
+    StorageProvider storageProvider =
+    Provider.of<StorageProvider>(context, listen: true);
     return Scaffold(
       appBar: PreferredSize(
           preferredSize: Size.fromHeight(SizeConfig.getProportionalHeight(100)),
@@ -37,16 +39,16 @@ class _MealPlanningState extends State<MealPlanning> {
             padding: EdgeInsets.symmetric(
                 vertical: SizeConfig.getProportionalWidth(50),
                 horizontal: SizeConfig.getProportionalWidth(20)),
-            child: const Row(
+            child:  Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                CustomBackButton(),
-                CustomText(
+                CustomBackButton(storageProvider: storageProvider,),
+                const CustomText(
                     isCenter: true,
                     text: "meal_planning_inline",
                     fontSize: 25,
                     fontWeight: FontWeight.bold),
-                ProfileCircle(height: 50, width: 50, iconSize: 25)
+                const ProfileCircle(height: 50, width: 50, iconSize: 25)
               ],
             ),
           )),

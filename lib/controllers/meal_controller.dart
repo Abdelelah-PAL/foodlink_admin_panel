@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../core/utils/size_config.dart';
 import '../models/meal.dart';
+import '../providers/features_provider.dart';
 import '../providers/meals_provider.dart';
+import '../providers/storage_provider.dart';
 import '../screens/food_screens/meal_screen.dart';
 import '../screens/widgets/custom_text.dart';
 import '../services/meals_services.dart';
@@ -54,11 +56,11 @@ class MealController {
     return languageCode;
   }
 
-  Future<void> addMeal(mealsProvider) async {
+  Future<void> addMeal(MealsProvider mealsProvider, StorageProvider storageProvider) async {
     String? imageUrl;
-    if (mealsProvider.imageIsPicked) {
-      imageUrl = await MealsProvider()
-          .uploadImage(mealsProvider.pickedFile, "planned_meals_images");
+    if (storageProvider.mealImageIsPicked) {
+      imageUrl = await StorageProvider()
+          .uploadImage(storageProvider.pickedMealImage!, "planned_meals_images");
     }
     List<String> ingredients = MealsProvider()
         .ingredientsControllers
@@ -80,17 +82,17 @@ class MealController {
         day: mealsProvider.day,
         date: mealsProvider.selectedDate));
 
-    mealsProvider.resetValues();
+    FeaturesProvider().resetArticleValues(storageProvider);
     Get.to(MealScreen(meal: addedMeal));
   }
 
   Future<void> updateMeal(mealsProvider, meal) async {
     String? imageUrl = '';
-    if (mealsProvider.imageIsPicked) {
+    if (mealsProvider.mealImageIsPicked) {
       if (meal.imageUrl != null) {
-        await MealsProvider().deleteImage(meal.imageUrl);
+        await StorageProvider().deleteImage(meal.imageUrl);
       }
-      imageUrl = await MealsProvider().uploadImage(mealsProvider.pickedFile, "planned_meals_images");
+      imageUrl = await StorageProvider().uploadImage(mealsProvider.pickedMealImage, "planned_meals_images");
     }
     List<String> ingredients = MealsProvider()
         .ingredientsControllers
@@ -111,7 +113,7 @@ class MealController {
         imageUrl: (imageUrl?.isNotEmpty ?? false) ? imageUrl : null,
         day: mealsProvider.day,
         date: mealsProvider.selectedDate));
-    mealsProvider.resetValues();
+    mealsProvider.resetArticleValues();
 
     Get.to(MealScreen(meal: updatedMeal));
   }

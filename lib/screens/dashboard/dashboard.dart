@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import '../../controllers/dashboard_controller.dart';
 import '../../core/constants/colors.dart';
 import '../../providers/dashboard_provider.dart';
+import '../../providers/features_provider.dart';
 import '../../providers/meals_provider.dart';
 
 class Dashboard extends StatefulWidget {

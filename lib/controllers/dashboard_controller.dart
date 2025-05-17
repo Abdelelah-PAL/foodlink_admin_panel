@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:foodlink_admin_panel/screens/beyond_calories_articles_screen/add_article_screen.dart';
+import 'package:foodlink_admin_panel/screens/features_screens/add_article_screen.dart';
+import 'package:foodlink_admin_panel/screens/features_screens/show_features_screen.dart';
 import 'package:foodlink_admin_panel/screens/food_screens/add_dish_of_the_week_screen.dart';
 import 'package:foodlink_admin_panel/screens/food_screens/add_meal_screen.dart';
 import 'package:foodlink_admin_panel/screens/food_screens/meals_list_screen.dart';
@@ -29,6 +30,7 @@ class DashboardController {
     ),
     const AddDishOfTheWeekScreen(),
     const AddArticleScreen(),
+    const ShowFeaturesScreen(),
     const SettingsScreen(),
   ];
 }

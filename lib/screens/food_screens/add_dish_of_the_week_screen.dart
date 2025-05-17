@@ -1,13 +1,15 @@
 import 'dart:developer';
 import 'package:flutter/material.dart';
-import 'package:foodlink_admin_panel/controllers/meal_controller.dart';
-import 'package:foodlink_admin_panel/core/constants/assets.dart';
-import 'package:foodlink_admin_panel/core/constants/colors.dart';
-import 'package:foodlink_admin_panel/core/utils/size_config.dart';
-import 'package:foodlink_admin_panel/providers/meals_provider.dart';
-import 'package:foodlink_admin_panel/providers/settings_provider.dart';
-import 'package:foodlink_admin_panel/screens/widgets/custom_button.dart';
 import 'package:provider/provider.dart';
+
+import '../../controllers/meal_controller.dart';
+import '../../core/constants/assets.dart';
+import '../../core/constants/colors.dart';
+import '../../core/utils/size_config.dart';
+import '../../providers/meals_provider.dart';
+import '../../providers/settings_provider.dart';
+import '../../providers/storage_provider.dart';
+import '../widgets/custom_button.dart';
 
 class AddDishOfTheWeekScreen extends StatefulWidget {
   const AddDishOfTheWeekScreen({super.key});
@@ -19,6 +21,7 @@ class AddDishOfTheWeekScreen extends StatefulWidget {
 class _AddDishOfTheWeekScreenState extends State<AddDishOfTheWeekScreen> {
   Offset _position = Offset.zero;
   late MealsProvider mealsProvider;
+  late StorageProvider storageProvider;
   final GlobalKey imageKey = GlobalKey();
 
   @override
@@ -38,6 +41,7 @@ class _AddDishOfTheWeekScreenState extends State<AddDishOfTheWeekScreen> {
   @override
   Widget build(BuildContext context) {
     mealsProvider = context.watch<MealsProvider>();
+    storageProvider = context.watch<StorageProvider>();
     final settingsProvider = context.watch<SettingsProvider>();
 
     return Scaffold(
@@ -53,11 +57,11 @@ class _AddDishOfTheWeekScreenState extends State<AddDishOfTheWeekScreen> {
           ),
           Center(
             child: IconButton(
-              onPressed: () => mealsProvider.pickImage("DOW"),
+              onPressed: () => storageProvider.pickImage("DOW"),
               icon: const Icon(Icons.add_a_photo, size: 30),
             ),
           ),
-          if (mealsProvider.dOWIsPicked && mealsProvider.pickedDOW != null)
+          if (storageProvider.dOWIsPicked && storageProvider.pickedDOW != null)
             Positioned(
               left: _position.dx,
               top: _position.dy,
@@ -68,7 +72,7 @@ class _AddDishOfTheWeekScreenState extends State<AddDishOfTheWeekScreen> {
                   });
                 },
                 child: Image.memory(
-                  mealsProvider.pickedDOW!.files.first.bytes!,
+                  storageProvider.pickedDOW!.files.first.bytes!,
                   width: SizeConfig.getProperHorizontalSpace(7),
                   height: SizeConfig.getProperVerticalSpace(5),
                 ),
@@ -83,12 +87,12 @@ class _AddDishOfTheWeekScreenState extends State<AddDishOfTheWeekScreen> {
                 CustomButton(
                   onTap: () async {
                     try {
-                      if (mealsProvider.pickedDOW == null) {
+                      if (storageProvider.pickedDOW == null) {
                         throw Exception('pickedDOW is null');
                       }
 
-                      var imageUrl = await mealsProvider.uploadImage(
-                        mealsProvider.pickedDOW!,
+                      var imageUrl = await storageProvider.uploadImage(
+                        storageProvider.pickedDOW!,
                         "dish_of_the_week",
                       );
 
@@ -105,11 +109,7 @@ class _AddDishOfTheWeekScreenState extends State<AddDishOfTheWeekScreen> {
 
                       final double width = rawWidth / imageBox.size.width;
                       final double height = rawHeight / imageBox.size.height;
-
-                      log('Normalized position: x=$x, y=$y');
-                      log('Normalized size: width=$width, height=$height');
-
-                      await mealsProvider.saveImageMetadata(
+                      await storageProvider.saveImageMetadata(
                         imageUrl!,
                         x,
                         y,
@@ -119,7 +119,7 @@ class _AddDishOfTheWeekScreenState extends State<AddDishOfTheWeekScreen> {
 
                       if (!context.mounted) return;
                       MealController().showSuccessUploadingDialog(context, settingsProvider);
-                      mealsProvider.resetValues();
+                      mealsProvider.resetValues(storageProvider);
                     } catch (e) {
                       log('uploadImage : $e');
                     }

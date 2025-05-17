@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import '../../../core/constants/colors.dart';
 import '../../../core/constants/fonts.dart';
 import '../../../core/utils/size_config.dart';
-import '../../../providers/meals_provider.dart';
+import '../../../providers/storage_provider.dart';
 import '../../../services/translation_services.dart';
 import '../../widgets/custom_back_button.dart';
 
@@ -28,8 +28,8 @@ class _MealImageContainerState extends State<MealImageContainer> {
 
   @override
   Widget build(BuildContext context) {
-    final MealsProvider mealsProvider =
-        Provider.of<MealsProvider>(context, listen: true);
+    final StorageProvider storageProvider =
+    Provider.of<StorageProvider>(context, listen: true);
     return SafeArea(
       child: widget.isUpdateSource
           ? Stack(
@@ -48,9 +48,9 @@ class _MealImageContainerState extends State<MealImageContainer> {
                         bottom: BorderSide(
                             width: 1, color: AppColors.defaultBorderColor),
                       )),
-                  child: mealsProvider.imageIsPicked
+                  child: storageProvider.mealImageIsPicked
                       ? Image.memory(
-                          mealsProvider.pickedFile!.files.first.bytes!,
+                    storageProvider.pickedMealImage!.files.first.bytes!,
                           fit: BoxFit.cover,
                         )
                       : widget.imageUrl != null && widget.imageUrl!.isNotEmpty
@@ -66,7 +66,7 @@ class _MealImageContainerState extends State<MealImageContainer> {
                   child: Center(
                     child: IconButton(
                       onPressed: () async {
-                        await mealsProvider.pickImage("meal");
+                        await storageProvider.pickImage("meal");
                         if (mounted) setState(() {});
                       },
                       icon: const Icon(
@@ -77,7 +77,7 @@ class _MealImageContainerState extends State<MealImageContainer> {
                     ),
                   ),
                 ),
-                const CustomBackButton(),
+                 CustomBackButton(storageProvider: storageProvider ,),
               ],
             )
           : Stack(
@@ -125,7 +125,7 @@ class _MealImageContainerState extends State<MealImageContainer> {
                     child: Center(
                       child: GestureDetector(
                         onTap: () async {
-                          await mealsProvider.pickImage("meal");
+                          await storageProvider.pickImage("meal");
                           if (mounted) setState(() {});
                         },
                         child: Row(
@@ -149,7 +149,7 @@ class _MealImageContainerState extends State<MealImageContainer> {
                       ),
                     ),
                   ),
-                if (mealsProvider.imageIsPicked && widget.isAddSource)
+                if (storageProvider.mealImageIsPicked && widget.isAddSource)
                   Container(
                     width: SizeConfig.screenWidth,
                     height: SizeConfig.getProperVerticalSpace(2),
@@ -165,11 +165,11 @@ class _MealImageContainerState extends State<MealImageContainer> {
                               width: 1, color: AppColors.defaultBorderColor),
                         )),
                     child: Image.memory(
-                      mealsProvider.pickedFile!.files.first.bytes!,
+                      storageProvider.pickedMealImage!.files.first.bytes!,
                       fit: BoxFit.cover,
                     ),
                   ),
-                const CustomBackButton(),
+                 CustomBackButton(storageProvider: storageProvider,),
               ],
             ),
     );
