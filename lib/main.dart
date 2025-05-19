@@ -1,21 +1,21 @@
 import 'package:firebase_app_check/firebase_app_check.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:foodlink_admin_panel/providers/features_provider.dart';
-import 'package:foodlink_admin_panel/providers/storage_provider.dart';
-import 'package:foodlink_admin_panel/screens/auth_screens/login_screen.dart';
-import 'package:foodlink_admin_panel/screens/auth_screens/sign_up_screen.dart';
-import 'package:foodlink_admin_panel/screens/dashboard/dashboard.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'core/constants/colors.dart';
 import 'providers/authentication_provider.dart';
 import 'providers/dashboard_provider.dart';
+import 'providers/features_provider.dart';
 import 'providers/general_provider.dart';
 import 'providers/meal_categories_provider.dart';
 import 'providers/meals_provider.dart';
 import 'providers/settings_provider.dart';
 import 'providers/admins_provider.dart';
+import 'providers/storage_provider.dart';
+import 'screens/auth_screens/login_screen.dart';
+import 'screens/auth_screens/sign_up_screen.dart';
+import 'screens/dashboard/dashboard.dart';
 import 'services/translation_services.dart';
 
 void main() async {
@@ -85,10 +85,12 @@ class MyAppState extends State<MyApp> {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
+        scaffoldBackgroundColor: AppColors.backgroundColor,
         checkboxTheme: CheckboxThemeData(
           fillColor: WidgetStateProperty.resolveWith((states) {
             if (states.contains(WidgetState.selected)) {
-              return AppColors.primaryColor;
+              return AppColors
+                  .primaryColor;
             }
             return AppColors.backgroundColor;
           }),

@@ -44,7 +44,7 @@ class _ShowFeaturesScreenState extends State<ShowFeaturesScreen> {
             ),
             body: Padding(
               padding: EdgeInsets.symmetric(
-                horizontal: SizeConfig.getProportionalWidth(20),
+                horizontal: SizeConfig.getProportionalWidth(10),
               ),
               child: featuresProviderWatcher.features.isEmpty
                   ? EmptyFeatureTile(

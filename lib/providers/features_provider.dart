@@ -19,7 +19,9 @@ class FeaturesProvider with ChangeNotifier {
   List<Map> statuses = [
     {'active_feature': false, 'premium_feature': false},
   ];
-
+  List<Map> userTypesAppearance = [
+    {'user': false, 'cooker': false},
+  ];
   List<TextEditingController> featuresControllers = [
     TextEditingController(),
   ];
@@ -37,11 +39,17 @@ class FeaturesProvider with ChangeNotifier {
             enImageURL: doc.enImageURL,
             active: doc.active,
             premium: doc.premium,
-            keyword: doc.keyword);
+            keyword: doc.keyword,
+            user: doc.user,
+            cooker: doc.cooker);
         featuresControllers.insert(index, TextEditingController());
         statuses.insert(index, {
           'active_feature': doc.active,
           'premium_feature': doc.premium,
+        });
+        userTypesAppearance.insert(index, {
+          'user': doc.user,
+          'cooker': doc.cooker,
         });
         featuresControllers[index].text = doc.keyword;
         features.add(feature);
@@ -114,8 +122,8 @@ class FeaturesProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void resetFeatureValues(StorageProvider storageProvider,
-      FeaturesProvider featuresProvider) {
+  void resetFeatureValues(
+      StorageProvider storageProvider, FeaturesProvider featuresProvider) {
     storageProvider.arFeatureImageIsPicked = false;
     storageProvider.arPickedFeatureImage = null;
     storageProvider.enFeatureImageIsPicked = false;
@@ -123,6 +131,8 @@ class FeaturesProvider with ChangeNotifier {
     featuresProvider.featuresControllers.last.clear();
     featuresProvider.statuses.last['active_feature'] = false;
     featuresProvider.statuses.last['premium_feature'] = false;
+    featuresProvider.userTypesAppearance.last['user'] = false;
+    featuresProvider.userTypesAppearance.last['cooker'] = false;
     notifyListeners();
   }
 
@@ -138,6 +148,17 @@ class FeaturesProvider with ChangeNotifier {
 
   void togglePremiumFeature(index) {
     statuses[index]['premium_feature'] = !statuses[index]['premium_feature'];
+    notifyListeners();
+  }
+
+  void toggleUserAppearance(index) {
+    userTypesAppearance[index]['user'] = !userTypesAppearance[index]['user'];
+    notifyListeners();
+  }
+
+  void toggleCookerAppearance(index) {
+    userTypesAppearance[index]['cooker'] =
+        !userTypesAppearance[index]['cooker'];
     notifyListeners();
   }
 }

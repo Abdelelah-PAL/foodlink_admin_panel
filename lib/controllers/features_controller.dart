@@ -39,7 +39,9 @@ class FeaturesController {
         enImageURL: enImageUrl,
         active: featuresProvider.statuses[index]['active_feature'],
         premium: featuresProvider.statuses[index]['premium_feature'],
-        keyword: FeaturesProvider().featuresControllers[index].text));
+        keyword: FeaturesProvider().featuresControllers[index].text,
+        user: featuresProvider.userTypesAppearance[index]['user'],
+        cooker:  featuresProvider.userTypesAppearance[index]['cooker']));
     featuresProvider.resetFeatureValues(storageProvider, featuresProvider);
   }
 
