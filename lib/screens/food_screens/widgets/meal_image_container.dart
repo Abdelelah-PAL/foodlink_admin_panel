@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import '../../../core/constants/colors.dart';
 import '../../../core/constants/fonts.dart';
 import '../../../core/utils/size_config.dart';
+import '../../../providers/meals_provider.dart';
 import '../../../providers/storage_provider.dart';
 import '../../../services/translation_services.dart';
 import '../../widgets/custom_back_button.dart';
@@ -12,11 +14,12 @@ class MealImageContainer extends StatefulWidget {
       {super.key,
       this.imageUrl,
       required this.isAddSource,
-      required this.isUpdateSource});
+      required this.isUpdateSource,  this.backButtonOnPressed});
 
   final bool isAddSource;
   final bool isUpdateSource;
   final String? imageUrl;
+  final VoidCallback? backButtonOnPressed;
 
   @override
   State<MealImageContainer> createState() => _MealImageContainerState();
@@ -29,7 +32,7 @@ class _MealImageContainerState extends State<MealImageContainer> {
   @override
   Widget build(BuildContext context) {
     final StorageProvider storageProvider =
-    Provider.of<StorageProvider>(context, listen: true);
+        Provider.of<StorageProvider>(context, listen: true);
     return SafeArea(
       child: widget.isUpdateSource
           ? Stack(
@@ -50,7 +53,7 @@ class _MealImageContainerState extends State<MealImageContainer> {
                       )),
                   child: storageProvider.mealImageIsPicked
                       ? Image.memory(
-                    storageProvider.pickedMealImage!.files.first.bytes!,
+                          storageProvider.pickedMealImage!.files.first.bytes!,
                           fit: BoxFit.cover,
                         )
                       : widget.imageUrl != null && widget.imageUrl!.isNotEmpty
@@ -77,7 +80,10 @@ class _MealImageContainerState extends State<MealImageContainer> {
                     ),
                   ),
                 ),
-                 CustomBackButton(storageProvider: storageProvider ,),
+                CustomBackButton(
+                  onPressed: () =>
+                      {MealsProvider().resetValues(storageProvider)},
+                ),
               ],
             )
           : Stack(
@@ -169,7 +175,9 @@ class _MealImageContainerState extends State<MealImageContainer> {
                       fit: BoxFit.cover,
                     ),
                   ),
-                 CustomBackButton(storageProvider: storageProvider,),
+                CustomBackButton(
+                  onPressed: widget.backButtonOnPressed ?? () => Get.back(),
+                ),
               ],
             ),
     );

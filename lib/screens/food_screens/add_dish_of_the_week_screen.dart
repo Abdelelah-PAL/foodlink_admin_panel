@@ -96,16 +96,21 @@ class _AddDishOfTheWeekScreenState extends State<AddDishOfTheWeekScreen> {
                         "dish_of_the_week",
                       );
 
-                      final RenderBox imageBox =
-                      imageKey.currentContext?.findRenderObject() as RenderBox;
-                      final Offset imageTopLeft = imageBox.localToGlobal(Offset.zero);
+                      final RenderBox imageBox = imageKey.currentContext
+                          ?.findRenderObject() as RenderBox;
+                      final Offset imageTopLeft =
+                          imageBox.localToGlobal(Offset.zero);
                       final Offset relativePosition = _position - imageTopLeft;
 
-                      final double x = relativePosition.dx / imageBox.size.width;
-                      final double y = relativePosition.dy / imageBox.size.height;
+                      final double x =
+                          relativePosition.dx / imageBox.size.width;
+                      final double y =
+                          relativePosition.dy / imageBox.size.height;
 
-                      final double rawWidth = SizeConfig.getProperHorizontalSpace(7);
-                      final double rawHeight = SizeConfig.getProperVerticalSpace(5);
+                      final double rawWidth =
+                          SizeConfig.getProperHorizontalSpace(7);
+                      final double rawHeight =
+                          SizeConfig.getProperVerticalSpace(5);
 
                       final double width = rawWidth / imageBox.size.width;
                       final double height = rawHeight / imageBox.size.height;
@@ -118,7 +123,8 @@ class _AddDishOfTheWeekScreenState extends State<AddDishOfTheWeekScreen> {
                       );
 
                       if (!context.mounted) return;
-                      MealController().showSuccessUploadingDialog(context, settingsProvider);
+                      MealController().showSuccessUploadingDialog(
+                          context, settingsProvider);
                       mealsProvider.resetValues(storageProvider);
                     } catch (e) {
                       log('uploadImage : $e');

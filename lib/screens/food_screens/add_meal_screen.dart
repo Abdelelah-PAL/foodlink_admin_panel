@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:foodlink_admin_panel/providers/storage_provider.dart';
+import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import '../../controllers/meal_controller.dart';
 import '../../core/constants/assets.dart';
@@ -7,6 +7,7 @@ import '../../core/utils/size_config.dart';
 import '../../models/meal.dart';
 import '../../providers/meals_provider.dart';
 import '../../providers/settings_provider.dart';
+import '../../providers/storage_provider.dart';
 import '../../services/translation_services.dart';
 import '../widgets/custom_app_textfield.dart';
 import '../widgets/custom_button.dart';
@@ -61,6 +62,10 @@ class _AddMealScreenState extends State<AddMealScreen> {
                     isAddSource: widget.isAddScreen,
                     isUpdateSource: widget.isUpdateScreen,
                     imageUrl: widget.meal?.imageUrl,
+                    backButtonOnPressed: () {
+                        MealsProvider().resetValues(storageProvider);
+                        Get.back();
+                    },
                   ),
                   SizeConfig.customSizedBox(null, 20, null),
                   Row(

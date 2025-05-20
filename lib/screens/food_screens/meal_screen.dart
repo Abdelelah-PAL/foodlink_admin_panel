@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:foodlink_admin_panel/providers/storage_provider.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import '../../core/utils/size_config.dart';
@@ -24,6 +25,7 @@ class MealScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     SettingsProvider settingsProvider = Provider.of<SettingsProvider>(context);
+    StorageProvider storageProvider = Provider.of<StorageProvider>(context);
 
     return Scaffold(
       body: SingleChildScrollView(
@@ -31,6 +33,10 @@ class MealScreen extends StatelessWidget {
           children: [
             MealImageContainer(
               imageUrl: meal.imageUrl, isAddSource: false, isUpdateSource: false,
+              backButtonOnPressed: () {
+                MealsProvider().resetValues(storageProvider);
+                Get.back();
+              },
             ),
             Padding(
               padding: EdgeInsets.only(

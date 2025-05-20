@@ -1,27 +1,27 @@
 import 'package:flutter/material.dart';
-import 'package:foodlink_admin_panel/providers/settings_provider.dart';
-import 'package:foodlink_admin_panel/screens/food_screens/widgets/plan_meal_tile.dart';
-import 'package:foodlink_admin_panel/screens/widgets/custom_text.dart';
+import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import '../../core/constants/fonts.dart';
 import '../../core/utils/size_config.dart';
 import '../../models/meal.dart';
 import '../../providers/meals_provider.dart';
+import '../../providers/settings_provider.dart';
+import '../../providers/storage_provider.dart';
 import '../../services/translation_services.dart';
-import 'widgets/list_meal_tile.dart';
+import 'add_meal_screen.dart';
+import 'widgets/list_header.dart';
+import 'widgets/plan_meal_tile.dart';
 
 class MealsListScreen extends StatefulWidget {
   const MealsListScreen({
     super.key,
   });
 
-
   @override
   State<MealsListScreen> createState() => _MealsListScreenState();
 }
 
 class _MealsListScreenState extends State<MealsListScreen> {
-
   @override
   void initState() {
     super.initState();
@@ -31,6 +31,7 @@ class _MealsListScreenState extends State<MealsListScreen> {
   Widget build(BuildContext context) {
     MealsProvider mealsProviderWatcher = context.watch<MealsProvider>();
     SettingsProvider settingsProvider = context.watch<SettingsProvider>();
+    StorageProvider storageProvider = context.watch<StorageProvider>();
 
     return mealsProviderWatcher.isLoading
         ? const Center(child: CircularProgressIndicator())
@@ -38,12 +39,16 @@ class _MealsListScreenState extends State<MealsListScreen> {
             appBar: PreferredSize(
               preferredSize:
                   Size.fromHeight(SizeConfig.getProportionalHeight(100)),
-              child: const SafeArea(
-                  child: CustomText(
-                      isCenter: true,
-                      text: "planned_meals",
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold)),
+              child: SafeArea(
+                  child: ListHeader(
+                text: "planned_meals",
+                onTap: () {
+                  MealsProvider().resetValues(storageProvider);
+                  Get.to(const AddMealScreen(
+                      isAddScreen: true, isUpdateScreen: false));
+                },
+                space: 350,
+              )),
             ),
             body: Padding(
               padding: EdgeInsets.symmetric(
