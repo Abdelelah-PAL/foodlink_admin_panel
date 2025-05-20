@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:foodlink_admin_panel/providers/settings_provider.dart';
+import 'package:provider/provider.dart';
 import '../controllers/features_controller.dart';
 import '../models/beyond_calories_article.dart';
 import '../models/feature.dart';
@@ -26,8 +28,9 @@ class FeaturesProvider with ChangeNotifier {
     TextEditingController(),
   ];
 
-  void getAllFeatures() async {
+  Future<void> getAllFeatures(BuildContext context) async {
     try {
+      StorageProvider storageProvider = context.watch<StorageProvider>();
       isLoading = true;
       features.clear();
       List<Feature> fetchedFeatures = await _fs.getAllFeatures();
@@ -51,6 +54,11 @@ class FeaturesProvider with ChangeNotifier {
           'user': doc.user,
           'cooker': doc.cooker,
         });
+        storageProvider.featuresImagesArePicked.insert(
+            index, {'ar_image_picked': false, 'en_image_picked': false});
+        storageProvider.featuresImagesArePicked
+            .insert(index, {'ar_Image': null, 'en_Image': null});
+
         featuresControllers[index].text = doc.keyword;
         features.add(feature);
         index++;
@@ -69,16 +77,32 @@ class FeaturesProvider with ChangeNotifier {
     return addedFeature;
   }
 
-  Future<Feature> updateFeature(Feature feature) async {
-    Feature updatedFeature = await _fs.updateFeature(feature);
-    return updatedFeature;
-  }
+  // Future<Feature?> updateFeature(Feature feature,
+  //     StorageProvider storageProvider,
+  //     SettingsProvider settingsProvider,
+  //     int index,
+  //     context) async {
+  //   Feature? updatedFeature;
+  //   if (storageProvider.featuresPickedImages[index]['ar_image'] &&
+  //       storageProvider.enFeatureImageIsPicked) {
+  //     await StorageProvider().deleteImage(feature.arImageURL);
+  //     await StorageProvider().deleteImage(feature.enImageURL);
+  //     String arImageUrl = (await StorageProvider()
+  //         .uploadImage(storageProvider.featuresPickedImages[index]['ar_image'], "features"))!;
+  //     String enImageUrl = (await StorageProvider()
+  //         .uploadImage(storageProvider.featuresPickedImages[index]['en_image'], "features"))!;
+  //     feature.arImageURL = arImageUrl;
+  //     feature.enImageURL = enImageUrl;
+  //     updatedFeature = await _fs.updateFeature(feature);
+  //   }
+  //   return updatedFeature;
+  // }
 
   Future<void> deleteFeature(id) async {
     await _fs.deleteFeature(id);
   }
 
-  void getAllArticles() async {
+  Future<void> getAllArticles() async {
     try {
       isLoading = true;
       articles.clear();
@@ -124,10 +148,10 @@ class FeaturesProvider with ChangeNotifier {
 
   void resetFeatureValues(
       StorageProvider storageProvider, FeaturesProvider featuresProvider) {
-    storageProvider.arFeatureImageIsPicked = false;
-    storageProvider.arPickedFeatureImage = null;
-    storageProvider.enFeatureImageIsPicked = false;
-    storageProvider.enPickedFeatureImage = null;
+    storageProvider.featuresImagesArePicked.last['ar_image_picked'] = false;
+    storageProvider.featuresPickedImages.last['ar_image'] = null;
+    storageProvider.featuresImagesArePicked.last['en_image_picked'] = false;
+    storageProvider.featuresPickedImages.last['en_image'] = null;
     featuresProvider.featuresControllers.last.clear();
     featuresProvider.statuses.last['active_feature'] = false;
     featuresProvider.statuses.last['premium_feature'] = false;

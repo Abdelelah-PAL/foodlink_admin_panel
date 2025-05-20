@@ -179,5 +179,8 @@
   "features": "Application Features",
   "active": "Active",
   "premium": "Premium",
-  "delete": "Delete"
+  "delete": "Delete",
+  "feature_added": "Feature has been added successfully",
+  "feature_updated": "Feature has been updated successfully",
+  "feature_deleted": "Feature has been deleted successfully"
 }

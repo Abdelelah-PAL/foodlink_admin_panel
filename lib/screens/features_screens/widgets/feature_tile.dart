@@ -149,11 +149,17 @@ class FeatureTile extends StatelessWidget {
                   Row(
                     children: [
                       CustomButton(
-                        onTap: () => {
-                          FeaturesController().deleteFeature(
-                              storageProvider, featuresProvider, feature),
-                          FeaturesController().addFeature(
-                              featuresProvider, storageProvider, index)
+                        onTap: () async => {
+                          await FeaturesController().deleteFeature(
+                              storageProvider, featuresProvider, feature, index),
+                          await FeaturesController().addFeature(
+                              featuresProvider,
+                              storageProvider,
+                              feature,
+                              index),
+                          FeaturesController().showSuccessDialog(
+                              context, settingsProvider, "feature_updated"),
+                          await featuresProvider.getAllFeatures(context)
                         },
                         text: 'confirm',
                         width: 50,
@@ -163,7 +169,9 @@ class FeatureTile extends StatelessWidget {
                       CustomButton(
                         onTap: () => {
                           FeaturesController().deleteFeature(
-                              storageProvider, featuresProvider, feature)
+                              storageProvider, featuresProvider, feature, index),
+                          FeaturesController().showSuccessDialog(
+                              context, settingsProvider, "feature_deleted")
                         },
                         text: "delete",
                         width: 50,
@@ -185,14 +193,16 @@ class FeatureTile extends StatelessWidget {
                           borderRadius: BorderRadius.circular(15),
                           color: AppColors.widgetsColor,
                         ),
-                        child:
-                            Image.network(feature.arImageURL, fit: BoxFit.fill),
+                        child: feature.arImageURL != ""
+                            ? Image.network(feature.arImageURL,
+                                fit: BoxFit.fill)
+                            : null,
                       ),
                     ],
                   ),
                   SizeConfig.customSizedBox(null, 10, null),
                   IconButton(
-                      onPressed: () => storageProvider.pickImage("ar_feature"),
+                      onPressed: () => storageProvider.pickFeatureImage("ar_feature", index),
                       icon: const Icon(Icons.camera_alt_outlined)),
                   SizeConfig.customSizedBox(null, 35, null),
                   Stack(
@@ -205,14 +215,16 @@ class FeatureTile extends StatelessWidget {
                           borderRadius: BorderRadius.circular(15),
                           color: AppColors.widgetsColor,
                         ),
-                        child:
-                            Image.network(feature.arImageURL, fit: BoxFit.fill),
+                        child: feature.arImageURL != ""
+                            ? Image.network(feature.arImageURL,
+                                fit: BoxFit.fill)
+                            : null,
                       ),
                     ],
                   ),
                   SizeConfig.customSizedBox(null, 10, null),
                   IconButton(
-                      onPressed: () => storageProvider.pickImage("en_feature"),
+                      onPressed: () => storageProvider.pickFeatureImage("en_feature", index),
                       icon: const Icon(Icons.camera_alt_outlined)),
                 ],
               )
@@ -356,8 +368,11 @@ class EmptyFeatureTile extends StatelessWidget {
                     alignment: Alignment.center,
                     child: CustomButton(
                       onTap: () async {
-                        await FeaturesController()
-                            .addFeature(featuresProvider, storageProvider, index);
+                        await FeaturesController().addFeature(
+                            featuresProvider, storageProvider, null, index);
+                        await featuresProvider.getAllFeatures(context);
+                        FeaturesController().showSuccessDialog(
+                            context, settingsProvider, "feature_added");
                       },
                       text: 'confirm',
                       width: 50,
@@ -378,18 +393,18 @@ class EmptyFeatureTile extends StatelessWidget {
                           borderRadius: BorderRadius.circular(15),
                           color: AppColors.widgetsColor,
                         ),
-                        child: storageProvider.arFeatureImageIsPicked == false
+                        child: storageProvider.featuresImagesArePicked[index]['ar_image_picked'] == false
                             ? null
                             : Image.memory(
                                 storageProvider
-                                    .arPickedFeatureImage!.files.first.bytes!,
+                                    .featuresImagesArePicked[index]['en_image_picked']!.files.first.bytes!,
                                 fit: BoxFit.fill),
                       ),
                     ],
                   ),
                   SizeConfig.customSizedBox(null, 10, null),
                   IconButton(
-                      onPressed: () => storageProvider.pickImage("ar_feature"),
+                      onPressed: () => storageProvider.pickFeatureImage("ar_feature", index),
                       icon: const Icon(Icons.camera_alt_outlined)),
                   SizeConfig.customSizedBox(null, 35, null),
                   Stack(
@@ -402,18 +417,18 @@ class EmptyFeatureTile extends StatelessWidget {
                           borderRadius: BorderRadius.circular(15),
                           color: AppColors.widgetsColor,
                         ),
-                        child: storageProvider.enFeatureImageIsPicked == false
+                        child: storageProvider.featuresImagesArePicked[index]['en_image_picked'] == false
                             ? null
                             : Image.memory(
                                 storageProvider
-                                    .enPickedFeatureImage!.files.first.bytes!,
+                                    .featuresPickedImages[index]['en_image']!.files.first.bytes!,
                                 fit: BoxFit.fill),
                       ),
                     ],
                   ),
                   SizeConfig.customSizedBox(null, 10, null),
                   IconButton(
-                      onPressed: () => storageProvider.pickImage("en_feature"),
+                      onPressed: () => storageProvider.pickFeatureImage("en_feature", index),
                       icon: const Icon(Icons.camera_alt_outlined)),
                 ],
               )

@@ -14,12 +14,14 @@ class StorageProvider with ChangeNotifier {
   bool dOWIsPicked = false;
   FilePickerResult? pickedMealImage;
   FilePickerResult? pickedDOW;
-  bool articleImageIsPicked = false;
   FilePickerResult? pickedArticleImage;
-  bool arFeatureImageIsPicked = false;
-  bool enFeatureImageIsPicked = false;
-  FilePickerResult? arPickedFeatureImage;
-  FilePickerResult? enPickedFeatureImage;
+  bool articleImageIsPicked = false;
+  List<Map> featuresImagesArePicked = [
+    {'ar_image_picked': false, 'en_image_picked': false},
+  ];
+  List<Map> featuresPickedImages = [
+    {'ar_Image': null, 'en_Image': null},
+  ];
 
   Future<void> pickImage(String source) async {
     try {
@@ -36,12 +38,27 @@ class StorageProvider with ChangeNotifier {
         } else if (source == "articles") {
           pickedArticleImage = file;
           articleImageIsPicked = true;
-        } else if (source == "ar_feature") {
-          arPickedFeatureImage = file;
-          arFeatureImageIsPicked = true;
+        }
+      }
+      notifyListeners();
+    } catch (e) {
+      print("Error picking image: $e");
+      rethrow;
+    }
+  }
+
+  Future<void> pickFeatureImage(String source, int index) async {
+    try {
+      FilePickerResult? file = await FilePicker.platform.pickFiles(
+        type: FileType.image,
+      );
+      if (file != null) {
+        if (source == "ar_feature") {
+          featuresPickedImages[index]['ar_Image'] = file;
+          featuresImagesArePicked[index]['ar_image_picked'] = true;
         } else if (source == "en_feature") {
-          enPickedFeatureImage = file;
-          enFeatureImageIsPicked = true;
+          featuresPickedImages[index]['en_Image'] = file;
+          featuresImagesArePicked[index]['en_image_picked'] = true;
         }
       }
       notifyListeners();

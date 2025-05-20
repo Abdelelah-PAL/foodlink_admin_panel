@@ -18,7 +18,7 @@ class ShowFeaturesScreen extends StatefulWidget {
 class _ShowFeaturesScreenState extends State<ShowFeaturesScreen> {
   @override
   void initState() {
-    FeaturesProvider().getAllFeatures();
+    FeaturesProvider().getAllFeatures(context);
     super.initState();
   }
 

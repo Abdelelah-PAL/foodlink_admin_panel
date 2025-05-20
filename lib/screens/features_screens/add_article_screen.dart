@@ -85,7 +85,8 @@ class _AddArticleScreenState extends State<AddArticleScreen> {
                 await FeaturesController().addArticle(storageProvider);
                 featuresProvider.resetArticleValues(storageProvider);
                 FeaturesController()
-                    .showSuccessDialog(context, settingsProvider);
+                    .showSuccessDialog(context, settingsProvider, 'article_added');
+                await FeaturesProvider().getAllArticles();
               },
               text: "confirm",
               width: 100,

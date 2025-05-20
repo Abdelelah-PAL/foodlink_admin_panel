@@ -179,5 +179,9 @@
   "features": "خدمات التطبيق",
   "active": "فعال",
   "premium": "مميز",
-  "delete": "حذف"
+  "delete": "حذف",
+  "feature_added": "تمَت إضافة الخدمة بنجاح",
+  "feature_updated": "تمَت إضافة الخدمة بنجاح",
+  "feature_deleted": "تمَت إضافة الخدمة بنجاح"
+
 }
