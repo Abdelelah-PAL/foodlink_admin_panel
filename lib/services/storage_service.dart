@@ -50,8 +50,10 @@ class StorageServices with ChangeNotifier {
 
   Future<void> deleteImage(String imageUrl) async {
     try {
-      Reference ref = _storage.refFromURL(imageUrl);
-      await ref.delete();
+      if(imageUrl != "") {
+        Reference ref = _storage.refFromURL(imageUrl);
+        await ref.delete();
+      }
     } catch (e) {
       rethrow;
     }

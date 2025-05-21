@@ -28,16 +28,19 @@ class FeaturesController {
       StorageProvider storageProvider, Feature? feature, index) async {
     String arImageUrl = '';
     String enImageUrl = '';
-    if (storageProvider.featuresImagesArePicked[index]['ar_image_picked']) {
-      arImageUrl = (await StorageProvider()
-          .uploadImage(storageProvider.featuresPickedImages[index]['ar_image']!, "features"))!;
+    if (storageProvider.featuresImagesArePicked[index]['ar_image_picked'] ??
+        false) {
+      arImageUrl = (await StorageProvider().uploadImage(
+          storageProvider.featuresPickedImages[index]['ar_image']!,
+          "features"))!;
     } else {
       arImageUrl = feature != null ? feature.arImageURL : "";
     }
-    if (storageProvider.featuresImagesArePicked[index]['ar_image_picked'] &&
-        storageProvider.featuresImagesArePicked[index]['en_image_picked']) {
-      enImageUrl = (await StorageProvider()
-          .uploadImage(storageProvider.featuresPickedImages[index]['en_image']!, "features"))!;
+    if (storageProvider.featuresImagesArePicked[index]['en_image_picked'] ??
+        false) {
+      enImageUrl = (await StorageProvider().uploadImage(
+          storageProvider.featuresPickedImages[index]['en_image']!,
+          "features"))!;
     } else {
       enImageUrl = feature != null ? feature.enImageURL : "";
     }
@@ -52,13 +55,12 @@ class FeaturesController {
     featuresProvider.resetFeatureValues(storageProvider, featuresProvider);
   }
 
-
   Future<void> deleteFeature(StorageProvider storageProvider,
       FeaturesProvider featuresProvider, Feature feature, index) async {
-    if (storageProvider.featuresImagesArePicked[index]['ar_image_picked'] &&
-        storageProvider.featuresPickedImages[index]['ar_image']) {
+    if (storageProvider.featuresImagesArePicked[index]['ar_image_picked'] ??
+            storageProvider.featuresPickedImages[index]['en_image_picked']) {
       await storageProvider.deleteImage(feature.arImageURL);
-      await storageProvider.deleteImage(feature.arImageURL);
+      await storageProvider.deleteImage(feature.enImageURL);
     }
     await featuresProvider.deleteFeature(feature.documentId!);
   }

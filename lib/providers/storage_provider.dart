@@ -16,11 +16,11 @@ class StorageProvider with ChangeNotifier {
   FilePickerResult? pickedDOW;
   FilePickerResult? pickedArticleImage;
   bool articleImageIsPicked = false;
-  List<Map> featuresImagesArePicked = [
+  List<Map<String, bool>> featuresImagesArePicked = [
     {'ar_image_picked': false, 'en_image_picked': false},
   ];
-  List<Map> featuresPickedImages = [
-    {'ar_Image': null, 'en_Image': null},
+  List<Map<String, dynamic>> featuresPickedImages = [
+    {'ar_image': null, 'en_image': null},
   ];
 
   Future<void> pickImage(String source) async {
@@ -54,15 +54,11 @@ class StorageProvider with ChangeNotifier {
       );
       if (file != null) {
         if (source == "ar_feature") {
-          featuresPickedImages[index]['ar_Image'] = file;
+          featuresPickedImages[index]['ar_image'] = file;
           featuresImagesArePicked[index]['ar_image_picked'] = true;
-          print(featuresPickedImages[index]['ar_Image']);
-          print(featuresImagesArePicked[index]['ar_image_picked']);
         } else if (source == "en_feature") {
-          featuresPickedImages[index]['en_Image'] = file;
+          featuresPickedImages[index]['en_image'] = file;
           featuresImagesArePicked[index]['en_image_picked'] = true;
-          print(featuresPickedImages[index]['en_Image']);
-          print(featuresImagesArePicked[index]['en_image_picked']);
         }
       }
       notifyListeners();
@@ -86,10 +82,11 @@ class StorageProvider with ChangeNotifier {
     await _ss.deleteImage(imageUrl);
   }
 
-  void addToImages(index) {
+  void addToImages(index, arImage, enImage) {
     featuresImagesArePicked
         .insert(index, {'ar_image_picked': false, 'en_image_picked': false});
-    featuresPickedImages.insert(index, {'ar_Image': null, 'en_Image': null});
+    featuresPickedImages
+        .insert(index, {'ar_image': arImage, 'en_image': enImage});
     notifyListeners();
   }
 }
