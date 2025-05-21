@@ -17,12 +17,6 @@ class ShowFeaturesScreen extends StatefulWidget {
 
 class _ShowFeaturesScreenState extends State<ShowFeaturesScreen> {
   @override
-  void initState() {
-    FeaturesProvider().getAllFeatures(context);
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     FeaturesProvider featuresProviderWatcher =
         context.watch<FeaturesProvider>();
@@ -55,7 +49,6 @@ class _ShowFeaturesScreenState extends State<ShowFeaturesScreen> {
                     )
                   : Consumer<FeaturesProvider>(
                       builder: (context, featuresProvider, child) {
-
                         return Padding(
                           padding: EdgeInsets.only(
                               top: SizeConfig.getProportionalHeight(20)),

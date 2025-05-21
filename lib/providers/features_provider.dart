@@ -28,9 +28,8 @@ class FeaturesProvider with ChangeNotifier {
     TextEditingController(),
   ];
 
-  Future<void> getAllFeatures(BuildContext context) async {
+  Future<void> getAllFeatures(StorageProvider storageProvider) async {
     try {
-      StorageProvider storageProvider = context.watch<StorageProvider>();
       isLoading = true;
       features.clear();
       List<Feature> fetchedFeatures = await _fs.getAllFeatures();
@@ -54,10 +53,8 @@ class FeaturesProvider with ChangeNotifier {
           'user': doc.user,
           'cooker': doc.cooker,
         });
-        storageProvider.featuresImagesArePicked.insert(
-            index, {'ar_image_picked': false, 'en_image_picked': false});
-        storageProvider.featuresImagesArePicked
-            .insert(index, {'ar_Image': null, 'en_Image': null});
+        storageProvider.addToImages(index);
+
 
         featuresControllers[index].text = doc.keyword;
         features.add(feature);

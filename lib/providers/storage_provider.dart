@@ -56,9 +56,13 @@ class StorageProvider with ChangeNotifier {
         if (source == "ar_feature") {
           featuresPickedImages[index]['ar_Image'] = file;
           featuresImagesArePicked[index]['ar_image_picked'] = true;
+          print(featuresPickedImages[index]['ar_Image']);
+          print(featuresImagesArePicked[index]['ar_image_picked']);
         } else if (source == "en_feature") {
           featuresPickedImages[index]['en_Image'] = file;
           featuresImagesArePicked[index]['en_image_picked'] = true;
+          print(featuresPickedImages[index]['en_Image']);
+          print(featuresImagesArePicked[index]['en_image_picked']);
         }
       }
       notifyListeners();
@@ -80,5 +84,12 @@ class StorageProvider with ChangeNotifier {
 
   Future<void> deleteImage(imageUrl) async {
     await _ss.deleteImage(imageUrl);
+  }
+
+  void addToImages(index) {
+    featuresImagesArePicked
+        .insert(index, {'ar_image_picked': false, 'en_image_picked': false});
+    featuresPickedImages.insert(index, {'ar_Image': null, 'en_Image': null});
+    notifyListeners();
   }
 }

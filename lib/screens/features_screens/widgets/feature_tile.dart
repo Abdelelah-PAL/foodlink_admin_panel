@@ -151,7 +151,10 @@ class FeatureTile extends StatelessWidget {
                       CustomButton(
                         onTap: () async => {
                           await FeaturesController().deleteFeature(
-                              storageProvider, featuresProvider, feature, index),
+                              storageProvider,
+                              featuresProvider,
+                              feature,
+                              index),
                           await FeaturesController().addFeature(
                               featuresProvider,
                               storageProvider,
@@ -159,7 +162,7 @@ class FeatureTile extends StatelessWidget {
                               index),
                           FeaturesController().showSuccessDialog(
                               context, settingsProvider, "feature_updated"),
-                          await featuresProvider.getAllFeatures(context)
+                          await featuresProvider.getAllFeatures(storageProvider)
                         },
                         text: 'confirm',
                         width: 50,
@@ -168,8 +171,8 @@ class FeatureTile extends StatelessWidget {
                       SizeConfig.customSizedBox(20, null, null),
                       CustomButton(
                         onTap: () => {
-                          FeaturesController().deleteFeature(
-                              storageProvider, featuresProvider, feature, index),
+                          FeaturesController().deleteFeature(storageProvider,
+                              featuresProvider, feature, index),
                           FeaturesController().showSuccessDialog(
                               context, settingsProvider, "feature_deleted")
                         },
@@ -193,38 +196,53 @@ class FeatureTile extends StatelessWidget {
                           borderRadius: BorderRadius.circular(15),
                           color: AppColors.widgetsColor,
                         ),
-                        child: feature.arImageURL != ""
-                            ? Image.network(feature.arImageURL,
+                        child: storageProvider.featuresImagesArePicked[index]
+                                    ['ar_image_picked'] ==
+                                true
+                            ? Image.memory(
+                                storageProvider.featuresPickedImages[index]
+                                    ['ar_image'].files.first.bytes,
                                 fit: BoxFit.fill)
-                            : null,
+                            : feature.arImageURL != ""
+                                ? Image.network(feature.arImageURL,
+                                    fit: BoxFit.fill)
+                                : null,
                       ),
                     ],
                   ),
                   SizeConfig.customSizedBox(null, 10, null),
                   IconButton(
-                      onPressed: () => storageProvider.pickFeatureImage("ar_feature", index),
+                      onPressed: () =>
+                          storageProvider.pickFeatureImage("ar_feature", index),
                       icon: const Icon(Icons.camera_alt_outlined)),
                   SizeConfig.customSizedBox(null, 35, null),
                   Stack(
                     alignment: Alignment.center,
                     children: [
                       Container(
-                        width: SizeConfig.getProportionalWidth(200),
-                        height: SizeConfig.getProportionalHeight(200),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(15),
-                          color: AppColors.widgetsColor,
-                        ),
-                        child: feature.arImageURL != ""
-                            ? Image.network(feature.arImageURL,
-                                fit: BoxFit.fill)
-                            : null,
-                      ),
+                          width: SizeConfig.getProportionalWidth(200),
+                          height: SizeConfig.getProportionalHeight(200),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(15),
+                            color: AppColors.widgetsColor,
+                          ),
+                          child: storageProvider.featuresImagesArePicked[index]
+                                      ['en_image_picked'] ==
+                                  true
+                              ? Image.memory(
+                                  storageProvider.featuresPickedImages[index]
+                                      ['en_image'].files.first.bytes,
+                                  fit: BoxFit.fill)
+                              : feature.enImageURL != ""
+                                  ? Image.network(feature.enImageURL,
+                                      fit: BoxFit.fill)
+                                  : null),
                     ],
                   ),
                   SizeConfig.customSizedBox(null, 10, null),
                   IconButton(
-                      onPressed: () => storageProvider.pickFeatureImage("en_feature", index),
+                      onPressed: () =>
+                          storageProvider.pickFeatureImage("en_feature", index),
                       icon: const Icon(Icons.camera_alt_outlined)),
                 ],
               )
@@ -370,7 +388,7 @@ class EmptyFeatureTile extends StatelessWidget {
                       onTap: () async {
                         await FeaturesController().addFeature(
                             featuresProvider, storageProvider, null, index);
-                        await featuresProvider.getAllFeatures(context);
+                        await featuresProvider.getAllFeatures(storageProvider);
                         FeaturesController().showSuccessDialog(
                             context, settingsProvider, "feature_added");
                       },
@@ -393,18 +411,21 @@ class EmptyFeatureTile extends StatelessWidget {
                           borderRadius: BorderRadius.circular(15),
                           color: AppColors.widgetsColor,
                         ),
-                        child: storageProvider.featuresImagesArePicked[index]['ar_image_picked'] == false
+                        child: storageProvider.featuresImagesArePicked[index]
+                                    ['ar_image_picked'] ==
+                                false
                             ? null
                             : Image.memory(
-                                storageProvider
-                                    .featuresImagesArePicked[index]['en_image_picked']!.files.first.bytes!,
+                                storageProvider.featuresPickedImages[index]
+                                    ['ar_image'].files.first.bytes,
                                 fit: BoxFit.fill),
                       ),
                     ],
                   ),
                   SizeConfig.customSizedBox(null, 10, null),
                   IconButton(
-                      onPressed: () => storageProvider.pickFeatureImage("ar_feature", index),
+                      onPressed: () =>
+                          storageProvider.pickFeatureImage("ar_feature", index),
                       icon: const Icon(Icons.camera_alt_outlined)),
                   SizeConfig.customSizedBox(null, 35, null),
                   Stack(
@@ -417,18 +438,21 @@ class EmptyFeatureTile extends StatelessWidget {
                           borderRadius: BorderRadius.circular(15),
                           color: AppColors.widgetsColor,
                         ),
-                        child: storageProvider.featuresImagesArePicked[index]['en_image_picked'] == false
+                        child: storageProvider.featuresImagesArePicked[index]
+                                    ['en_image_picked'] ==
+                                false
                             ? null
                             : Image.memory(
-                                storageProvider
-                                    .featuresPickedImages[index]['en_image']!.files.first.bytes!,
+                                storageProvider.featuresPickedImages[index]
+                                    ['en_image'].files.first.bytes,
                                 fit: BoxFit.fill),
                       ),
                     ],
                   ),
                   SizeConfig.customSizedBox(null, 10, null),
                   IconButton(
-                      onPressed: () => storageProvider.pickFeatureImage("en_feature", index),
+                      onPressed: () =>
+                          storageProvider.pickFeatureImage("en_feature", index),
                       icon: const Icon(Icons.camera_alt_outlined)),
                 ],
               )
@@ -436,159 +460,4 @@ class EmptyFeatureTile extends StatelessWidget {
           ),
         ]));
   }
-
-// @override
-// Widget build(BuildContext context) {
-//   return Padding(
-//     padding: EdgeInsets.only(
-//       bottom: SizeConfig.getProportionalHeight(15),
-//     ),
-//     child: Row(
-//       mainAxisAlignment: MainAxisAlignment.center,
-//       crossAxisAlignment: CrossAxisAlignment.start,
-//       textDirection: settingsProvider.language == "en"
-//           ? TextDirection.ltr
-//           : TextDirection.rtl,
-//       children: [
-//         Column(
-//           children: [
-//             Row(
-//               textDirection: settingsProvider.language == "en"
-//                   ? TextDirection.ltr
-//                   : TextDirection.rtl,
-//               children: [
-//                 Stack(
-//                   alignment: Alignment.center,
-//                   children: [
-//                     Container(
-//                       width: SizeConfig.getProportionalWidth(200),
-//                       height: SizeConfig.getProportionalHeight(200),
-//                       decoration: BoxDecoration(
-//                         borderRadius: BorderRadius.circular(15),
-//                         color: AppColors.widgetsColor,
-//                       ),
-//                       child: storageProvider.arFeatureImageIsPicked == false
-//                           ? null
-//                           : Image.memory(
-//                               storageProvider
-//                                   .arPickedFeatureImage!.files.first.bytes!,
-//                               fit: BoxFit.fill),
-//                     ),
-//                   ],
-//                 ),
-//                 SizeConfig.customSizedBox(10, null, null),
-//                 const CustomText(
-//                   isCenter: true,
-//                   text: "active",
-//                   fontSize: 20,
-//                   fontWeight: FontWeight.normal,
-//                 ),
-//                 SizeConfig.customSizedBox(10, null, null),
-//                 Checkbox(
-//                   activeColor: AppColors.backgroundColor,
-//                   checkColor: AppColors.fontColor,
-//                   value: featuresProvider.statuses[index]['active_feature'],
-//                   onChanged: (bool? newValue) {
-//                     featuresProvider.toggleActiveFeature(index);
-//                   },
-//                   side: const BorderSide(
-//                     color: AppColors.textFieldBorderColor,
-//                   ),
-//                 ),
-//                 CustomButton(
-//                   onTap: () => storageProvider.pickImage("ar_feature"),
-//                   icon: Icons.camera_alt_outlined,
-//                   iconSize: 50,
-//                   width: 50,
-//                   height: 200,
-//                 ),
-//               ],
-//             ),
-//             SizeConfig.customSizedBox(null, 10, null),
-//             CustomAppTextField(
-//               width: 100,
-//               height: 50,
-//               icon: Assets.keyword,
-//               controller: featuresProvider.featuresControllers[index],
-//               maxLines: 1,
-//               iconSizeFactor: 1,
-//               settingsProvider: settingsProvider,
-//               isCentered: true,
-//               textAlign: TextAlign.left,
-//             ),
-//             SizeConfig.customSizedBox(null, 10, null),
-//             Row(
-//               textDirection: settingsProvider.language == "en"
-//                   ? TextDirection.ltr
-//                   : TextDirection.rtl,
-//               children: [
-//                 Stack(
-//                   alignment: Alignment.center,
-//                   children: [
-//                     Container(
-//                       width: SizeConfig.getProportionalWidth(200),
-//                       height: SizeConfig.getProportionalHeight(200),
-//                       decoration: BoxDecoration(
-//                         borderRadius: BorderRadius.circular(15),
-//                         color: AppColors.widgetsColor,
-//                       ),
-//                       child: storageProvider.enFeatureImageIsPicked == false
-//                           ? null
-//                           : Image.memory(
-//                               storageProvider
-//                                   .enPickedFeatureImage!.files.first.bytes!,
-//                               fit: BoxFit.fill),
-//                     ),
-//                   ],
-//                 ),
-//                 SizeConfig.customSizedBox(10, null, null),
-//                 const CustomText(
-//                   isCenter: true,
-//                   text: "premium",
-//                   fontSize: 20,
-//                   fontWeight: FontWeight.normal,
-//                 ),
-//                 SizeConfig.customSizedBox(10, null, null),
-//                 Checkbox(
-//                   activeColor: AppColors.backgroundColor,
-//                   checkColor: AppColors.fontColor,
-//                   value: featuresProvider.statuses[index]['premium_feature'],
-//                   onChanged: (bool? newValue) {
-//                     featuresProvider.togglePremiumFeature(index);
-//                   },
-//                   side: const BorderSide(
-//                     color: AppColors.textFieldBorderColor,
-//                   ),
-//                 ),
-//                 SizeConfig.customSizedBox(10, null, null),
-//                 CustomButton(
-//                   onTap: () => storageProvider.pickImage("en_feature"),
-//                   icon: Icons.camera_alt_outlined,
-//                   iconSize: 50,
-//                   width: 50,
-//                   height: 200,
-//                 ),
-//               ],
-//             ),
-//           ],
-//         ),
-//         SizeConfig.customSizedBox(10, null, null),
-//         Padding(
-//           padding: EdgeInsets.symmetric(
-//             vertical: SizeConfig.getProportionalHeight(215),
-//           ),
-//           child: CustomButton(
-//             onTap: () async {
-//               await FeaturesController()
-//                   .addFeature(featuresProvider, storageProvider, index);
-//             },
-//             text: "confirm",
-//             width: 50,
-//             height: 50,
-//           ),
-//         ),
-//       ],
-//     ),
-//   );
-// }
 }

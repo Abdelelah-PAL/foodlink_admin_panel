@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:foodlink_admin_panel/providers/features_provider.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import '../../controllers/auth_controller.dart';
@@ -9,6 +10,7 @@ import '../../core/utils/size_config.dart';
 import '../../providers/admins_provider.dart';
 import '../../providers/authentication_provider.dart';
 import '../../providers/settings_provider.dart';
+import '../../providers/storage_provider.dart';
 import '../../services/translation_services.dart';
 import '../widgets/custom_text.dart';
 import 'widgets/custom_auth_btn.dart';
@@ -37,6 +39,8 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     SettingsProvider settingsProvider = Provider.of<SettingsProvider>(context);
+    StorageProvider storageProvider = context.watch<StorageProvider>();
+
     return Scaffold(
         backgroundColor: AppColors.backgroundColor,
         resizeToAvoidBottomInset: false,
@@ -190,6 +194,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                 admin.user!.email!,
                                 _authController.passwordController.text,
                               );
+                              await FeaturesProvider().getAllFeatures(storageProvider);
+
                             }
                           }
                         }
