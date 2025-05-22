@@ -51,7 +51,7 @@ class FeaturesProvider with ChangeNotifier {
           'user': doc.user,
           'cooker': doc.cooker,
         });
-        storageProvider.addToImages(index);
+        storageProvider.addToImages(index, doc.arImageURL, doc.enImageURL);
 
 
         featuresControllers[index].text = doc.keyword;

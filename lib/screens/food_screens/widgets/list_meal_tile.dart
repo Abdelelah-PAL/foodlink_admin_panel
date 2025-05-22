@@ -103,11 +103,6 @@ class _ListMealTileState extends State<ListMealTile> {
                                 icon: const Icon(Icons.delete)),
                           ],
                         ),
-                        SizeConfig.customSizedBox(null, 20, null),
-                        IconButton(
-                            onPressed: () => {
-
-                            }, icon: const Icon(Icons.delete))
                       ],
                     ),
                   )

@@ -9,6 +9,7 @@ import '../../../../core/utils/size_config.dart';
 import '../../../../providers/meals_provider.dart';
 import '../../../../providers/settings_provider.dart';
 import '../../../../services/translation_services.dart';
+import '../../../providers/storage_provider.dart';
 import '../../widgets/custom_text.dart';
 import '../meal_screen.dart';
 import 'ingredients_row.dart';
@@ -149,6 +150,19 @@ class _PlanMealTileState extends State<PlanMealTile> {
                                 maxLines: 3,
                                 settingsProvider: widget.settingsProvider,
                               ),
+                              SizeConfig.customSizedBox(null, 10, null),
+                              IconButton(
+                                  onPressed: () async {
+                                    await MealsProvider()
+                                        .deleteMeal(widget.meal.documentId!);
+                                    if (widget.meal.imageUrl != null ||
+                                        widget.meal.imageUrl != "") {
+                                      await StorageProvider()
+                                          .deleteImage(widget.meal.imageUrl);
+                                    }
+                                    MealsProvider().getAllPlannedMeals();
+                                  },
+                                  icon: const Icon(Icons.delete)),
                             ],
                           ),
                         )

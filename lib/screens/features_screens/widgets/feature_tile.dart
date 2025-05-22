@@ -162,7 +162,9 @@ class FeatureTile extends StatelessWidget {
                               index),
                           FeaturesController().showSuccessDialog(
                               context, settingsProvider, "feature_updated"),
-                          await featuresProvider.getAllFeatures(storageProvider)
+                          await featuresProvider
+                              .getAllFeatures(storageProvider),
+                          featuresProvider.resetFeatureValues
                         },
                         text: 'confirm',
                         width: 50,
@@ -200,8 +202,11 @@ class FeatureTile extends StatelessWidget {
                                     ['ar_image_picked'] ==
                                 true
                             ? Image.memory(
-                                storageProvider.featuresPickedImages[index]
-                                    ['ar_image'].files.first.bytes,
+                                storageProvider
+                                    .featuresPickedImages[index]['ar_image']
+                                    .files
+                                    .first
+                                    .bytes,
                                 fit: BoxFit.fill)
                             : feature.arImageURL != ""
                                 ? Image.network(feature.arImageURL,
@@ -230,8 +235,11 @@ class FeatureTile extends StatelessWidget {
                                       ['en_image_picked'] ==
                                   true
                               ? Image.memory(
-                                  storageProvider.featuresPickedImages[index]
-                                      ['en_image'].files.first.bytes,
+                                  storageProvider
+                                      .featuresPickedImages[index]['en_image']
+                                      .files
+                                      .first
+                                      .bytes,
                                   fit: BoxFit.fill)
                               : feature.enImageURL != ""
                                   ? Image.network(feature.enImageURL,
@@ -389,6 +397,7 @@ class EmptyFeatureTile extends StatelessWidget {
                         await FeaturesController().addFeature(
                             featuresProvider, storageProvider, null, index);
                         await featuresProvider.getAllFeatures(storageProvider);
+                        featuresProvider.resetFeatureValues;
                         FeaturesController().showSuccessDialog(
                             context, settingsProvider, "feature_added");
                       },
@@ -416,8 +425,11 @@ class EmptyFeatureTile extends StatelessWidget {
                                 false
                             ? null
                             : Image.memory(
-                                storageProvider.featuresPickedImages[index]
-                                    ['ar_image'].files.first.bytes,
+                                storageProvider
+                                    .featuresPickedImages[index]['ar_image']
+                                    .files
+                                    .first
+                                    .bytes,
                                 fit: BoxFit.fill),
                       ),
                     ],
@@ -443,8 +455,11 @@ class EmptyFeatureTile extends StatelessWidget {
                                 false
                             ? null
                             : Image.memory(
-                                storageProvider.featuresPickedImages[index]
-                                    ['en_image'].files.first.bytes,
+                                storageProvider
+                                    .featuresPickedImages[index]['en_image']
+                                    .files
+                                    .first
+                                    .bytes,
                                 fit: BoxFit.fill),
                       ),
                     ],
