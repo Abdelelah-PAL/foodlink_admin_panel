@@ -47,7 +47,7 @@ class _MealsListScreenState extends State<MealsListScreen> {
                   Get.to(const AddMealScreen(
                       isAddScreen: true, isUpdateScreen: false));
                 },
-                space: 350,
+                spaceFactor: 3,
               )),
             ),
             body: Padding(

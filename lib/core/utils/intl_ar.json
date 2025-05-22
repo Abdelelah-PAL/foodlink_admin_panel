@@ -176,12 +176,13 @@
   "upload": "رفع",
   "image_uploaded": "تم رفع الصورة بنجاح",
   "article_added": "تمَت إضافة المقال بنجاح",
+  "article_deleted": "تم حذف المقال بنجاح",
   "features": "خدمات التطبيق",
   "active": "فعال",
   "premium": "مميز",
   "delete": "حذف",
   "feature_added": "تمَت إضافة الخدمة بنجاح",
   "feature_updated": "تمَت إضافة الخدمة بنجاح",
-  "feature_deleted": "تمَت إضافة الخدمة بنجاح"
-
+  "feature_deleted": "تمَت إضافة الخدمة بنجاح",
+  "adding_article": "إضافة مقال"
 }

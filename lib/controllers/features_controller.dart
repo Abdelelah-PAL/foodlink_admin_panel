@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:foodlink_admin_panel/providers/settings_provider.dart';
 import '../core/utils/size_config.dart';
 import '../models/beyond_calories_article.dart';
 import '../models/feature.dart';
@@ -24,20 +23,21 @@ class FeaturesController {
 
   FeaturesServices ms = FeaturesServices();
 
-  Future<void> addFeature(FeaturesProvider featuresProvider,
-      StorageProvider storageProvider, Feature? feature, index) async {
+  Future<void> addFeature(FeaturesProvider featuresProvider, StorageProvider storageProvider, Feature? feature, index) async {
     String arImageUrl = '';
     String enImageUrl = '';
     if (storageProvider.featuresImagesArePicked[index]['ar_image_picked']) {
-      arImageUrl = (await StorageProvider()
-          .uploadImage(storageProvider.featuresPickedImages[index]['ar_image']!, "features"))!;
+      arImageUrl = (await StorageProvider().uploadImage(
+          storageProvider.featuresPickedImages[index]['ar_image']!,
+          "features"))!;
     } else {
       arImageUrl = feature != null ? feature.arImageURL : "";
     }
     if (storageProvider.featuresImagesArePicked[index]['ar_image_picked'] &&
         storageProvider.featuresImagesArePicked[index]['en_image_picked']) {
-      enImageUrl = (await StorageProvider()
-          .uploadImage(storageProvider.featuresPickedImages[index]['en_image']!, "features"))!;
+      enImageUrl = (await StorageProvider().uploadImage(
+          storageProvider.featuresPickedImages[index]['en_image']!,
+          "features"))!;
     } else {
       enImageUrl = feature != null ? feature.enImageURL : "";
     }
@@ -52,9 +52,7 @@ class FeaturesController {
     featuresProvider.resetFeatureValues(storageProvider, featuresProvider);
   }
 
-
-  Future<void> deleteFeature(StorageProvider storageProvider,
-      FeaturesProvider featuresProvider, Feature feature, index) async {
+  Future<void> deleteFeature(StorageProvider storageProvider, FeaturesProvider featuresProvider, Feature feature, index) async {
     if (storageProvider.featuresImagesArePicked[index]['ar_image_picked'] &&
         storageProvider.featuresPickedImages[index]['ar_image']) {
       await storageProvider.deleteImage(feature.arImageURL);
@@ -76,8 +74,7 @@ class FeaturesController {
     ));
   }
 
-  Future<void> updateArticle(
-      StorageProvider storageProvider, BeyondCaloriesArticle article) async {
+  Future<void> updateArticle(StorageProvider storageProvider, BeyondCaloriesArticle article) async {
     String imageUrl = '';
     if (storageProvider.articleImageIsPicked) {
       imageUrl = (await StorageProvider()
@@ -89,6 +86,11 @@ class FeaturesController {
       imageUrl: imageUrl,
       url: urlController.text,
     ));
+  }
+
+  Future<void> deleteArticle(StorageProvider storageProvider,FeaturesProvider featuresProvider, BeyondCaloriesArticle article) async {
+    await storageProvider.deleteImage(article.imageUrl);
+    await featuresProvider.deleteArticle(article.documentId!);
   }
 
   void showSuccessDialog(BuildContext context, settingsProvider, String text) {

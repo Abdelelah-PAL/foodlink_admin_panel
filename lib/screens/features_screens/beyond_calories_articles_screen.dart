@@ -2,10 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import '../../../core/constants/colors.dart';
+import '../../controllers/features_controller.dart';
 import '../../controllers/general_controller.dart';
 import '../../core/utils/size_config.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import '../../models/beyond_calories_article.dart';
 import '../../providers/features_provider.dart';
+import '../../providers/settings_provider.dart';
+import '../../providers/storage_provider.dart';
 import '../food_screens/widgets/list_header.dart';
 import 'add_article_screen.dart';
 
@@ -21,8 +25,10 @@ class _BeyondCaloriesArticlesScreenState
     extends State<BeyondCaloriesArticlesScreen> {
   @override
   Widget build(BuildContext context) {
-    final featuresProvider = Provider.of<FeaturesProvider>(context);
-    final articles = featuresProvider.articles;
+    FeaturesProvider featuresProvider = Provider.of<FeaturesProvider>(context);
+    StorageProvider storageProvider = Provider.of<StorageProvider>(context);
+    SettingsProvider settingsProvider = Provider.of<SettingsProvider>(context);
+    List<BeyondCaloriesArticle> articles = featuresProvider.articles;
 
     return featuresProvider.isLoading == true
         ? const Center(
@@ -36,7 +42,7 @@ class _BeyondCaloriesArticlesScreenState
                 child: ListHeader(
                   text: "beyond_calories",
                   onTap: () => Get.to(const AddArticleScreen()),
-                  space: 350,
+                  spaceFactor: 3,
                 ),
               ),
             ),
@@ -48,14 +54,15 @@ class _BeyondCaloriesArticlesScreenState
                       horizontal: SizeConfig.getProportionalWidth(5),
                       vertical: SizeConfig.getProportionalHeight(20),
                     ),
-                    child: GridView.custom(
+                    child:  GridView.custom(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: SizeConfig.getProportionalWidth(5),
+                      ),
                       gridDelegate: SliverWovenGridDelegate.count(
                         crossAxisCount: 2,
-                        mainAxisSpacing: 12,
-                        crossAxisSpacing: 12,
-                        pattern: const [
-                          WovenGridTile(1),
-                          WovenGridTile(
+                        pattern: [
+                          const WovenGridTile(1),
+                          const WovenGridTile(
                             5 / 7,
                             crossAxisRatio: 0.9,
                             alignment: AlignmentDirectional.center,
@@ -63,32 +70,24 @@ class _BeyondCaloriesArticlesScreenState
                         ],
                       ),
                       childrenDelegate: SliverChildBuilderDelegate(
-                        (context, index) {
-                          final article = articles[index];
+                            (context, index) {
                           return GestureDetector(
                             onTap: () => GeneralController()
-                                .launchURL(context, Uri.parse(article.url)),
-                            child: LayoutBuilder(
-                              builder: (context, constraints) {
-                                return ClipRRect(
-                                  borderRadius: BorderRadius.circular(15),
-                                  child: AspectRatio(
-                                    aspectRatio: 4 / 3,
-                                    child: Image.network(
-                                      article.imageUrl,
-                                      fit: BoxFit.cover,
-                                      errorBuilder: (context, error,
-                                              stackTrace) =>
-                                          const Center(
-                                              child: Icon(Icons.broken_image)),
-                                    ),
-                                  ),
-                                );
-                              },
+                                .launchURL(
+                                context,
+                                Uri.parse(featuresProvider
+                                    .articles[index].url)),
+                            child: Container(
+                              decoration: BoxDecoration(borderRadius: BorderRadius.circular(15)),
+                              child: Image.network(
+                                featuresProvider
+                                    .articles[index].imageUrl,
+                                fit: BoxFit.cover,
+                              ),
                             ),
                           );
                         },
-                        childCount: articles.length,
+                        childCount: featuresProvider.articles.length,
                       ),
                     ),
                   ),

@@ -38,76 +38,83 @@ class _ListMealTileState extends State<ListMealTile> {
   Widget build(BuildContext context) {
     SettingsProvider settingsProvider = Provider.of<SettingsProvider>(context);
     return Padding(
-      padding: EdgeInsets.only(bottom: SizeConfig.getProportionalHeight(15)),
-      child: Stack(
-              children: [
-                GestureDetector(
-                  onTap: onTap,
-                  child: Row(
-                    textDirection: settingsProvider.language == 'en'
-                        ? TextDirection.ltr
-                        : TextDirection.rtl,
-                    children: [
-                      Container(
-                        width: SizeConfig.getProperVerticalSpace(3),
-                        height: SizeConfig.getProperVerticalSpace(8),
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                              width: 1, color: AppColors.defaultBorderColor),
-                          borderRadius: BorderRadius.circular(15),
+        padding: EdgeInsets.only(bottom: SizeConfig.getProportionalHeight(15)),
+        child: Stack(
+          children: [
+            GestureDetector(
+              onTap: onTap,
+              child: Row(
+                textDirection: settingsProvider.language == 'en'
+                    ? TextDirection.ltr
+                    : TextDirection.rtl,
+                children: [
+                  Container(
+                    width: SizeConfig.getProperVerticalSpace(3),
+                    height: SizeConfig.getProperVerticalSpace(8),
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                          width: 1, color: AppColors.defaultBorderColor),
+                      borderRadius: BorderRadius.circular(15),
+                    ),
+                    child: widget.meal.imageUrl != null &&
+                            widget.meal.imageUrl!.isNotEmpty
+                        ? ClipRRect(
+                            borderRadius: BorderRadius.circular(15),
+                            // Apply the same radius here
+                            child: Image.network(
+                              widget.meal.imageUrl!,
+                              fit: BoxFit.fill,
+                            ),
+                          )
+                        : const Icon(Icons.camera_alt_outlined),
+                  ),
+                  SizeConfig.customSizedBox(10, null, null),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        NameRow(
+                          name: widget.meal.name,
+                          fontSize: 15,
+                          textWidth: 115,
+                          settingsProvider: settingsProvider,
                         ),
-                        child: widget.meal.imageUrl != null &&
-                                widget.meal.imageUrl!.isNotEmpty
-                            ? ClipRRect(
-                                borderRadius: BorderRadius.circular(15),
-                                // Apply the same radius here
-                                child: Image.network(
-                                  widget.meal.imageUrl!,
-                                  fit: BoxFit.fill,
-                                ),
-                              )
-                            : const Icon(Icons.camera_alt_outlined),
-                      ),
-                      SizeConfig.customSizedBox(10, null, null),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                        SizeConfig.customSizedBox(null, 10, null),
+                        Row(
+                          textDirection: settingsProvider.language == 'en'
+                              ? TextDirection.ltr
+                              : TextDirection.rtl,
                           children: [
-                            NameRow(
-                              name: widget.meal.name,
-                              fontSize: 15,
-                              textWidth: 115,
+                            IngredientsRow(
+                              meal: widget.meal,
+                              fontSize: 14,
+                              textWidth: 80,
+                              maxLines: 3,
                               settingsProvider: settingsProvider,
                             ),
-                            SizeConfig.customSizedBox(null, 10, null),
-                            Row(
-                              textDirection: settingsProvider.language == 'en'
-                                  ? TextDirection.ltr
-                                  : TextDirection.rtl,
-                              children: [
-                                IngredientsRow(
-                                  meal: widget.meal,
-                                  fontSize: 14,
-                                  textWidth: 80,
-                                  maxLines: 3,
-                                  settingsProvider: settingsProvider,
-                                ),
-                                IconButton(onPressed: () async{
-                                  await MealsProvider().deleteMeal(widget.meal.documentId!);
+                            IconButton(
+                                onPressed: () async {
+                                  await MealsProvider()
+                                      .deleteMeal(widget.meal.documentId!);
                                   setState(() {
                                     MealsProvider().getAllPlannedMeals();
                                   });
-                                }, icon: const Icon(Icons.delete)),
-                              ],
-                            ),
+                                },
+                                icon: const Icon(Icons.delete)),
                           ],
                         ),
-                      )
-                    ],
-                  ),
-                ),
-              ],
-            )
-    );
+                        SizeConfig.customSizedBox(null, 20, null),
+                        IconButton(
+                            onPressed: () => {
+
+                            }, icon: const Icon(Icons.delete))
+                      ],
+                    ),
+                  )
+                ],
+              ),
+            ),
+          ],
+        ));
   }
 }

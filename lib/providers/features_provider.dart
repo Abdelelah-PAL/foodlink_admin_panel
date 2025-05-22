@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:foodlink_admin_panel/providers/settings_provider.dart';
-import 'package:provider/provider.dart';
 import '../controllers/features_controller.dart';
 import '../models/beyond_calories_article.dart';
 import '../models/feature.dart';
@@ -73,27 +71,6 @@ class FeaturesProvider with ChangeNotifier {
     var addedFeature = await _fs.addFeature(feature);
     return addedFeature;
   }
-
-  // Future<Feature?> updateFeature(Feature feature,
-  //     StorageProvider storageProvider,
-  //     SettingsProvider settingsProvider,
-  //     int index,
-  //     context) async {
-  //   Feature? updatedFeature;
-  //   if (storageProvider.featuresPickedImages[index]['ar_image'] &&
-  //       storageProvider.enFeatureImageIsPicked) {
-  //     await StorageProvider().deleteImage(feature.arImageURL);
-  //     await StorageProvider().deleteImage(feature.enImageURL);
-  //     String arImageUrl = (await StorageProvider()
-  //         .uploadImage(storageProvider.featuresPickedImages[index]['ar_image'], "features"))!;
-  //     String enImageUrl = (await StorageProvider()
-  //         .uploadImage(storageProvider.featuresPickedImages[index]['en_image'], "features"))!;
-  //     feature.arImageURL = arImageUrl;
-  //     feature.enImageURL = enImageUrl;
-  //     updatedFeature = await _fs.updateFeature(feature);
-  //   }
-  //   return updatedFeature;
-  // }
 
   Future<void> deleteFeature(id) async {
     await _fs.deleteFeature(id);

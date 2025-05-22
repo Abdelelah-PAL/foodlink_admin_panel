@@ -9,7 +9,9 @@ import '../../providers/features_provider.dart';
 import '../../providers/settings_provider.dart';
 import '../../providers/storage_provider.dart';
 import '../widgets/custom_app_textfield.dart';
+import '../widgets/custom_back_button.dart';
 import '../widgets/custom_button.dart';
+import '../widgets/custom_text.dart';
 
 class AddArticleScreen extends StatefulWidget {
   const AddArticleScreen({super.key});
@@ -28,6 +30,25 @@ class _AddArticleScreenState extends State<AddArticleScreen> {
     final StorageProvider storageProvider =
         Provider.of<StorageProvider>(context, listen: true);
     return Scaffold(
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(SizeConfig.getProportionalHeight(100)),
+        child:  SafeArea(
+          child: Row(
+            children: [
+              const CustomBackButton(),
+              SizedBox(
+                width: SizeConfig.getProperHorizontalSpace(2.3),
+              ),
+              const CustomText(
+                isCenter: true,
+                text: "adding_article",
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+              ),
+            ],
+          ),
+        ),
+      ),
       backgroundColor: AppColors.backgroundColor,
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -80,12 +101,13 @@ class _AddArticleScreenState extends State<AddArticleScreen> {
                     FeaturesController().urlController.text.isEmpty) {
                   FeaturesController()
                       .showFailedAddDialog(context, settingsProvider);
+                  await featuresProvider.getAllFeatures(storageProvider);
                   return;
                 }
                 await FeaturesController().addArticle(storageProvider);
                 featuresProvider.resetArticleValues(storageProvider);
-                FeaturesController()
-                    .showSuccessDialog(context, settingsProvider, 'article_added');
+                FeaturesController().showSuccessDialog(
+                    context, settingsProvider, 'article_added');
                 await FeaturesProvider().getAllArticles();
               },
               text: "confirm",

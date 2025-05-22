@@ -8,12 +8,12 @@ class ListHeader extends StatelessWidget {
     super.key,
     required this.text,
     required this.onTap,
-    required this.space,
+    required this.spaceFactor,
   });
 
   final String text;
   final VoidCallback onTap;
-  final double space;
+  final double spaceFactor;
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +32,9 @@ class ListHeader extends StatelessWidget {
             fontSize: 20,
             fontWeight: FontWeight.bold,
           ),
-          SizeConfig.customSizedBox(space, null, null),
+          SizedBox(
+            width: SizeConfig.getProperHorizontalSpace(spaceFactor),
+          ),
           GestureDetector(
             onTap: onTap,
             child: Container(

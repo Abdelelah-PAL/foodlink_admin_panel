@@ -176,11 +176,13 @@
   "upload": "Upload",
   "image_uploaded": "Image has been uploaded successfully",
   "article_added": "Article has been added successfully",
+  "article_deleted": "Article has been deleted successfully",
   "features": "Application Features",
   "active": "Active",
   "premium": "Premium",
   "delete": "Delete",
   "feature_added": "Feature has been added successfully",
   "feature_updated": "Feature has been updated successfully",
-  "feature_deleted": "Feature has been deleted successfully"
+  "feature_deleted": "Feature has been deleted successfully",
+  "adding_article": "Adding Article"
 }
