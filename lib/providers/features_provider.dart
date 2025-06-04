@@ -16,15 +16,12 @@ class FeaturesProvider with ChangeNotifier {
   List<Feature> features = [];
   final FeaturesServices _fs = FeaturesServices();
   bool isLoading = false;
-  List<Map> statuses = [
-    {'active_feature': false, 'premium_feature': false},
-  ];
-  List<Map> userTypesAppearance = [
-    {'user': false, 'cooker': false},
-  ];
-  List<TextEditingController> featuresControllers = [
-    TextEditingController(),
-  ];
+  List<Map> statuses = [];
+  List<Map> userTypesAppearances = [];
+  List<TextEditingController> featuresControllers = [];
+  Map status = {'active_feature': false, 'premium_feature': false};
+  Map userTypesAppearance = {'user': false, 'cooker': false};
+  TextEditingController featuresController = TextEditingController();
 
   Future<void> getAllFeatures(StorageProvider storageProvider) async {
     try {
@@ -47,12 +44,11 @@ class FeaturesProvider with ChangeNotifier {
           'active_feature': doc.active,
           'premium_feature': doc.premium,
         });
-        userTypesAppearance.insert(index, {
+        userTypesAppearances.insert(index, {
           'user': doc.user,
           'cooker': doc.cooker,
         });
         storageProvider.addToImages(index, doc.arImageURL, doc.enImageURL);
-
 
         featuresControllers[index].text = doc.keyword;
         features.add(feature);
@@ -120,17 +116,17 @@ class FeaturesProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void resetFeatureValues(
-      StorageProvider storageProvider, FeaturesProvider featuresProvider) {
-    storageProvider.featuresImagesArePicked.last['ar_image_picked'] = false;
-    storageProvider.featuresPickedImages.last['ar_image'] = null;
-    storageProvider.featuresImagesArePicked.last['en_image_picked'] = false;
-    storageProvider.featuresPickedImages.last['en_image'] = null;
-    featuresProvider.featuresControllers.last.clear();
-    featuresProvider.statuses.last['active_feature'] = false;
-    featuresProvider.statuses.last['premium_feature'] = false;
-    featuresProvider.userTypesAppearance.last['user'] = false;
-    featuresProvider.userTypesAppearance.last['cooker'] = false;
+  void resetFeatureValues(StorageProvider storageProvider,
+      FeaturesProvider featuresProvider) async {
+    storageProvider.featureImageIsPicked['ar_image_picked'] = false;
+    storageProvider.featurePickedImage['ar_image'] = null;
+    storageProvider.featureImageIsPicked['en_image_picked'] = false;
+    storageProvider.featurePickedImage['en_image'] = null;
+    featuresProvider.featuresController.clear();
+    featuresProvider.status['active_feature'] = false;
+    featuresProvider.status['premium_feature'] = false;
+    featuresProvider.userTypesAppearance['user'] = false;
+    featuresProvider.userTypesAppearance['cooker'] = false;
     notifyListeners();
   }
 
@@ -150,13 +146,33 @@ class FeaturesProvider with ChangeNotifier {
   }
 
   void toggleUserAppearance(index) {
-    userTypesAppearance[index]['user'] = !userTypesAppearance[index]['user'];
+    userTypesAppearances[index]['user'] = !userTypesAppearances[index]['user'];
     notifyListeners();
   }
 
   void toggleCookerAppearance(index) {
-    userTypesAppearance[index]['cooker'] =
-        !userTypesAppearance[index]['cooker'];
+    userTypesAppearances[index]['cooker'] =
+        !userTypesAppearances[index]['cooker'];
+    notifyListeners();
+  }
+
+  void toggleActiveFeatureEmpty() {
+    status['active_feature'] = !status['active_feature'];
+    notifyListeners();
+  }
+
+  void togglePremiumFeatureEmpty() {
+    status['premium_feature'] = !status['premium_feature'];
+    notifyListeners();
+  }
+
+  void toggleUserAppearanceEmpty() {
+    userTypesAppearance['user'] = !userTypesAppearance['user'];
+    notifyListeners();
+  }
+
+  void toggleCookerAppearanceEmpty() {
+    userTypesAppearance['cooker'] = !userTypesAppearance['cooker'];
     notifyListeners();
   }
 }

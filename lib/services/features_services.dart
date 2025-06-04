@@ -12,21 +12,22 @@ class FeaturesServices with ChangeNotifier {
   final FirebaseStorage _storage = FirebaseStorage.instance;
 
   Future<List<Feature>> getAllFeatures() async {
-    try {
-      QuerySnapshot<Map<String, dynamic>> featureQuery =
+        try {
+          QuerySnapshot<Map<String, dynamic>> featureQuery =
           await _firebaseFireStore.collection('features').get();
 
-      List<Feature> features = featureQuery.docs.map((doc) {
-        return Feature.fromJson(doc.data(), doc.id);
-      }).toList();
-      return features;
-    } catch (ex) {
-      rethrow;
+          List<Feature> features = featureQuery.docs.map((doc) {
+            return Feature.fromJson(doc.data(), doc.id);
+          }).toList();
+          return features;
+        } catch (ex) {
+          rethrow;
     }
   }
 
   Future<Feature> addFeature(feature) async {
     try {
+      print(feature);
       var addedFeature =
           await _firebaseFireStore.collection('features').add(feature.toMap());
       var featureSnapshot = await addedFeature.get();

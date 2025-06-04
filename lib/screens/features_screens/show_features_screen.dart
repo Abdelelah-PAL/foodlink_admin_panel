@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import '../../core/utils/size_config.dart';
 import '../../models/feature.dart';
 import '../../providers/features_provider.dart';
 import '../../providers/settings_provider.dart';
 import '../../providers/storage_provider.dart';
+import '../food_screens/widgets/list_header.dart';
 import '../widgets/custom_text.dart';
+import 'add_feature_screen.dart';
 import 'widgets/feature_tile.dart';
 
 class ShowFeaturesScreen extends StatefulWidget {
@@ -29,23 +32,25 @@ class _ShowFeaturesScreenState extends State<ShowFeaturesScreen> {
             appBar: PreferredSize(
               preferredSize:
                   Size.fromHeight(SizeConfig.getProportionalHeight(100)),
-              child: const SafeArea(
-                  child: CustomText(
-                      isCenter: true,
-                      text: "features",
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold)),
+              child: SafeArea(
+                child: ListHeader(
+                  text: "features",
+                  onTap: () => Get.to(const AddFeatureScreen()),
+                  spaceFactor: 3,
+                ),
+              ),
             ),
             body: Padding(
               padding: EdgeInsets.symmetric(
                 horizontal: SizeConfig.getProportionalWidth(10),
               ),
               child: featuresProviderWatcher.features.isEmpty
-                  ? EmptyFeatureTile(
-                      featuresProvider: featuresProviderWatcher,
-                      settingsProvider: settingsProvider,
-                      storageProvider: storageProvider,
-                      index: 0,
+                  ? const Center(
+                      child: CustomText(
+                          isCenter: true,
+                          text: "no_features",
+                          fontSize: 30,
+                          fontWeight: FontWeight.bold),
                     )
                   : Consumer<FeaturesProvider>(
                       builder: (context, featuresProvider, child) {
@@ -53,28 +58,20 @@ class _ShowFeaturesScreenState extends State<ShowFeaturesScreen> {
                           padding: EdgeInsets.only(
                               top: SizeConfig.getProportionalHeight(20)),
                           child: ListView.builder(
-                              itemCount: featuresProvider.features.length + 1,
+                              itemCount: featuresProvider.features.length,
                               scrollDirection: Axis.vertical,
                               itemBuilder: (ctx, index) {
-                                if (index >= featuresProvider.features.length) {
-                                  return EmptyFeatureTile(
-                                    featuresProvider: featuresProvider,
-                                    settingsProvider: settingsProvider,
-                                    storageProvider: storageProvider,
-                                    index: index,
-                                  );
-                                }
-
-                                Feature feature = featuresProvider.features[index];
+                                Feature feature =
+                                    featuresProvider.features[index];
                                 return FeatureTile(
                                   feature: feature,
                                   featuresProvider: featuresProvider,
                                   settingsProvider: settingsProvider,
                                   storageProvider: storageProvider,
                                   index: index,
+                                  length: featuresProvider.features.length,
                                 );
-                              }
-                          ),
+                              }),
                         );
                       },
                     ),

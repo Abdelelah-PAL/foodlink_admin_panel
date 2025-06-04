@@ -184,5 +184,7 @@
   "feature_added": "Feature has been added successfully",
   "feature_updated": "Feature has been updated successfully",
   "feature_deleted": "Feature has been deleted successfully",
-  "adding_article": "Adding Article"
+  "adding_article": "Adding Article",
+  "adding_features": "Adding Features",
+  "no_features": "No features added yet"
 }

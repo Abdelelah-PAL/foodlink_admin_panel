@@ -1,5 +1,5 @@
 import 'package:file_picker/file_picker.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import '../services/storage_service.dart';
 
 class StorageProvider with ChangeNotifier {
@@ -16,12 +16,16 @@ class StorageProvider with ChangeNotifier {
   FilePickerResult? pickedDOW;
   FilePickerResult? pickedArticleImage;
   bool articleImageIsPicked = false;
-  List<Map<String, bool>> featuresImagesArePicked = [
-    {'ar_image_picked': false, 'en_image_picked': false},
-  ];
-  List<Map<String, dynamic>> featuresPickedImages = [
-    {'ar_image': null, 'en_image': null},
-  ];
+  List<Map<String, bool>> featuresImagesArePicked = [];
+  List<Map<String, dynamic>> featuresPickedImages = [];
+  Map<String, bool> featureImageIsPicked = {
+    'ar_image_picked': false,
+    'en_image_picked': false
+  };
+  Map<String, dynamic> featurePickedImage = {
+    'ar_image': null,
+    'en_image': null
+  };
 
   Future<void> pickImage(String source) async {
     try {
@@ -42,7 +46,9 @@ class StorageProvider with ChangeNotifier {
       }
       notifyListeners();
     } catch (e) {
-      print("Error picking image: $e");
+      if (kDebugMode) {
+        print("Error picking image: $e");
+      }
       rethrow;
     }
   }
@@ -63,10 +69,36 @@ class StorageProvider with ChangeNotifier {
       }
       notifyListeners();
     } catch (e) {
-      print("Error picking image: $e");
+      if (kDebugMode) {
+        print("Error picking image: $e");
+      }
       rethrow;
     }
   }
+
+  Future<void> pickEmptyFeatureImage(String source) async {
+    try {
+      FilePickerResult? file = await FilePicker.platform.pickFiles(
+        type: FileType.image,
+      );
+      if (file != null) {
+        if (source == "ar_feature") {
+          featurePickedImage['ar_image'] = file;
+          featureImageIsPicked['ar_image_picked'] = true;
+        } else if (source == "en_feature") {
+          featurePickedImage['en_image'] = file;
+          featureImageIsPicked['en_image_picked'] = true;
+        }
+      }
+      notifyListeners();
+    } catch (e) {
+      if (kDebugMode) {
+        print("Error picking image: $e");
+      }
+      rethrow;
+    }
+  }
+
 
   Future<String?> uploadImage(FilePickerResult path, String tag) async {
     return _ss.uploadImage(path, tag);

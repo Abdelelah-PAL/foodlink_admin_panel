@@ -23,7 +23,37 @@ class FeaturesController {
 
   FeaturesServices ms = FeaturesServices();
 
-  Future<void> addFeature(FeaturesProvider featuresProvider, StorageProvider storageProvider, Feature? feature, index) async {
+  Future<void> addEmptyFeature(FeaturesProvider featuresProvider, StorageProvider storageProvider, Feature? feature) async {
+    String arImageUrl = '';
+    String enImageUrl = '';
+    if (storageProvider.featureImageIsPicked['ar_image_picked'] ??
+        false) {
+      arImageUrl = (await StorageProvider().uploadImage(
+          storageProvider.featurePickedImage['ar_image']!,
+          "features"))!;
+    } else {
+      arImageUrl = feature != null ? feature.arImageURL : "";
+    }
+    if (storageProvider.featureImageIsPicked['en_image_picked'] ??
+        false) {
+      enImageUrl = (await StorageProvider().uploadImage(
+          storageProvider.featurePickedImage['en_image']!,
+          "features"))!;
+    } else {
+      enImageUrl = feature != null ? feature.enImageURL : "";
+    }
+    await FeaturesProvider().addFeature(Feature(
+        arImageURL: arImageUrl,
+        enImageURL: enImageUrl,
+        active: featuresProvider.status['active_feature'],
+        premium: featuresProvider.status['premium_feature'],
+        keyword: FeaturesProvider().featuresController.text,
+        user: featuresProvider.userTypesAppearance['user'],
+        cooker: featuresProvider.userTypesAppearance['cooker']));
+    featuresProvider.resetFeatureValues(storageProvider, featuresProvider);
+  }
+
+  Future<void> addFeature(FeaturesProvider featuresProvider, StorageProvider storageProvider, Feature? feature, int index) async {
     String arImageUrl = '';
     String enImageUrl = '';
     if (storageProvider.featuresImagesArePicked[index]['ar_image_picked'] ??
@@ -48,8 +78,8 @@ class FeaturesController {
         active: featuresProvider.statuses[index]['active_feature'],
         premium: featuresProvider.statuses[index]['premium_feature'],
         keyword: FeaturesProvider().featuresControllers[index].text,
-        user: featuresProvider.userTypesAppearance[index]['user'],
-        cooker: featuresProvider.userTypesAppearance[index]['cooker']));
+        user: featuresProvider.userTypesAppearances[index]['user'],
+        cooker: featuresProvider.userTypesAppearances[index]['cooker']));
     featuresProvider.resetFeatureValues(storageProvider, featuresProvider);
   }
 

@@ -19,6 +19,7 @@ class FeatureTile extends StatelessWidget {
     required this.storageProvider,
     required this.feature,
     required this.index,
+    required this.length,
   });
 
   final FeaturesProvider featuresProvider;
@@ -26,6 +27,7 @@ class FeatureTile extends StatelessWidget {
   final SettingsProvider settingsProvider;
   final Feature feature;
   final int index;
+  final int length;
 
   @override
   Widget build(BuildContext context) {
@@ -117,7 +119,7 @@ class FeatureTile extends StatelessWidget {
                           Checkbox(
                             activeColor: AppColors.backgroundColor,
                             checkColor: AppColors.fontColor,
-                            value: featuresProvider.userTypesAppearance[index]
+                            value: featuresProvider.userTypesAppearances[index]
                                     ['user'] ??
                                 false,
                             onChanged: (bool? newValue) {
@@ -131,7 +133,7 @@ class FeatureTile extends StatelessWidget {
                           Checkbox(
                             activeColor: AppColors.backgroundColor,
                             checkColor: AppColors.fontColor,
-                            value: featuresProvider.userTypesAppearance[index]
+                            value: featuresProvider.userTypesAppearances[index]
                                     ['cooker'] ??
                                 false,
                             onChanged: (bool? newValue) {
@@ -172,11 +174,13 @@ class FeatureTile extends StatelessWidget {
                       ),
                       SizeConfig.customSizedBox(20, null, null),
                       CustomButton(
-                        onTap: () => {
+                        onTap: () async {
                           FeaturesController().deleteFeature(storageProvider,
-                              featuresProvider, feature, index),
+                              featuresProvider, feature, index);
+                          await featuresProvider
+                              .getAllFeatures(storageProvider);
                           FeaturesController().showSuccessDialog(
-                              context, settingsProvider, "feature_deleted")
+                              context, settingsProvider, "feature_deleted");
                         },
                         text: "delete",
                         width: 50,
@@ -256,7 +260,7 @@ class FeatureTile extends StatelessWidget {
               )
             ],
           ),
-          const Divider()
+          if (index != length) const Divider()
         ]));
   }
 }
@@ -267,13 +271,11 @@ class EmptyFeatureTile extends StatelessWidget {
     required this.featuresProvider,
     required this.settingsProvider,
     required this.storageProvider,
-    required this.index,
   });
 
   final FeaturesProvider featuresProvider;
   final SettingsProvider settingsProvider;
   final StorageProvider storageProvider;
-  final int index;
 
   @override
   Widget build(BuildContext context) {
@@ -292,7 +294,7 @@ class EmptyFeatureTile extends StatelessWidget {
                     width: 100,
                     height: 50,
                     icon: Assets.keyword,
-                    controller: featuresProvider.featuresControllers[index],
+                    controller: featuresProvider.featuresController,
                     maxLines: 1,
                     iconSizeFactor: 1,
                     settingsProvider: settingsProvider,
@@ -337,10 +339,9 @@ class EmptyFeatureTile extends StatelessWidget {
                           Checkbox(
                             activeColor: AppColors.backgroundColor,
                             checkColor: AppColors.fontColor,
-                            value: featuresProvider.statuses[index]
-                                ['active_feature'],
+                            value: featuresProvider.status['active_feature'],
                             onChanged: (bool? newValue) {
-                              featuresProvider.toggleActiveFeature(index);
+                              featuresProvider.toggleActiveFeatureEmpty();
                             },
                             side: const BorderSide(
                               color: AppColors.textFieldBorderColor,
@@ -350,10 +351,9 @@ class EmptyFeatureTile extends StatelessWidget {
                           Checkbox(
                             activeColor: AppColors.backgroundColor,
                             checkColor: AppColors.fontColor,
-                            value: featuresProvider.statuses[index]
-                                ['premium_feature'],
+                            value: featuresProvider.status['premium_feature'],
                             onChanged: (bool? newValue) {
-                              featuresProvider.togglePremiumFeature(index);
+                              featuresProvider.togglePremiumFeatureEmpty();
                             },
                             side: const BorderSide(
                               color: AppColors.textFieldBorderColor,
@@ -363,10 +363,9 @@ class EmptyFeatureTile extends StatelessWidget {
                           Checkbox(
                             activeColor: AppColors.backgroundColor,
                             checkColor: AppColors.fontColor,
-                            value: featuresProvider.userTypesAppearance[index]
-                                ['user'],
+                            value: featuresProvider.userTypesAppearance['user'],
                             onChanged: (bool? newValue) {
-                              featuresProvider.toggleUserAppearance(index);
+                              featuresProvider.toggleUserAppearanceEmpty();
                             },
                             side: const BorderSide(
                               color: AppColors.textFieldBorderColor,
@@ -376,10 +375,10 @@ class EmptyFeatureTile extends StatelessWidget {
                           Checkbox(
                             activeColor: AppColors.backgroundColor,
                             checkColor: AppColors.fontColor,
-                            value: featuresProvider.userTypesAppearance[index]
-                                ['cooker'],
+                            value:
+                                featuresProvider.userTypesAppearance['cooker'],
                             onChanged: (bool? newValue) {
-                              featuresProvider.toggleCookerAppearance(index);
+                              featuresProvider.toggleCookerAppearanceEmpty();
                             },
                             side: const BorderSide(
                               color: AppColors.textFieldBorderColor,
@@ -388,23 +387,6 @@ class EmptyFeatureTile extends StatelessWidget {
                         ],
                       ),
                     ],
-                  ),
-                  SizeConfig.customSizedBox(null, 20, null),
-                  Align(
-                    alignment: Alignment.center,
-                    child: CustomButton(
-                      onTap: () async {
-                        await FeaturesController().addFeature(
-                            featuresProvider, storageProvider, null, index);
-                        await featuresProvider.getAllFeatures(storageProvider);
-                        featuresProvider.resetFeatureValues;
-                        FeaturesController().showSuccessDialog(
-                            context, settingsProvider, "feature_added");
-                      },
-                      text: 'confirm',
-                      width: 50,
-                      height: 50,
-                    ),
                   ),
                 ],
               ),
@@ -420,16 +402,13 @@ class EmptyFeatureTile extends StatelessWidget {
                           borderRadius: BorderRadius.circular(15),
                           color: AppColors.widgetsColor,
                         ),
-                        child: storageProvider.featuresImagesArePicked[index]
-                                    ['ar_image_picked'] ==
+                        child: storageProvider
+                                    .featureImageIsPicked['ar_image_picked'] ==
                                 false
                             ? null
                             : Image.memory(
-                                storageProvider
-                                    .featuresPickedImages[index]['ar_image']
-                                    .files
-                                    .first
-                                    .bytes,
+                                storageProvider.featurePickedImage['ar_image']
+                                    .files.first.bytes,
                                 fit: BoxFit.fill),
                       ),
                     ],
@@ -437,7 +416,7 @@ class EmptyFeatureTile extends StatelessWidget {
                   SizeConfig.customSizedBox(null, 10, null),
                   IconButton(
                       onPressed: () =>
-                          storageProvider.pickFeatureImage("ar_feature", index),
+                          storageProvider.pickEmptyFeatureImage("ar_feature"),
                       icon: const Icon(Icons.camera_alt_outlined)),
                   SizeConfig.customSizedBox(null, 35, null),
                   Stack(
@@ -450,16 +429,13 @@ class EmptyFeatureTile extends StatelessWidget {
                           borderRadius: BorderRadius.circular(15),
                           color: AppColors.widgetsColor,
                         ),
-                        child: storageProvider.featuresImagesArePicked[index]
-                                    ['en_image_picked'] ==
+                        child: storageProvider
+                                    .featureImageIsPicked['en_image_picked'] ==
                                 false
                             ? null
                             : Image.memory(
-                                storageProvider
-                                    .featuresPickedImages[index]['en_image']
-                                    .files
-                                    .first
-                                    .bytes,
+                                storageProvider.featurePickedImage['en_image']
+                                    .files.first.bytes,
                                 fit: BoxFit.fill),
                       ),
                     ],
@@ -467,7 +443,7 @@ class EmptyFeatureTile extends StatelessWidget {
                   SizeConfig.customSizedBox(null, 10, null),
                   IconButton(
                       onPressed: () =>
-                          storageProvider.pickFeatureImage("en_feature", index),
+                          storageProvider.pickEmptyFeatureImage("en_feature"),
                       icon: const Icon(Icons.camera_alt_outlined)),
                 ],
               )
