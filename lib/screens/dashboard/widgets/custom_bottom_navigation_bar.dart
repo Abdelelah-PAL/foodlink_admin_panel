@@ -54,7 +54,8 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
           _buildNavItem(Icons.add_a_photo_outlined, 1, null),
           _buildNavItem(Icons.article_outlined, 2, null),
           _buildNavItem(Icons.design_services, 3, null),
-          _buildNavItem(Icons.settings, 4, null),
+          _buildNavItem(Icons.file_present, 4, null),
+          _buildNavItem(Icons.settings, 5, null),
         ],
       ),
     );

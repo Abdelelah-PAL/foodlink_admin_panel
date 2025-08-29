@@ -57,7 +57,7 @@ class _AddDishOfTheWeekScreenState extends State<AddDishOfTheWeekScreen> {
           ),
           Center(
             child: IconButton(
-              onPressed: () => storageProvider.pickImage("DOW"),
+              onPressed: () => storageProvider.pickFile("DOW"),
               icon: const Icon(Icons.add_a_photo, size: 30),
             ),
           ),
@@ -91,7 +91,7 @@ class _AddDishOfTheWeekScreenState extends State<AddDishOfTheWeekScreen> {
                         throw Exception('pickedDOW is null');
                       }
 
-                      var imageUrl = await storageProvider.uploadImage(
+                      var imageUrl = await storageProvider.uploadFile(
                         storageProvider.pickedDOW!,
                         "dish_of_the_week",
                       );

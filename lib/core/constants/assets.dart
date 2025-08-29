@@ -48,4 +48,6 @@ class Assets {
   static String note ="$rootIcons/note.png";
   static String web ="$rootIcons/web.png";
   static String keyword ="$rootIcons/keyword.png";
+  static String excel ="$rootIcons/excel.png";
+
 }

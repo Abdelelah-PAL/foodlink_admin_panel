@@ -67,7 +67,7 @@ class _AddArticleScreenState extends State<AddArticleScreen> {
                 child: storageProvider.articleImageIsPicked == false
                     ? IconButton(
                         onPressed: () =>
-                            StorageProvider().pickImage("articles"),
+                            StorageProvider().pickFile("articles"),
                         icon: const Icon(Icons.add_a_photo))
                     : SizedBox(
                         width: SizeConfig.getProperVerticalSpace(3),

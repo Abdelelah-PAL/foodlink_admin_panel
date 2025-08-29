@@ -7,7 +7,7 @@ import 'package:file_picker/file_picker.dart';
 class StorageServices with ChangeNotifier {
   final FirebaseStorage _storage = FirebaseStorage.instance;
 
-  Future<String?> uploadImage(FilePickerResult path, String tag) async {
+  Future<String?> uploadFile(FilePickerResult path, String tag) async {
     try {
       final fileBytes = path.files.first.bytes;
       final fileName = path.files.first.name;
@@ -48,10 +48,10 @@ class StorageServices with ChangeNotifier {
     }
   }
 
-  Future<void> deleteImage(String imageUrl) async {
+  Future<void> deleteImage(String fileUrl) async {
     try {
-      if(imageUrl != "") {
-        Reference ref = _storage.refFromURL(imageUrl);
+      if(fileUrl != "") {
+        Reference ref = _storage.refFromURL(fileUrl);
         await ref.delete();
       }
     } catch (e) {

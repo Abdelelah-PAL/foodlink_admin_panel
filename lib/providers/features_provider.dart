@@ -116,6 +116,13 @@ class FeaturesProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  void resetSuggestionValues(StorageProvider storageProvider) {
+    storageProvider.suggestionsFileIsPicked = false;
+    storageProvider.pickedSuggestionsFile = null;
+    FeaturesController().urlController.clear();
+    notifyListeners();
+  }
+
   void resetFeatureValues(StorageProvider storageProvider,
       FeaturesProvider featuresProvider) async {
     storageProvider.featureImageIsPicked['ar_image_picked'] = false;

@@ -60,7 +60,7 @@ class MealController {
     String? imageUrl;
     if (storageProvider.mealImageIsPicked) {
       imageUrl = await StorageProvider()
-          .uploadImage(storageProvider.pickedMealImage!, "planned_meals_images");
+          .uploadFile(storageProvider.pickedMealImage!, "planned_meals_images");
     }
     List<String> ingredients = MealsProvider()
         .ingredientsControllers
@@ -92,7 +92,7 @@ class MealController {
       if (meal.imageUrl != null || meal.imageUrl != "") {
         await StorageProvider().deleteImage(meal.imageUrl);
       }
-      imageUrl = await StorageProvider().uploadImage(mealsProvider.pickedMealImage, "planned_meals_images");
+      imageUrl = await StorageProvider().uploadFile(mealsProvider.pickedMealImage, "planned_meals_images");
     }
     List<String> ingredients = MealsProvider()
         .ingredientsControllers

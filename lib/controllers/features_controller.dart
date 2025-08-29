@@ -28,7 +28,7 @@ class FeaturesController {
     String enImageUrl = '';
     if (storageProvider.featureImageIsPicked['ar_image_picked'] ??
         false) {
-      arImageUrl = (await StorageProvider().uploadImage(
+      arImageUrl = (await StorageProvider().uploadFile(
           storageProvider.featurePickedImage['ar_image']!,
           "features"))!;
     } else {
@@ -36,7 +36,7 @@ class FeaturesController {
     }
     if (storageProvider.featureImageIsPicked['en_image_picked'] ??
         false) {
-      enImageUrl = (await StorageProvider().uploadImage(
+      enImageUrl = (await StorageProvider().uploadFile(
           storageProvider.featurePickedImage['en_image']!,
           "features"))!;
     } else {
@@ -58,7 +58,7 @@ class FeaturesController {
     String enImageUrl = '';
     if (storageProvider.featuresImagesArePicked[index]['ar_image_picked'] ??
         false) {
-      arImageUrl = (await StorageProvider().uploadImage(
+      arImageUrl = (await StorageProvider().uploadFile(
           storageProvider.featuresPickedImages[index]['ar_image']!,
           "features"))!;
     } else {
@@ -66,7 +66,7 @@ class FeaturesController {
     }
     if (storageProvider.featuresImagesArePicked[index]['en_image_picked'] ??
         false) {
-      enImageUrl = (await StorageProvider().uploadImage(
+      enImageUrl = (await StorageProvider().uploadFile(
           storageProvider.featuresPickedImages[index]['en_image']!,
           "features"))!;
     } else {
@@ -97,7 +97,7 @@ class FeaturesController {
     String imageUrl = '';
     if (storageProvider.articleImageIsPicked) {
       imageUrl = (await StorageProvider()
-          .uploadImage(storageProvider.pickedArticleImage!, "articles"))!;
+          .uploadFile(storageProvider.pickedArticleImage!, "articles"))!;
     }
 
     await FeaturesProvider().addArticle(BeyondCaloriesArticle(
@@ -110,7 +110,7 @@ class FeaturesController {
     String imageUrl = '';
     if (storageProvider.articleImageIsPicked) {
       imageUrl = (await StorageProvider()
-          .uploadImage(storageProvider.pickedArticleImage!, "articles"))!;
+          .uploadFile(storageProvider.pickedArticleImage!, "articles"))!;
     }
 
     await FeaturesProvider().updateArticle(BeyondCaloriesArticle(

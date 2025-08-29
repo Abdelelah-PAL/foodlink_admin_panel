@@ -69,7 +69,7 @@ class _MealImageContainerState extends State<MealImageContainer> {
                   child: Center(
                     child: IconButton(
                       onPressed: () async {
-                        await storageProvider.pickImage("meal");
+                        await storageProvider.pickFile("meal");
                         if (mounted) setState(() {});
                       },
                       icon: const Icon(
@@ -131,7 +131,7 @@ class _MealImageContainerState extends State<MealImageContainer> {
                     child: Center(
                       child: GestureDetector(
                         onTap: () async {
-                          await storageProvider.pickImage("meal");
+                          await storageProvider.pickFile("meal");
                           if (mounted) setState(() {});
                         },
                         child: Row(

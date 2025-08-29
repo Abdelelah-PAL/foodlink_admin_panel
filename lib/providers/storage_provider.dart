@@ -12,10 +12,12 @@ class StorageProvider with ChangeNotifier {
   final StorageServices _ss = StorageServices();
   bool mealImageIsPicked = false;
   bool dOWIsPicked = false;
+  bool articleImageIsPicked = false;
+  bool suggestionsFileIsPicked = false;
   FilePickerResult? pickedMealImage;
   FilePickerResult? pickedDOW;
   FilePickerResult? pickedArticleImage;
-  bool articleImageIsPicked = false;
+  FilePickerResult? pickedSuggestionsFile;
   List<Map<String, bool>> featuresImagesArePicked = [];
   List<Map<String, dynamic>> featuresPickedImages = [];
   Map<String, bool> featureImageIsPicked = {
@@ -27,21 +29,34 @@ class StorageProvider with ChangeNotifier {
     'en_image': null
   };
 
-  Future<void> pickImage(String source) async {
+  Future<void> pickFile(String source) async {
     try {
-      FilePickerResult? file = await FilePicker.platform.pickFiles(
-        type: FileType.image,
-      );
-      if (file != null) {
-        if (source == "meal") {
-          pickedMealImage = file;
-          mealImageIsPicked = true;
-        } else if (source == "DOW") {
-          pickedDOW = file;
-          dOWIsPicked = true;
-        } else if (source == "articles") {
-          pickedArticleImage = file;
-          articleImageIsPicked = true;
+      FilePickerResult? file;
+      if (source == "suggestions") {
+        file = await FilePicker.platform.pickFiles(
+          type: FileType.any,
+        );
+        pickedSuggestionsFile = file;
+        suggestionsFileIsPicked = true;
+      } else {
+        file = await FilePicker.platform.pickFiles(
+          type: FileType.image,
+        );
+        if (file != null) {
+          switch (source) {
+            case "meal":
+              pickedMealImage = file;
+              mealImageIsPicked = true;
+              break;
+            case "DOW":
+              pickedDOW = file;
+              dOWIsPicked = true;
+              break;
+            case "articles":
+              pickedArticleImage = file;
+              articleImageIsPicked = true;
+              break;
+          }
         }
       }
       notifyListeners();
@@ -99,9 +114,8 @@ class StorageProvider with ChangeNotifier {
     }
   }
 
-
-  Future<String?> uploadImage(FilePickerResult path, String tag) async {
-    return _ss.uploadImage(path, tag);
+  Future<String?> uploadFile(FilePickerResult path, String tag) async {
+    return _ss.uploadFile(path, tag);
   }
 
   Future<void> saveImageMetadata(String imageUrl, double dx, double dy,
