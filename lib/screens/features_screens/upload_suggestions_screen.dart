@@ -62,7 +62,7 @@ class _UploadSuggestionsScreenState extends State<UploadSuggestionsScreen> {
                 border: Border.all(width: 3),
                 shape: BoxShape.rectangle,
               ),
-              child: storageProvider.pickedSuggestionsFile == null
+              child: storageProvider.pickedSuggestionsImage == null
                   ? IconButton(
                       onPressed: () =>
                           StorageProvider().pickFile("suggestions"),
@@ -74,16 +74,16 @@ class _UploadSuggestionsScreenState extends State<UploadSuggestionsScreen> {
                         child: Image.asset(Assets.excel),
                       )),
             ),
-            if (storageProvider.pickedSuggestionsFile != null) ...[
+            if (storageProvider.pickedSuggestionsImage != null) ...[
               SizeConfig.customSizedBox(null, 20, null),
-              Text(storageProvider.pickedSuggestionsFile!.names[0]!),
+              Text(storageProvider.pickedSuggestionsImage!.names[0]!),
             ],
             SizeConfig.customSizedBox(null, 50, null),
             CustomButton(
                 onTap: () async {
-                  if (storageProvider.pickedSuggestionsFile != null) {
+                  if (storageProvider.pickedSuggestionsImage != null) {
                     await StorageProvider().uploadFile(
-                        storageProvider.pickedSuggestionsFile!, "suggestions");
+                        storageProvider.pickedSuggestionsImage!, "suggestions");
                     featuresProvider.resetSuggestionValues(storageProvider);
                     FeaturesController().showSuccessDialog(
                         context, settingsProvider, 'file_uploaded');

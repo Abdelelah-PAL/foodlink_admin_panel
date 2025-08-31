@@ -7,7 +7,8 @@ import '../../services/translation_services.dart';
 import 'custom_text.dart';
 
 class CustomAppTextField extends StatelessWidget {
-  const CustomAppTextField({super.key,
+  const CustomAppTextField({
+    super.key,
     required this.width,
     required this.height,
     this.headerText,
@@ -18,7 +19,8 @@ class CustomAppTextField extends StatelessWidget {
     required this.iconSizeFactor,
     required this.settingsProvider,
     required this.isCentered,
-     this.textAlign,});
+    this.textAlign,
+  });
 
   final double width;
   final double height;
@@ -38,22 +40,25 @@ class CustomAppTextField extends StatelessWidget {
         textDirection: settingsProvider.language == 'en'
             ? TextDirection.ltr
             : TextDirection.rtl,
-        mainAxisAlignment: isCentered ? MainAxisAlignment.center : MainAxisAlignment.start,
+        mainAxisAlignment:
+            isCentered ? MainAxisAlignment.center : MainAxisAlignment.start,
         children: [
-          if(icon != null)Align(
-              alignment: Alignment.centerLeft,
-              child: icon != null
-                  ? SizeConfig.customSizedBox(
-                  iconSizeFactor, iconSizeFactor, Image.asset(icon!))
-                  : null
-          ),
-          if (headerText != null) CustomText(
-            isCenter: false,
-            text: TranslationService().translate(headerText!),
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-          ),
-          if (headerText != null && icon != null) SizeConfig.customSizedBox(15, null, null),
+          if (icon != null)
+            Align(
+                alignment: Alignment.centerLeft,
+                child: icon != null
+                    ? SizeConfig.customSizedBox(
+                        iconSizeFactor, iconSizeFactor, Image.asset(icon!))
+                    : null),
+          if (headerText != null)
+            CustomText(
+              isCenter: false,
+              text: TranslationService().translate(headerText!),
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+            ),
+          if (headerText != null && icon != null)
+            SizeConfig.customSizedBox(15, null, null),
           Container(
             width: SizeConfig.getProportionalWidth(width),
             height: SizeConfig.getProportionalHeight(height),
@@ -66,22 +71,24 @@ class CustomAppTextField extends StatelessWidget {
             child: TextField(
               maxLines: maxLines,
               controller: controller,
-              textAlign: textAlign ?? (settingsProvider.language == 'en'
-                  ? TextAlign.left
-                  : TextAlign.right),
+              textAlign: textAlign ??
+                  (settingsProvider.language == 'en'
+                      ? TextAlign.left
+                      : TextAlign.right),
               decoration: InputDecoration(
                   contentPadding: EdgeInsets.fromLTRB(
                       SizeConfig.getProportionalWidth(10),
                       SizeConfig.getProportionalHeight(10),
                       SizeConfig.getProportionalWidth(10),
-                      SizeConfig.getProportionalHeight(30)),
+                      SizeConfig.getProportionalHeight(10)),
                   hintStyle: TextStyle(
                       fontSize: 20,
                       color: AppColors.hintTextColor,
                       fontFamily: AppFonts.primaryFont),
                   border: InputBorder.none,
-                  hintText: hintText != null ? TranslationService().translate(hintText!) : null
-              ),
+                  hintText: hintText != null
+                      ? TranslationService().translate(hintText!)
+                      : null),
             ),
           ),
         ]);

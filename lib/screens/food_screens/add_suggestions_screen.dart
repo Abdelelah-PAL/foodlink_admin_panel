@@ -18,6 +18,7 @@ class AddSuggestionsScreen extends StatefulWidget {
 }
 
 class _AddSuggestionsScreenState extends State<AddSuggestionsScreen> {
+
   @override
   Widget build(BuildContext context) {
     final MealsProvider mealsProvider =
@@ -61,16 +62,20 @@ class _AddSuggestionsScreenState extends State<AddSuggestionsScreen> {
                   shrinkWrap: true,
                   itemCount: mealsProvider.numberOfSuggestionsToAdd,
                   itemBuilder: (ctx, index) {
-                    print(index);
-                    print(mealsProvider.numberOfSuggestionsToAdd);
+
                     return index == mealsProvider.numberOfSuggestionsToAdd -1
-                        ? AddSuggestionTile(mealsProvider: mealsProvider)
-                        : EmptySuggestionTile(
-                            mealsProvider: mealsProvider,
-                            settingsProvider: settingsProvider,
-                            storageProvider: storageProvider,
-                            tileIndex: index,
-                          );
+                        ? AddSuggestionTile(mealsProvider: mealsProvider, storageProvider: storageProvider,)
+                        : Column(
+                          children: [
+                            EmptySuggestionTile(
+                                mealsProvider: mealsProvider,
+                                settingsProvider: settingsProvider,
+                                storageProvider: storageProvider,
+                                tileIndex: index,
+                              ),
+                            const Divider()
+                          ],
+                        );
                   },
                 ),
                 SizeConfig.customSizedBox(null, 20, null),

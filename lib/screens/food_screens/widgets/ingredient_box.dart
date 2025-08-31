@@ -68,3 +68,31 @@ class AddIngredientBox extends StatelessWidget {
     );
   }
 }
+
+class AddIngredientBoxForSuggestion extends StatelessWidget {
+  const AddIngredientBoxForSuggestion({super.key, required this.mealsProvider, this.onTap});
+
+  final MealsProvider mealsProvider;
+  final GestureTapCallback? onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap ?? mealsProvider.increaseIngredients,
+      child: Container(
+          width: SizeConfig.getProperHorizontalSpace(10),
+          height: SizeConfig.getProportionalWidth(15),
+
+          margin: EdgeInsets.symmetric(
+            vertical: SizeConfig.getProportionalHeight(10),
+            horizontal: SizeConfig.getProportionalWidth(3),
+          ),
+          decoration: BoxDecoration(
+            color: AppColors.widgetsColor,
+            borderRadius: BorderRadius.circular(15),
+          ),
+          child: const Icon(Icons.add)),
+    );
+  }
+}
+

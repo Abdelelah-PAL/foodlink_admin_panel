@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:foodlink_admin_panel/screens/features_screens/show_features_screen.dart';
-import 'package:foodlink_admin_panel/screens/features_screens/widgets/feature_tile.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import '../../../core/constants/colors.dart';
@@ -12,6 +10,8 @@ import '../../providers/storage_provider.dart';
 import '../widgets/custom_back_button.dart';
 import '../widgets/custom_button.dart';
 import '../widgets/custom_text.dart';
+import 'show_features_screen.dart';
+import 'widgets/feature_tile.dart';
 
 class AddFeatureScreen extends StatefulWidget {
   const AddFeatureScreen({super.key});

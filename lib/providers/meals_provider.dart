@@ -14,6 +14,7 @@ class MealsProvider with ChangeNotifier {
   List<Meal> plannedMeals = [];
   List<Meal> suggestions = [];
   List<Meal> suggestionsToAdd = [];
+  List<String?> suggestionMealTypes = [];
 
   final MealsServices _ms = MealsServices();
   bool isLoading = false;
@@ -162,11 +163,12 @@ class MealsProvider with ChangeNotifier {
     return days[date.weekday - 1];
   }
 
-  void increaseSuggestions() {
+  void increaseSuggestions(StorageProvider storageProvider) {
     numberOfSuggestionsToAdd++;
     suggestionMealNameControllers.add(TextEditingController());
-    suggestionMealRecipeControllers.add(TextEditingController());
-
+    suggestionMealTypes.add(null);
+    storageProvider.suggestionsPickedImages.add(null);
+    storageProvider.suggestionsImagesArePicked.add(false);
     notifyListeners();
   }
 }

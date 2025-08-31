@@ -49,14 +49,15 @@ class StepBox extends StatelessWidget {
 }
 
 class AddStepBox extends StatelessWidget {
-  const AddStepBox({super.key, required this.mealsProvider});
+  const AddStepBox({super.key, required this.mealsProvider, this.onTap});
 
   final MealsProvider mealsProvider;
+  final GestureTapCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: mealsProvider.increaseSteps,
+      onTap: onTap ?? mealsProvider.increaseSteps,
       child: Container(
           width: SizeConfig.getProportionalWidth(348),
           height: SizeConfig.getProportionalHeight(66),

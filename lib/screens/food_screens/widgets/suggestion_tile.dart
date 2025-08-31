@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:foodlink_admin_panel/screens/food_screens/widgets/ingredient_box.dart';
 import '../../../core/constants/assets.dart';
 import '../../../core/constants/colors.dart';
 import '../../../core/utils/size_config.dart';
@@ -7,7 +6,10 @@ import '../../../models/feature.dart';
 import '../../../providers/meals_provider.dart';
 import '../../../providers/settings_provider.dart';
 import '../../../providers/storage_provider.dart';
+import '../../../services/translation_services.dart';
 import '../../widgets/custom_app_textfield.dart';
+import 'ingredient_box.dart';
+import 'step_box.dart';
 
 class SuggestionTile extends StatelessWidget {
   const SuggestionTile({
@@ -61,8 +63,7 @@ class SuggestionTile extends StatelessWidget {
             width: 100,
             height: 500,
             icon: Assets.keyword,
-            controller:
-                mealsProvider.suggestionMealRecipeControllers[index],
+            controller: mealsProvider.suggestionMealRecipeControllers[index],
             maxLines: 50,
             iconSizeFactor: 1,
             settingsProvider: settingsProvider,
@@ -83,15 +84,11 @@ class SuggestionTile extends StatelessWidget {
                             ['ar_image_picked'] ==
                         true
                     ? Image.memory(
-                        storageProvider
-                            .featuresPickedImages[index]['ar_image']
-                            .files
-                            .first
-                            .bytes,
+                        storageProvider.featuresPickedImages[index]['ar_image']
+                            .files.first.bytes,
                         fit: BoxFit.fill)
                     : feature.arImageURL != ""
-                        ? Image.network(feature.arImageURL,
-                            fit: BoxFit.fill)
+                        ? Image.network(feature.arImageURL, fit: BoxFit.fill)
                         : null,
               ),
             ],
@@ -128,7 +125,17 @@ class EmptySuggestionTile extends StatefulWidget {
 }
 
 class _EmptySuggestionTileState extends State<EmptySuggestionTile> {
+  final items = [
+    TranslationService().translate("Breakfast"),
+    TranslationService().translate("Lunch"),
+    TranslationService().translate("Dinner"),
+    TranslationService().translate("Drinks"),
+    TranslationService().translate("Snacks"),
+    TranslationService().translate("Sweets"),
+  ];
   List<TextEditingController> ingredientControllers = [];
+  List<TextEditingController> stepsControllers = [];
+  String? selectedValue;
 
   @override
   void initState() {
@@ -136,11 +143,17 @@ class _EmptySuggestionTileState extends State<EmptySuggestionTile> {
     ingredientControllers = [
       TextEditingController(),
     ];
+    stepsControllers = [
+      TextEditingController(),
+    ];
   }
 
   @override
   void dispose() {
     for (var c in ingredientControllers) {
+      c.dispose();
+    }
+    for (var c in stepsControllers) {
       c.dispose();
     }
     super.dispose();
@@ -152,58 +165,117 @@ class _EmptySuggestionTileState extends State<EmptySuggestionTile> {
     });
   }
 
+  void addStepBox() {
+    setState(() {
+      stepsControllers.add(TextEditingController());
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        SizedBox(
+          width: SizeConfig.getProportionalWidth(50),
+          child: DropdownButton<String>(
+            value: selectedValue,
+            hint: const Text("Select meal type"),
+            isExpanded: true,
+            items: items.map((String value) {
+              return DropdownMenuItem<String>(
+                value: value,
+                child: Text(value),
+              );
+            }).toList(),
+            onChanged: (newValue) {
+              setState(() {
+                selectedValue = newValue;
+              });
+            },
+          ),
+        ),
+        SizeConfig.customSizedBox(15, null, null),
         CustomAppTextField(
-          width: 70,
-          height: 50,
+          width: SizeConfig.getProperHorizontalSpace(20),
+          height: SizeConfig.getProportionalHeight(50),
           icon: Assets.keyword,
-          controller: widget.mealsProvider
-              .suggestionMealNameControllers[widget.tileIndex],
+          controller: widget
+              .mealsProvider.suggestionMealNameControllers[widget.tileIndex],
+          hintText: TranslationService().translate("meal_name"),
           maxLines: 1,
           iconSizeFactor: 1,
           settingsProvider: widget.settingsProvider,
           isCentered: true,
           textAlign: TextAlign.left,
         ),
-
-        Flexible(
-          child: SizedBox(
-            width: 150,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                ...ingredientControllers.map(
-                  (controller) =>  IngredientBox(
-                      settingsProvider: widget.settingsProvider,
-                      controller: controller,
-                    ),
+        SizeConfig.customSizedBox(15, null, null),
+        SizedBox(
+          width: SizeConfig.getProperHorizontalSpace(10),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              ...ingredientControllers.map(
+                (controller) => IngredientBox(
+                  settingsProvider: widget.settingsProvider,
+                  controller: controller,
                 ),
-                AddIngredientBox(
-                  mealsProvider: widget.mealsProvider,
-                  onTap: addIngredient,
-                ),
-              ],
-            ),
+              ),
+              AddIngredientBoxForSuggestion(
+                mealsProvider: widget.mealsProvider,
+                onTap: addIngredient,
+              ),
+            ],
           ),
         ),
-
-
-        // Recipe field
-        CustomAppTextField(
-          width: 70,
-          height: 50,
-          icon: Assets.keyword,
-          controller: widget.mealsProvider
-              .suggestionMealRecipeControllers[widget.tileIndex],
-          maxLines: 50,
-          iconSizeFactor: 1,
-          settingsProvider: widget.settingsProvider,
-          isCentered: true,
-          textAlign: TextAlign.left,
+        SizeConfig.customSizedBox(15, null, null),
+        SizedBox(
+          width: SizeConfig.getProperHorizontalSpace(5),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              ...stepsControllers.map(
+                (controller) => StepBox(
+                  settingsProvider: widget.settingsProvider,
+                  controller: controller,
+                ),
+              ),
+              AddStepBox(
+                mealsProvider: widget.mealsProvider,
+                onTap: addStepBox,
+              ),
+            ],
+          ),
+        ),
+        SizeConfig.customSizedBox(15, null, null),
+        Stack(
+          alignment: Alignment.center,
+          children: [
+            Container(
+              width: SizeConfig.getProperHorizontalSpace(5),
+              height: SizeConfig.getProportionalHeight(200),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(15),
+                color: AppColors.widgetsColor,
+              ),
+              child: widget.storageProvider
+                          .suggestionsImagesArePicked[widget.tileIndex] ==
+                      true
+                  ? Image.memory(
+                      widget
+                          .storageProvider
+                          .suggestionsPickedImages[widget.tileIndex]
+                          .files
+                          .first
+                          .bytes,
+                      fit: BoxFit.fill)
+                  : null,
+            ),
+            IconButton(
+                onPressed: () =>
+                    StorageProvider().pickSuggestionImage(widget.tileIndex),
+                icon: const Icon(Icons.camera_alt_outlined))
+          ],
         ),
       ],
     );
@@ -211,14 +283,16 @@ class _EmptySuggestionTileState extends State<EmptySuggestionTile> {
 }
 
 class AddSuggestionTile extends StatelessWidget {
-  const AddSuggestionTile({super.key, required this.mealsProvider});
+  const AddSuggestionTile(
+      {super.key, required this.mealsProvider, required this.storageProvider});
 
   final MealsProvider mealsProvider;
+  final StorageProvider storageProvider;
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: mealsProvider.increaseSuggestions,
+      onTap: () => mealsProvider.increaseSuggestions(storageProvider),
       child: Container(
           width: SizeConfig.getProportionalWidth(100),
           height: SizeConfig.getProportionalHeight(50),

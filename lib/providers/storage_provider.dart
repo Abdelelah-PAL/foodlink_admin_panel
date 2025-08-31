@@ -17,7 +17,7 @@ class StorageProvider with ChangeNotifier {
   FilePickerResult? pickedMealImage;
   FilePickerResult? pickedDOW;
   FilePickerResult? pickedArticleImage;
-  FilePickerResult? pickedSuggestionsFile;
+  FilePickerResult? pickedSuggestionsImage;
   List<Map<String, bool>> featuresImagesArePicked = [];
   List<Map<String, dynamic>> featuresPickedImages = [];
   Map<String, bool> featureImageIsPicked = {
@@ -29,19 +29,19 @@ class StorageProvider with ChangeNotifier {
     'en_image': null
   };
 
+  List<bool> suggestionsImagesArePicked = [
+    false
+  ];
+  List<dynamic> suggestionsPickedImages = [
+    null
+  ];
+
   Future<void> pickFile(String source) async {
     try {
-      FilePickerResult? file;
-      if (source == "suggestions") {
-        file = await FilePicker.platform.pickFiles(
-          type: FileType.any,
-        );
-        pickedSuggestionsFile = file;
-        suggestionsFileIsPicked = true;
-      } else {
-        file = await FilePicker.platform.pickFiles(
-          type: FileType.image,
-        );
+      FilePickerResult? file  = await FilePicker.platform.pickFiles(
+        type: FileType.image,
+      );
+
         if (file != null) {
           switch (source) {
             case "meal":
@@ -56,7 +56,6 @@ class StorageProvider with ChangeNotifier {
               pickedArticleImage = file;
               articleImageIsPicked = true;
               break;
-          }
         }
       }
       notifyListeners();
@@ -113,6 +112,25 @@ class StorageProvider with ChangeNotifier {
       rethrow;
     }
   }
+
+  Future<void> pickSuggestionImage(int index) async {
+    try {
+      FilePickerResult? file = await FilePicker.platform.pickFiles(
+        type: FileType.image,
+      );
+      if (file != null) {
+        suggestionsPickedImages[index] = file;
+        suggestionsImagesArePicked[index] = true;
+      }
+      notifyListeners();
+    } catch (e) {
+      if (kDebugMode) {
+        print("Error picking image: $e");
+      }
+      rethrow;
+    }
+  }
+
 
   Future<String?> uploadFile(FilePickerResult path, String tag) async {
     return _ss.uploadFile(path, tag);
