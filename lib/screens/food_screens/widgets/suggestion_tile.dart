@@ -298,7 +298,7 @@ class AddSuggestionTile extends StatelessWidget {
           height: SizeConfig.getProportionalHeight(50),
           margin: EdgeInsets.symmetric(
             vertical: SizeConfig.getProportionalHeight(5),
-            horizontal: SizeConfig.getProportionalWidth(3),
+            horizontal: SizeConfig.getProportionalWidth(151),
           ),
           decoration: BoxDecoration(
             color: AppColors.widgetsColor,

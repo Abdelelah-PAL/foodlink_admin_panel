@@ -79,8 +79,10 @@ class _AddSuggestionsScreenState extends State<AddSuggestionsScreen> {
                   },
                 ),
                 SizeConfig.customSizedBox(null, 20, null),
-                CustomButton(
-                    onTap: () async {}, text: 'confirm', width: 100, height: 50),
+                Center(
+                  child: CustomButton(
+                      onTap: () async {}, text: 'confirm', width: 35, height: 50),
+                ),
               ],
             ),
           ),
