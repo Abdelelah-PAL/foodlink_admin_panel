@@ -82,7 +82,6 @@ class _UploadSuggestionsScreenState extends State<UploadSuggestionsScreen> {
             CustomButton(
                 onTap: () async {
                   if (storageProvider.pickedSuggestionsFile != null) {
-                    print("object");
                     await StorageProvider().uploadFile(
                         storageProvider.pickedSuggestionsFile!, "suggestions");
                     featuresProvider.resetSuggestionValues(storageProvider);

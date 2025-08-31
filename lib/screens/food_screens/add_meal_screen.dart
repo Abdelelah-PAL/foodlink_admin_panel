@@ -137,10 +137,10 @@ class _AddMealScreenState extends State<AddMealScreen> {
                                   crossAxisSpacing: 4,
                                   mainAxisSpacing: 3,
                                   childAspectRatio: 10),
-                              itemCount: mealsProvider.numberOfIngredients,
+                              itemCount: mealsProvider.numberOfPlannedMealIngredients,
                               itemBuilder: (context, index) {
                                 if (index ==
-                                    mealsProvider.numberOfIngredients - 1) {
+                                    mealsProvider.numberOfPlannedMealIngredients - 1) {
                                   return AddIngredientBox(
                                       mealsProvider: mealsProvider);
                                 }
@@ -176,9 +176,9 @@ class _AddMealScreenState extends State<AddMealScreen> {
                       margin: EdgeInsets.symmetric(
                           horizontal: SizeConfig.getProportionalWidth(26)),
                       child: ListView.builder(
-                        itemCount: mealsProvider.numberOfSteps,
+                        itemCount: mealsProvider.numberOfPlannedMealSteps,
                         itemBuilder: (context, index) {
-                          if (index == mealsProvider.numberOfSteps - 1) {
+                          if (index == mealsProvider.numberOfPlannedMealSteps - 1) {
                             return AddStepBox(
                               mealsProvider: mealsProvider,
                             );
@@ -218,7 +218,7 @@ class _AddMealScreenState extends State<AddMealScreen> {
                       context, settingsProvider),
                       }
                       else
-                      await MealController().addMeal(mealsProvider, storageProvider)
+                      await MealController().addPlannedMeal(mealsProvider, storageProvider)
                     }: {
                       if (MealController()
                           .nameController
@@ -233,7 +233,7 @@ class _AddMealScreenState extends State<AddMealScreen> {
                       }
                       else
                       await MealController()
-                          .updateMeal(mealsProvider, widget.meal)
+                          .updatePlannedMeal(mealsProvider, widget.meal)
                       };
                     },
                     text: TranslationService()

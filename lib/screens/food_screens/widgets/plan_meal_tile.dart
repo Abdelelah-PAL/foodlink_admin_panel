@@ -154,7 +154,7 @@ class _PlanMealTileState extends State<PlanMealTile> {
                               IconButton(
                                   onPressed: () async {
                                     await MealsProvider()
-                                        .deleteMeal(widget.meal.documentId!);
+                                        .deletePlannedMeal(widget.meal.documentId!);
                                     if (widget.meal.imageUrl != null ||
                                         widget.meal.imageUrl != "") {
                                       await StorageProvider()

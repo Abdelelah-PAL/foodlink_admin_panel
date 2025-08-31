@@ -95,7 +95,7 @@ class _ListMealTileState extends State<ListMealTile> {
                             IconButton(
                                 onPressed: () async {
                                   await MealsProvider()
-                                      .deleteMeal(widget.meal.documentId!);
+                                      .deletePlannedMeal(widget.meal.documentId!);
                                   setState(() {
                                     MealsProvider().getAllPlannedMeals();
                                   });

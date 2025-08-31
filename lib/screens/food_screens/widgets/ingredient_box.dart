@@ -46,14 +46,15 @@ class IngredientBox extends StatelessWidget {
 }
 
 class AddIngredientBox extends StatelessWidget {
-  const AddIngredientBox({super.key, required this.mealsProvider});
+  const AddIngredientBox({super.key, required this.mealsProvider, this.onTap});
 
   final MealsProvider mealsProvider;
+  final GestureTapCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: mealsProvider.increaseIngredients,
+      onTap: onTap ?? mealsProvider.increaseIngredients,
       child: Container(
           margin: EdgeInsets.symmetric(
             vertical: SizeConfig.getProportionalHeight(10),

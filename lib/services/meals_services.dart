@@ -19,7 +19,7 @@ class MealsServices with ChangeNotifier {
     }
   }
 
-  Future<Meal> addMeal(Meal meal) async {
+  Future<Meal> addPlannedMeal(Meal meal) async {
     try {
       final mealRef =
           await fireStore.collection('planned_meals').add(meal.toMap());
@@ -31,7 +31,7 @@ class MealsServices with ChangeNotifier {
     }
   }
 
-  Future<Meal> updateMeal(Meal meal) async {
+  Future<Meal> updatePlannedMeal(Meal meal) async {
     try {
       await fireStore.collection('planned_meals').doc(meal.documentId).set(
             meal.toMap(),
@@ -48,7 +48,7 @@ class MealsServices with ChangeNotifier {
     }
   }
 
-  Future<void> deleteMeal(String docId) async {
+  Future<void> deletePlannedMeal(String docId) async {
     await fireStore.collection('planned_meals').doc(docId).delete();
   }
 }

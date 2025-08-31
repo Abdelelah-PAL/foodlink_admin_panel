@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../controllers/features_controller.dart';
 import '../models/beyond_calories_article.dart';
 import '../models/feature.dart';
+import '../models/meal.dart';
 import '../services/features_services.dart';
 import 'storage_provider.dart';
 
@@ -14,6 +15,7 @@ class FeaturesProvider with ChangeNotifier {
 
   List<BeyondCaloriesArticle> articles = [];
   List<Feature> features = [];
+
   final FeaturesServices _fs = FeaturesServices();
   bool isLoading = false;
   List<Map> statuses = [];
@@ -22,6 +24,9 @@ class FeaturesProvider with ChangeNotifier {
   Map status = {'active_feature': false, 'premium_feature': false};
   Map userTypesAppearance = {'user': false, 'cooker': false};
   TextEditingController featuresController = TextEditingController();
+
+
+
 
   Future<void> getAllFeatures(StorageProvider storageProvider) async {
     try {

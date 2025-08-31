@@ -54,7 +54,7 @@ class _MealsListScreenState extends State<MealsListScreen> {
               padding: EdgeInsets.symmetric(
                 horizontal: SizeConfig.getProportionalWidth(20),
               ),
-              child: mealsProviderWatcher.meals.isEmpty
+              child: mealsProviderWatcher.plannedMeals.isEmpty
                   ? SizeConfig.customSizedBox(
                       null,
                       null,
@@ -75,12 +75,12 @@ class _MealsListScreenState extends State<MealsListScreen> {
                           padding: EdgeInsets.only(
                               top: SizeConfig.getProportionalHeight(20)),
                           child: ListView.builder(
-                            itemCount: mealsProvider.meals.length,
+                            itemCount: mealsProvider.plannedMeals.length,
                             scrollDirection: Axis.vertical,
                             itemBuilder: (ctx, index) {
-                              Meal meal = mealsProvider.meals[index];
+                              Meal meal = mealsProvider.plannedMeals[index];
                               return PlanMealTile(
-                                meal: mealsProvider.meals[index],
+                                meal: mealsProvider.plannedMeals[index],
                                 index: index,
                                 day: meal.day!,
                                 date: meal.date!,

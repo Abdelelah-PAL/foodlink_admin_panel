@@ -1,4 +1,3 @@
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import '../controllers/meal_controller.dart';
 import '../models/meal.dart';
@@ -12,14 +11,26 @@ class MealsProvider with ChangeNotifier {
 
   MealsProvider._internal();
 
-  List<Meal> meals = [];
-  List<Meal> favoriteMeals = [];
+  List<Meal> plannedMeals = [];
+  List<Meal> suggestions = [];
+  List<Meal> suggestionsToAdd = [];
+
   final MealsServices _ms = MealsServices();
   bool isLoading = false;
-  int numberOfIngredients = 2;
-  int numberOfSteps = 2;
+  int numberOfPlannedMealIngredients = 2;
+  int numberOfPlannedMealSteps = 2;
+  int numberOfSuggestionsToAdd = 2;
   DateTime? selectedDate;
   String? day;
+  List<TextEditingController> suggestionMealNameControllers = [
+    TextEditingController(),
+  ];
+  List<TextEditingController> suggestionMealIngredientsControllers = [
+    TextEditingController(),
+  ];
+  List<TextEditingController> suggestionMealRecipeControllers = [
+    TextEditingController(),
+  ];
 
   List<TextEditingController> ingredientsControllers = [
     TextEditingController(),
@@ -31,7 +42,7 @@ class MealsProvider with ChangeNotifier {
   void getAllPlannedMeals() async {
     try {
       isLoading = true;
-      meals.clear();
+      plannedMeals.clear();
       List<Meal> fetchedMeals = await _ms.getAllPlannedMeals();
       for (var doc in fetchedMeals) {
         Meal meal = Meal(
@@ -43,8 +54,10 @@ class MealsProvider with ChangeNotifier {
             recipe: doc.recipe,
             date: doc.date,
             day: doc.day,
-            source: doc.source);
-        meals.add(meal);
+            source: doc.source,
+            isPlanned: true,
+            isSuggested: false);
+        plannedMeals.add(meal);
       }
       isLoading = false;
       notifyListeners();
@@ -54,27 +67,26 @@ class MealsProvider with ChangeNotifier {
     }
   }
 
-  Future<Meal> addMeal(Meal meal) async {
-    var addedMeal = await _ms.addMeal(meal);
+  Future<Meal> addPlannedMeal(Meal meal) async {
+    var addedMeal = await _ms.addPlannedMeal(meal);
     return addedMeal;
   }
 
-  Future<Meal> updateMeal(Meal meal) async {
-    Meal updatedMeal = await _ms.updateMeal(meal);
+  Future<Meal> updatePlannedMeal(Meal meal) async {
+    Meal updatedMeal = await _ms.updatePlannedMeal(meal);
     return updatedMeal;
   }
 
-  Future<void> deleteMeal(String docId) async {
-    await _ms.deleteMeal(docId);
+  Future<void> deletePlannedMeal(String docId) async {
+    await _ms.deletePlannedMeal(docId);
   }
-
 
   void resetValues(StorageProvider storageProvider) {
     selectedDate = null;
     storageProvider.mealImageIsPicked = false;
     storageProvider.pickedMealImage = null;
-    numberOfIngredients = 2;
-    numberOfSteps = 2;
+    numberOfPlannedMealIngredients = 2;
+    numberOfPlannedMealSteps = 2;
     MealController().sourceController.clear();
     MealController().nameController.clear();
     ingredientsControllers = [
@@ -89,35 +101,35 @@ class MealsProvider with ChangeNotifier {
   }
 
   void increaseIngredients() {
-    numberOfIngredients++;
+    numberOfPlannedMealIngredients++;
     ingredientsControllers.add(TextEditingController());
     notifyListeners();
   }
 
-  void fillDataForEdition(meal) {
-    MealController().nameController.text = meal.name;
-    MealController().sourceController.text = meal.source ?? "";
-    selectedDate = meal.date;
-    day = getDayOfWeek(meal.date);
-    numberOfIngredients = meal.ingredients.length + 1;
-    meal.ingredients.asMap().forEach((index, controller) {
+  void fillDataForEdition(plannedMeal) {
+    MealController().nameController.text = plannedMeal.name;
+    MealController().sourceController.text = plannedMeal.source ?? "";
+    selectedDate = plannedMeal.date;
+    day = getDayOfWeek(plannedMeal.date);
+    numberOfPlannedMealIngredients = plannedMeal.ingredients.length + 1;
+    plannedMeal.ingredients.asMap().forEach((index, controller) {
       if (index + 1 > ingredientsControllers.length) {
         ingredientsControllers.add(TextEditingController());
       }
-      ingredientsControllers[index].text = meal.ingredients[index];
+      ingredientsControllers[index].text = plannedMeal.ingredients[index];
     });
-    numberOfSteps = meal.recipe.length + 1;
-    meal.recipe.asMap().forEach((index, controller) {
+    numberOfPlannedMealSteps = plannedMeal.recipe.length + 1;
+    plannedMeal.recipe.asMap().forEach((index, controller) {
       if (index + 1 > stepsControllers.length) {
         stepsControllers.add(TextEditingController());
       }
-      stepsControllers[index].text = meal.recipe[index];
+      stepsControllers[index].text = plannedMeal.recipe[index];
     });
     notifyListeners();
   }
 
   void increaseSteps() {
-    numberOfSteps++;
+    numberOfPlannedMealSteps++;
     stepsControllers.add(TextEditingController());
     notifyListeners();
   }
@@ -148,5 +160,13 @@ class MealsProvider with ChangeNotifier {
       "Sunday",
     ];
     return days[date.weekday - 1];
+  }
+
+  void increaseSuggestions() {
+    numberOfSuggestionsToAdd++;
+    suggestionMealNameControllers.add(TextEditingController());
+    suggestionMealRecipeControllers.add(TextEditingController());
+
+    notifyListeners();
   }
 }

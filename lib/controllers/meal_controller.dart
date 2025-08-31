@@ -56,7 +56,8 @@ class MealController {
     return languageCode;
   }
 
-  Future<void> addMeal(MealsProvider mealsProvider, StorageProvider storageProvider) async {
+  Future<void> addPlannedMeal(
+      MealsProvider mealsProvider, StorageProvider storageProvider) async {
     String? imageUrl;
     if (storageProvider.mealImageIsPicked) {
       imageUrl = await StorageProvider()
@@ -73,26 +74,29 @@ class MealController {
         .where((text) => text.isNotEmpty)
         .toList();
 
-    var addedMeal = await MealsProvider().addMeal(Meal(
+    var addedPlannedMeal = await MealsProvider().addPlannedMeal(Meal(
         name: nameController.text,
         ingredients: ingredients,
         recipe: steps,
         source: sourceController.text,
         imageUrl: (imageUrl?.isNotEmpty ?? false) ? imageUrl : null,
         day: mealsProvider.day,
-        date: mealsProvider.selectedDate));
+        date: mealsProvider.selectedDate,
+        isPlanned: true,
+        isSuggested: false));
 
     FeaturesProvider().resetArticleValues(storageProvider);
-    Get.to(MealScreen(meal: addedMeal));
+    Get.to(MealScreen(meal: addedPlannedMeal));
   }
 
-  Future<void> updateMeal(mealsProvider, meal) async {
+  Future<void> updatePlannedMeal(mealsProvider, meal) async {
     String? imageUrl = '';
     if (mealsProvider.mealImageIsPicked) {
       if (meal.imageUrl != null || meal.imageUrl != "") {
         await StorageProvider().deleteImage(meal.imageUrl);
       }
-      imageUrl = await StorageProvider().uploadFile(mealsProvider.pickedMealImage, "planned_meals_images");
+      imageUrl = await StorageProvider()
+          .uploadFile(mealsProvider.pickedMealImage, "planned_meals_images");
     }
     List<String> ingredients = MealsProvider()
         .ingredientsControllers
@@ -104,7 +108,7 @@ class MealController {
         .map((controller) => controller.text)
         .where((text) => text.isNotEmpty)
         .toList();
-    var updatedMeal = await MealsProvider().updateMeal(Meal(
+    var updatedPlannedMeal = await MealsProvider().updatePlannedMeal(Meal(
         documentId: meal.documentId,
         name: nameController.text,
         ingredients: ingredients,
@@ -112,15 +116,17 @@ class MealController {
         source: sourceController.text,
         imageUrl: (imageUrl?.isNotEmpty ?? false) ? imageUrl : null,
         day: mealsProvider.day,
-        date: mealsProvider.selectedDate));
+        date: mealsProvider.selectedDate,
+        isPlanned: true,
+        isSuggested: false));
     mealsProvider.resetArticleValues();
 
-    Get.to(MealScreen(meal: updatedMeal));
+    Get.to(MealScreen(meal: updatedPlannedMeal));
   }
 
-  Meal findMealById(meals, id) {
-    Meal meal = meals.firstWhere((meal) => meal.documentId == id);
-    return meal;
+  Meal findPlannedMealById(meals, id) {
+    Meal plannedMeal = meals.firstWhere((meal) => meal.documentId == id);
+    return plannedMeal;
   }
 
   void showSuccessUploadingDialog(BuildContext context, settingsProvider) {
