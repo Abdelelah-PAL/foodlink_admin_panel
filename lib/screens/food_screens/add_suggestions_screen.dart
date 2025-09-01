@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:foodlink_admin_panel/models/meal.dart';
 import 'package:provider/provider.dart';
 import '../../../core/constants/colors.dart';
 import '../../../core/utils/size_config.dart';
+import '../../controllers/meal_types.dart';
 import '../../providers/meals_provider.dart';
 import '../../providers/settings_provider.dart';
 import '../../providers/storage_provider.dart';
@@ -18,7 +20,6 @@ class AddSuggestionsScreen extends StatefulWidget {
 }
 
 class _AddSuggestionsScreenState extends State<AddSuggestionsScreen> {
-
   @override
   Widget build(BuildContext context) {
     final MealsProvider mealsProvider =
@@ -62,25 +63,33 @@ class _AddSuggestionsScreenState extends State<AddSuggestionsScreen> {
                   shrinkWrap: true,
                   itemCount: mealsProvider.numberOfSuggestionsToAdd,
                   itemBuilder: (ctx, index) {
-
-                    return index == mealsProvider.numberOfSuggestionsToAdd -1
-                        ? AddSuggestionTile(mealsProvider: mealsProvider, storageProvider: storageProvider,)
+                    return index == mealsProvider.numberOfSuggestionsToAdd - 1
+                        ? AddSuggestionTile(
+                            mealsProvider: mealsProvider,
+                            storageProvider: storageProvider,
+                          )
                         : Column(
-                          children: [
-                            EmptySuggestionTile(
+                            children: [
+                              EmptySuggestionTile(
                                 mealsProvider: mealsProvider,
                                 settingsProvider: settingsProvider,
                                 storageProvider: storageProvider,
                                 tileIndex: index,
                               ),
-                            const Divider()
-                          ],
-                        );
+                              const Divider()
+                            ],
+                          );
                   },
                 ),
                 SizeConfig.customSizedBox(null, 20, null),
                 CustomButton(
-                    onTap: () async {}, text: 'confirm', width: 100, height: 50),
+                  onTap: () async {
+                    mealsProvider.addSuggestedMeals(storageProvider);
+                  },
+                  text: 'confirm',
+                  width: 100,
+                  height: 50,
+                )
               ],
             ),
           ),

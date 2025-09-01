@@ -10,8 +10,8 @@ class Meal {
   DateTime? date;
   String? day;
   String? source;
-  bool isPlanned;
-  bool isSuggested;
+  int typeId;
+
 
   Meal({
     this.documentId,
@@ -25,8 +25,7 @@ class Meal {
     this.date,
     this.day,
     this.source,
-    required this.isPlanned,
-    required this.isSuggested,
+    required this.typeId,
   });
 
   factory Meal.fromJson(Map<String, dynamic> json, docId) {
@@ -42,8 +41,7 @@ class Meal {
       date: json['date']?.toDate(),
       day: json['day'],
       source: json['source'],
-      isPlanned: json['is_planned'],
-      isSuggested: json['is_suggested'],
+      typeId: json['type_id'],
     );
   }
 
@@ -59,8 +57,7 @@ class Meal {
       'date': date,
       'day': day,
       'source': source,
-      'is_planned': isPlanned,
-      'is_suggested': isSuggested,
+      'type_id': typeId
     };
   }
 }

@@ -1,7 +1,9 @@
 import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:foodlink_admin_panel/providers/storage_provider.dart';
 
+import '../controllers/meal_types.dart';
 import '../models/meal.dart';
 
 class MealsServices with ChangeNotifier {
@@ -50,5 +52,51 @@ class MealsServices with ChangeNotifier {
 
   Future<void> deletePlannedMeal(String docId) async {
     await fireStore.collection('planned_meals').doc(docId).delete();
+  }
+
+  Future<List<Meal>> addSuggestedMeals(
+      List<Meal> suggestedMeals,
+      StorageProvider storageProvider,
+      ) async {
+    try {
+      final batch = fireStore.batch();
+      final mealsRef = fireStore.collection("meals");
+      final createdMeals = <Meal>[];
+
+      for (var i = 0; i < suggestedMeals.length; i++) {
+        final meal = suggestedMeals[i];
+        String? imageUrl;
+
+        if (i < storageProvider.suggestionsImagesArePicked.length &&
+            storageProvider.suggestionsImagesArePicked[i]) {
+          imageUrl = await StorageProvider().uploadFile(
+            storageProvider.suggestionsPickedImages[i],
+            "suggested_meals_images",
+          );
+        }
+
+        final newMeal = Meal(
+          name: meal.name,
+          categoryId: meal.categoryId,
+          ingredients: meal.ingredients,
+          recipe: meal.recipe,
+          source: "",
+          imageUrl: imageUrl,
+          typeId: MealTypes.suggestedMeal,
+        );
+
+        final docRef = mealsRef.doc();
+        batch.set(docRef, newMeal.toMap());
+
+        createdMeals.add(newMeal..documentId = docRef.id);
+      }
+
+      await batch.commit();
+
+      return createdMeals;
+    } catch (ex) {
+      log("Error adding suggested meals: $ex");
+      rethrow;
+    }
   }
 }

@@ -8,6 +8,7 @@ import '../providers/storage_provider.dart';
 import '../screens/food_screens/meal_screen.dart';
 import '../screens/widgets/custom_text.dart';
 import '../services/meals_services.dart';
+import 'meal_types.dart';
 
 class MealController {
   static final MealController _instance = MealController._internal();
@@ -56,8 +57,7 @@ class MealController {
     return languageCode;
   }
 
-  Future<void> addPlannedMeal(
-      MealsProvider mealsProvider, StorageProvider storageProvider) async {
+  Future<void> addPlannedMeal(MealsProvider mealsProvider, StorageProvider storageProvider) async {
     String? imageUrl;
     if (storageProvider.mealImageIsPicked) {
       imageUrl = await StorageProvider()
@@ -82,8 +82,7 @@ class MealController {
         imageUrl: (imageUrl?.isNotEmpty ?? false) ? imageUrl : null,
         day: mealsProvider.day,
         date: mealsProvider.selectedDate,
-        isPlanned: true,
-        isSuggested: false));
+        typeId: MealTypes.plannedMeal));
 
     FeaturesProvider().resetArticleValues(storageProvider);
     Get.to(MealScreen(meal: addedPlannedMeal));
@@ -117,8 +116,7 @@ class MealController {
         imageUrl: (imageUrl?.isNotEmpty ?? false) ? imageUrl : null,
         day: mealsProvider.day,
         date: mealsProvider.selectedDate,
-        isPlanned: true,
-        isSuggested: false));
+        typeId: MealTypes.plannedMeal));
     mealsProvider.resetArticleValues();
 
     Get.to(MealScreen(meal: updatedPlannedMeal));
@@ -128,6 +126,7 @@ class MealController {
     Meal plannedMeal = meals.firstWhere((meal) => meal.documentId == id);
     return plannedMeal;
   }
+
 
   void showSuccessUploadingDialog(BuildContext context, settingsProvider) {
     showDialog(
@@ -214,5 +213,49 @@ class MealController {
       "Sunday",
     ];
     return days[date.weekday - 1];
+  }
+
+  Future<void> addSuggestionMeals(MealsProvider mealsProvider,StorageProvider storageProvider) async {
+    await mealsProvider.addSuggestedMeals(storageProvider);
+
+  }
+
+  Future<void> updateSuggestionMeal(mealsProvider, suggestedMeal) async {
+    String? imageUrl = '';
+    if (mealsProvider.mealImageIsPicked) {
+      if (suggestedMeal.imageUrl != null || suggestedMeal.imageUrl != "") {
+        await StorageProvider().deleteImage(suggestedMeal.imageUrl);
+      }
+      imageUrl = await StorageProvider()
+          .uploadFile(mealsProvider.pickedMealImage, "planned_meals_images");
+    }
+    List<String> ingredients = MealsProvider()
+        .ingredientsControllers
+        .map((controller) => controller.text)
+        .where((text) => text.isNotEmpty)
+        .toList();
+    List<String> steps = MealsProvider()
+        .stepsControllers
+        .map((controller) => controller.text)
+        .where((text) => text.isNotEmpty)
+        .toList();
+    var updatedPlannedMeal = await MealsProvider().updatePlannedMeal(Meal(
+        documentId: suggestedMeal.documentId,
+        name: nameController.text,
+        ingredients: ingredients,
+        recipe: steps,
+        source: sourceController.text,
+        imageUrl: (imageUrl?.isNotEmpty ?? false) ? imageUrl : null,
+        day: mealsProvider.day,
+        date: mealsProvider.selectedDate,
+        typeId: MealTypes.plannedMeal));
+    mealsProvider.resetArticleValues();
+
+    Get.to(MealScreen(meal: updatedPlannedMeal));
+  }
+
+  Meal findSuggestedMealById(meals, id) {
+    Meal suggestedMeals = meals.firstWhere((meal) => meal.documentId == id);
+    return suggestedMeals;
   }
 }

@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:foodlink_admin_panel/screens/widgets/custom_button.dart';
+import '../../../controllers/meal_types.dart';
 import '../../../core/constants/assets.dart';
 import '../../../core/constants/colors.dart';
 import '../../../core/utils/size_config.dart';
 import '../../../models/feature.dart';
+import '../../../models/meal.dart';
 import '../../../providers/meals_provider.dart';
 import '../../../providers/settings_provider.dart';
 import '../../../providers/storage_provider.dart';
@@ -129,13 +132,14 @@ class _EmptySuggestionTileState extends State<EmptySuggestionTile> {
     TranslationService().translate("Breakfast"),
     TranslationService().translate("Lunch"),
     TranslationService().translate("Dinner"),
-    TranslationService().translate("Drinks"),
-    TranslationService().translate("Snacks"),
     TranslationService().translate("Sweets"),
+    TranslationService().translate("Snacks"),
+    TranslationService().translate("Drinks"),
   ];
   List<TextEditingController> ingredientControllers = [];
   List<TextEditingController> stepsControllers = [];
   String? selectedValue;
+  int? categoryId;
 
   @override
   void initState() {
@@ -173,110 +177,158 @@ class _EmptySuggestionTileState extends State<EmptySuggestionTile> {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
+    return Stack(
       children: [
-        SizedBox(
-          width: SizeConfig.getProportionalWidth(50),
-          child: DropdownButton<String>(
-            value: selectedValue,
-            hint: const Text("Select meal type"),
-            isExpanded: true,
-            items: items.map((String value) {
-              return DropdownMenuItem<String>(
-                value: value,
-                child: Text(value),
-              );
-            }).toList(),
-            onChanged: (newValue) {
-              setState(() {
-                selectedValue = newValue;
-              });
-            },
-          ),
-        ),
-        SizeConfig.customSizedBox(15, null, null),
-        CustomAppTextField(
-          width: SizeConfig.getProperHorizontalSpace(20),
-          height: SizeConfig.getProportionalHeight(50),
-          icon: Assets.keyword,
-          controller: widget
-              .mealsProvider.suggestionMealNameControllers[widget.tileIndex],
-          hintText: TranslationService().translate("meal_name"),
-          maxLines: 1,
-          iconSizeFactor: 1,
-          settingsProvider: widget.settingsProvider,
-          isCentered: true,
-          textAlign: TextAlign.left,
-        ),
-        SizeConfig.customSizedBox(15, null, null),
-        SizedBox(
-          width: SizeConfig.getProperHorizontalSpace(10),
+        Padding(
+          padding: EdgeInsets.only(top: SizeConfig.getProportionalHeight(100)),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              ...ingredientControllers.map(
-                (controller) => IngredientBox(
-                  settingsProvider: widget.settingsProvider,
-                  controller: controller,
-                ),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(
+                    width: SizeConfig.getProportionalWidth(50),
+                    child: DropdownButton<String>(
+                      value: selectedValue,
+                      hint: const Text("Select meal type"),
+                      isExpanded: true,
+                      items: items.asMap().entries.map((entry) {
+                        final idx = entry.key;
+                        final value = entry.value;
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Text(value),
+                          onTap: () {
+                            categoryId = idx; // store the index
+                          },
+                        );
+                      }).toList(),
+                      onChanged: (newValue) {
+                        setState(() {
+                          selectedValue = newValue;
+                        });
+                      },
+                    ),
+                  ),
+                  SizeConfig.customSizedBox(15, null, null),
+                  CustomAppTextField(
+                    width: SizeConfig.getProperHorizontalSpace(20),
+                    height: SizeConfig.getProportionalHeight(50),
+                    icon: Assets.keyword,
+                    controller: widget.mealsProvider
+                        .suggestionMealNameControllers[widget.tileIndex],
+                    hintText: TranslationService().translate("meal_name"),
+                    maxLines: 1,
+                    iconSizeFactor: 1,
+                    settingsProvider: widget.settingsProvider,
+                    isCentered: true,
+                    textAlign: TextAlign.left,
+                  ),
+                  SizeConfig.customSizedBox(15, null, null),
+                  SizedBox(
+                    width: SizeConfig.getProperHorizontalSpace(10),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        ...ingredientControllers.map(
+                          (controller) => IngredientBox(
+                            settingsProvider: widget.settingsProvider,
+                            controller: controller,
+                          ),
+                        ),
+                        AddIngredientBoxForSuggestion(
+                          mealsProvider: widget.mealsProvider,
+                          onTap: addIngredient,
+                        ),
+                      ],
+                    ),
+                  ),
+                  SizeConfig.customSizedBox(15, null, null),
+                  SizedBox(
+                    width: SizeConfig.getProperHorizontalSpace(5),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        ...stepsControllers.map(
+                          (controller) => StepBox(
+                            settingsProvider: widget.settingsProvider,
+                            controller: controller,
+                          ),
+                        ),
+                        AddStepBox(
+                          mealsProvider: widget.mealsProvider,
+                          onTap: addStepBox,
+                        ),
+                      ],
+                    ),
+                  ),
+                  SizeConfig.customSizedBox(15, null, null),
+                  Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      Container(
+                        width: SizeConfig.getProperHorizontalSpace(5),
+                        height: SizeConfig.getProportionalHeight(200),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(15),
+                          color: AppColors.widgetsColor,
+                        ),
+                        child: widget.storageProvider.suggestionsImagesArePicked[
+                                    widget.tileIndex] ==
+                                true
+                            ? Image.memory(
+                                widget
+                                    .storageProvider
+                                    .suggestionsPickedImages[widget.tileIndex]
+                                    .files
+                                    .first
+                                    .bytes,
+                                fit: BoxFit.fill)
+                            : null,
+                      ),
+                      IconButton(
+                          onPressed: () => StorageProvider()
+                              .pickSuggestionImage(widget.tileIndex),
+                          icon: const Icon(Icons.camera_alt_outlined))
+                    ],
+                  ),
+                ],
               ),
-              AddIngredientBoxForSuggestion(
-                mealsProvider: widget.mealsProvider,
-                onTap: addIngredient,
-              ),
+              CustomButton(
+                  onTap: () {
+                    List<String> ingredients = ingredientControllers
+                        .map((ingredientController) => ingredientController.text)
+                        .where((text) => text.trim().isNotEmpty)
+                        .toList();
+
+                    List<String> steps = stepsControllers
+                        .map((stepController) => stepController.text)
+                        .where((text) => text.trim().isNotEmpty)
+                        .toList();
+
+                    Meal meal = Meal(
+                      name: widget.mealsProvider
+                          .suggestionMealNameControllers[widget.tileIndex].text,
+                      ingredients: ingredients,
+                      recipe: steps,
+                      typeId: MealTypes.suggestedMeal,
+                      categoryId: categoryId,
+                    );
+                    widget.mealsProvider.addSuggestedMeal(meal);
+                  },
+                  text: "Add",
+                  width: SizeConfig.getProperHorizontalSpace(15),
+                  height: SizeConfig.getProperVerticalSpace(15))
             ],
           ),
         ),
-        SizeConfig.customSizedBox(15, null, null),
-        SizedBox(
-          width: SizeConfig.getProperHorizontalSpace(5),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              ...stepsControllers.map(
-                (controller) => StepBox(
-                  settingsProvider: widget.settingsProvider,
-                  controller: controller,
-                ),
-              ),
-              AddStepBox(
-                mealsProvider: widget.mealsProvider,
-                onTap: addStepBox,
-              ),
-            ],
-          ),
-        ),
-        SizeConfig.customSizedBox(15, null, null),
-        Stack(
-          alignment: Alignment.center,
-          children: [
-            Container(
-              width: SizeConfig.getProperHorizontalSpace(5),
-              height: SizeConfig.getProportionalHeight(200),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(15),
-                color: AppColors.widgetsColor,
-              ),
-              child: widget.storageProvider
-                          .suggestionsImagesArePicked[widget.tileIndex] ==
-                      true
-                  ? Image.memory(
-                      widget
-                          .storageProvider
-                          .suggestionsPickedImages[widget.tileIndex]
-                          .files
-                          .first
-                          .bytes,
-                      fit: BoxFit.fill)
-                  : null,
-            ),
-            IconButton(
+        Positioned(
+            left: 0,
+            top: 20,
+            child: IconButton(
                 onPressed: () =>
-                    StorageProvider().pickSuggestionImage(widget.tileIndex),
-                icon: const Icon(Icons.camera_alt_outlined))
-          ],
-        ),
+                    widget.mealsProvider.removeSuggestedMeal(widget.tileIndex),
+                icon: const Icon(Icons.remove_circle_outline)))
       ],
     );
   }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../controllers/meal_controller.dart';
+import '../controllers/meal_types.dart';
 import '../models/meal.dart';
 import '../services/meals_services.dart';
 import 'storage_provider.dart';
@@ -56,8 +57,7 @@ class MealsProvider with ChangeNotifier {
             date: doc.date,
             day: doc.day,
             source: doc.source,
-            isPlanned: true,
-            isSuggested: false);
+            typeId: MealTypes.plannedMeal);
         plannedMeals.add(meal);
       }
       isLoading = false;
@@ -80,6 +80,11 @@ class MealsProvider with ChangeNotifier {
 
   Future<void> deletePlannedMeal(String docId) async {
     await _ms.deletePlannedMeal(docId);
+  }
+
+  Future<List<Meal>> addSuggestedMeals(StorageProvider storageProvider) async {
+    var addedMeals = await _ms.addSuggestedMeals(suggestions, storageProvider);
+    return addedMeals;
   }
 
   void resetValues(StorageProvider storageProvider) {
@@ -170,5 +175,21 @@ class MealsProvider with ChangeNotifier {
     storageProvider.suggestionsPickedImages.add(null);
     storageProvider.suggestionsImagesArePicked.add(false);
     notifyListeners();
+  }
+
+  void addSuggestedMeal(Meal meal) {
+    suggestions.add(meal);
+    notifyListeners();
+  }
+
+  void removeSuggestedMeal(int index) {
+    if (index >= 0 && index < suggestionsToAdd.length) {
+      suggestionsToAdd.removeAt(index);
+      suggestionMealNameControllers.removeAt(index);
+      suggestionMealIngredientsControllers.removeAt(index);
+      suggestionMealRecipeControllers.removeAt(index);
+      suggestionMealTypes.removeAt(index);
+      notifyListeners();
+    }
   }
 }

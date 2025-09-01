@@ -17,7 +17,6 @@ class StorageProvider with ChangeNotifier {
   FilePickerResult? pickedMealImage;
   FilePickerResult? pickedDOW;
   FilePickerResult? pickedArticleImage;
-  FilePickerResult? pickedSuggestionsImage;
   List<Map<String, bool>> featuresImagesArePicked = [];
   List<Map<String, dynamic>> featuresPickedImages = [];
   Map<String, bool> featureImageIsPicked = {
