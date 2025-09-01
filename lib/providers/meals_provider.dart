@@ -14,14 +14,20 @@ class MealsProvider with ChangeNotifier {
 
   List<Meal> plannedMeals = [];
   List<Meal> suggestions = [];
-  List<Meal> suggestionsToAdd = [];
-  List<String?> suggestionMealTypes = [];
+  List<Meal> suggestionsToAdd = [
+    Meal(
+        name: "",
+        imageUrl: "",
+        ingredients: [],
+        recipe: [],
+        categoryId: 0,
+        typeId: MealTypes.suggestedMeal)
+  ];
 
   final MealsServices _ms = MealsServices();
   bool isLoading = false;
   int numberOfPlannedMealIngredients = 2;
   int numberOfPlannedMealSteps = 2;
-  int numberOfSuggestionsToAdd = 2;
   DateTime? selectedDate;
   String? day;
   List<TextEditingController> suggestionMealNameControllers = [
@@ -83,7 +89,7 @@ class MealsProvider with ChangeNotifier {
   }
 
   Future<List<Meal>> addSuggestedMeals(StorageProvider storageProvider) async {
-    var addedMeals = await _ms.addSuggestedMeals(suggestions, storageProvider);
+    var addedMeals = await _ms.addSuggestedMeals(suggestionsToAdd, storageProvider);
     return addedMeals;
   }
 
@@ -169,26 +175,29 @@ class MealsProvider with ChangeNotifier {
   }
 
   void increaseSuggestions(StorageProvider storageProvider) {
-    numberOfSuggestionsToAdd++;
+    suggestionsToAdd.add(Meal(
+        name: "",
+        imageUrl: "",
+        ingredients: [],
+        recipe: [],
+        categoryId: 0,
+        typeId: MealTypes.suggestedMeal));
     suggestionMealNameControllers.add(TextEditingController());
-    suggestionMealTypes.add(null);
     storageProvider.suggestionsPickedImages.add(null);
     storageProvider.suggestionsImagesArePicked.add(false);
     notifyListeners();
   }
 
   void addSuggestedMeal(Meal meal) {
-    suggestions.add(meal);
+    suggestionsToAdd.add(meal);
     notifyListeners();
   }
 
   void removeSuggestedMeal(int index) {
+
     if (index >= 0 && index < suggestionsToAdd.length) {
       suggestionsToAdd.removeAt(index);
       suggestionMealNameControllers.removeAt(index);
-      suggestionMealIngredientsControllers.removeAt(index);
-      suggestionMealRecipeControllers.removeAt(index);
-      suggestionMealTypes.removeAt(index);
       notifyListeners();
     }
   }

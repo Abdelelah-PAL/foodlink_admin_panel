@@ -6,10 +6,12 @@ import '../../../providers/settings_provider.dart';
 
 class StepBox extends StatelessWidget {
   const StepBox(
-      {super.key, required this.settingsProvider, required this.controller});
+      {super.key, required this.settingsProvider, required this.controller, this.onChanged});
 
   final TextEditingController controller;
   final SettingsProvider settingsProvider;
+  final ValueChanged<String>? onChanged;
+
 
   @override
   Widget build(BuildContext context) {
@@ -25,6 +27,7 @@ class StepBox extends StatelessWidget {
         border: Border.all(width: 3.0, color: AppColors.widgetsColor),
       ),
       child: TextField(
+        onChanged: onChanged,
         controller: controller,
         textDirection: settingsProvider.language == 'en'
             ? TextDirection.ltr

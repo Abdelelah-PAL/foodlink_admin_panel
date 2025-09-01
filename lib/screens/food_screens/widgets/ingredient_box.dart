@@ -6,10 +6,12 @@ import '../../../providers/settings_provider.dart';
 
 class IngredientBox extends StatelessWidget {
   const IngredientBox(
-      {super.key, required this.settingsProvider, required this.controller});
+      {super.key, required this.settingsProvider, required this.controller, this.onChanged, });
 
   final TextEditingController controller;
   final SettingsProvider settingsProvider;
+  final ValueChanged<String>? onChanged;
+
 
   @override
   Widget build(BuildContext context) {
@@ -23,6 +25,7 @@ class IngredientBox extends StatelessWidget {
         border: Border.all(width: 1.0, color: AppColors.widgetsColor),
       ),
       child: TextField(
+        onChanged: onChanged,
         controller: controller,
         textDirection: settingsProvider.language == 'en'
             ? TextDirection.ltr

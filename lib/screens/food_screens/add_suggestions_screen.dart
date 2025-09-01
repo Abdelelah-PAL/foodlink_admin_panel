@@ -61,9 +61,9 @@ class _AddSuggestionsScreenState extends State<AddSuggestionsScreen> {
               children: [
                 ListView.builder(
                   shrinkWrap: true,
-                  itemCount: mealsProvider.numberOfSuggestionsToAdd,
+                  itemCount: mealsProvider.suggestionsToAdd.length + 1,
                   itemBuilder: (ctx, index) {
-                    return index == mealsProvider.numberOfSuggestionsToAdd - 1
+                    return index == mealsProvider.suggestionsToAdd.length
                         ? AddSuggestionTile(
                             mealsProvider: mealsProvider,
                             storageProvider: storageProvider,
@@ -72,8 +72,8 @@ class _AddSuggestionsScreenState extends State<AddSuggestionsScreen> {
                             children: [
                               EmptySuggestionTile(
                                 mealsProvider: mealsProvider,
-                                settingsProvider: settingsProvider,
                                 storageProvider: storageProvider,
+                                settingsProvider: settingsProvider,
                                 tileIndex: index,
                               ),
                               const Divider()

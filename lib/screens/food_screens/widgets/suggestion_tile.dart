@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:foodlink_admin_panel/screens/widgets/custom_button.dart';
 import '../../../controllers/meal_types.dart';
 import '../../../core/constants/assets.dart';
 import '../../../core/constants/colors.dart';
@@ -136,20 +135,35 @@ class _EmptySuggestionTileState extends State<EmptySuggestionTile> {
     TranslationService().translate("Snacks"),
     TranslationService().translate("Drinks"),
   ];
+
   List<TextEditingController> ingredientControllers = [];
   List<TextEditingController> stepsControllers = [];
-  String? selectedValue;
-  int? categoryId;
+
+  Meal get meal => widget.mealsProvider.suggestionsToAdd[widget.tileIndex];
 
   @override
   void initState() {
     super.initState();
-    ingredientControllers = [
-      TextEditingController(),
-    ];
-    stepsControllers = [
-      TextEditingController(),
-    ];
+    // initialize with at least one box
+    ingredientControllers.add(TextEditingController(text: meal.ingredients.isNotEmpty ? meal.ingredients[0] : ""));
+    stepsControllers.add(TextEditingController(text: meal.recipe != null && meal.recipe!.isNotEmpty ? meal.recipe![0] : ""));
+    // ensure meal lists have at least one item
+    if (meal.ingredients.isEmpty) meal.ingredients.add("");
+    if (meal.recipe == null) meal.recipe = [""];
+  }
+
+  void addIngredient() {
+    setState(() {
+      ingredientControllers.add(TextEditingController());
+      meal.ingredients.add("");
+    });
+  }
+
+  void addStep() {
+    setState(() {
+      stepsControllers.add(TextEditingController());
+      meal.recipe!.add("");
+    });
   }
 
   @override
@@ -163,18 +177,6 @@ class _EmptySuggestionTileState extends State<EmptySuggestionTile> {
     super.dispose();
   }
 
-  void addIngredient() {
-    setState(() {
-      ingredientControllers.add(TextEditingController());
-    });
-  }
-
-  void addStepBox() {
-    setState(() {
-      stepsControllers.add(TextEditingController());
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -186,56 +188,62 @@ class _EmptySuggestionTileState extends State<EmptySuggestionTile> {
               Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  // Meal type dropdown
                   SizedBox(
                     width: SizeConfig.getProportionalWidth(50),
-                    child: DropdownButton<String>(
-                      value: selectedValue,
+                    child: DropdownButton<int>(
+                      value: meal.categoryId,
                       hint: const Text("Select meal type"),
                       isExpanded: true,
                       items: items.asMap().entries.map((entry) {
                         final idx = entry.key;
                         final value = entry.value;
-                        return DropdownMenuItem<String>(
-                          value: value,
+                        return DropdownMenuItem<int>(
+                          value: idx,
                           child: Text(value),
-                          onTap: () {
-                            categoryId = idx; // store the index
-                          },
                         );
                       }).toList(),
                       onChanged: (newValue) {
-                        setState(() {
-                          selectedValue = newValue;
-                        });
+                        if (newValue != null) {
+                          setState(() => meal.categoryId = newValue);
+                        }
                       },
                     ),
                   ),
                   SizeConfig.customSizedBox(15, null, null),
+
+                  // Meal name
                   CustomAppTextField(
                     width: SizeConfig.getProperHorizontalSpace(20),
                     height: SizeConfig.getProportionalHeight(50),
                     icon: Assets.keyword,
-                    controller: widget.mealsProvider
-                        .suggestionMealNameControllers[widget.tileIndex],
+                    controller: widget.mealsProvider.suggestionMealNameControllers[widget.tileIndex],
                     hintText: TranslationService().translate("meal_name"),
                     maxLines: 1,
                     iconSizeFactor: 1,
                     settingsProvider: widget.settingsProvider,
                     isCentered: true,
                     textAlign: TextAlign.left,
+                    onChanged: (val) => meal.name = val,
                   ),
                   SizeConfig.customSizedBox(15, null, null),
+
+                  // Ingredients
                   SizedBox(
                     width: SizeConfig.getProperHorizontalSpace(10),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        ...ingredientControllers.map(
-                          (controller) => IngredientBox(
+                        ...ingredientControllers.asMap().entries.map((entry) {
+                          final i = entry.key;
+                          final controller = entry.value;
+                          while (meal.ingredients.length <= i) meal.ingredients.add("");
+                          return IngredientBox(
                             settingsProvider: widget.settingsProvider,
                             controller: controller,
-                          ),
-                        ),
+                            onChanged: (val) => meal.ingredients[i] = val,
+                          );
+                        }),
                         AddIngredientBoxForSuggestion(
                           mealsProvider: widget.mealsProvider,
                           onTap: addIngredient,
@@ -244,25 +252,33 @@ class _EmptySuggestionTileState extends State<EmptySuggestionTile> {
                     ),
                   ),
                   SizeConfig.customSizedBox(15, null, null),
+
+                  // Recipe Steps
                   SizedBox(
                     width: SizeConfig.getProperHorizontalSpace(5),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        ...stepsControllers.map(
-                          (controller) => StepBox(
+                        ...stepsControllers.asMap().entries.map((entry) {
+                          final i = entry.key;
+                          final controller = entry.value;
+                          while (meal.recipe!.length <= i) meal.recipe!.add("");
+                          return StepBox(
                             settingsProvider: widget.settingsProvider,
                             controller: controller,
-                          ),
-                        ),
+                            onChanged: (val) => meal.recipe![i] = val,
+                          );
+                        }),
                         AddStepBox(
                           mealsProvider: widget.mealsProvider,
-                          onTap: addStepBox,
+                          onTap: addStep,
                         ),
                       ],
                     ),
                   ),
                   SizeConfig.customSizedBox(15, null, null),
+
+                  // Image picker
                   Stack(
                     alignment: Alignment.center,
                     children: [
@@ -273,66 +289,44 @@ class _EmptySuggestionTileState extends State<EmptySuggestionTile> {
                           borderRadius: BorderRadius.circular(15),
                           color: AppColors.widgetsColor,
                         ),
-                        child: widget.storageProvider.suggestionsImagesArePicked[
-                                    widget.tileIndex] ==
-                                true
+                        child: widget.storageProvider.suggestionsImagesArePicked[widget.tileIndex] == true
                             ? Image.memory(
-                                widget
-                                    .storageProvider
-                                    .suggestionsPickedImages[widget.tileIndex]
-                                    .files
-                                    .first
-                                    .bytes,
-                                fit: BoxFit.fill)
-                            : null,
+                          widget.storageProvider.suggestionsPickedImages[widget.tileIndex].files.first.bytes,
+                          fit: BoxFit.fill,
+                        )
+                            : (meal.imageUrl!.isNotEmpty ? Image.network(meal.imageUrl!, fit: BoxFit.fill) : null),
                       ),
                       IconButton(
-                          onPressed: () => StorageProvider()
-                              .pickSuggestionImage(widget.tileIndex),
-                          icon: const Icon(Icons.camera_alt_outlined))
+                        onPressed: () async {
+                          await StorageProvider().pickSuggestionImage(widget.tileIndex);
+                          setState(() {
+                            meal.imageUrl = ""; // update if needed
+                          });
+                        },
+                        icon: const Icon(Icons.camera_alt_outlined),
+                      ),
                     ],
                   ),
                 ],
               ),
-              CustomButton(
-                  onTap: () {
-                    List<String> ingredients = ingredientControllers
-                        .map((ingredientController) => ingredientController.text)
-                        .where((text) => text.trim().isNotEmpty)
-                        .toList();
-
-                    List<String> steps = stepsControllers
-                        .map((stepController) => stepController.text)
-                        .where((text) => text.trim().isNotEmpty)
-                        .toList();
-
-                    Meal meal = Meal(
-                      name: widget.mealsProvider
-                          .suggestionMealNameControllers[widget.tileIndex].text,
-                      ingredients: ingredients,
-                      recipe: steps,
-                      typeId: MealTypes.suggestedMeal,
-                      categoryId: categoryId,
-                    );
-                    widget.mealsProvider.addSuggestedMeal(meal);
-                  },
-                  text: "Add",
-                  width: SizeConfig.getProperHorizontalSpace(15),
-                  height: SizeConfig.getProperVerticalSpace(15))
             ],
           ),
         ),
+
+        // Remove meal button
         Positioned(
-            left: 0,
-            top: 20,
-            child: IconButton(
-                onPressed: () =>
-                    widget.mealsProvider.removeSuggestedMeal(widget.tileIndex),
-                icon: const Icon(Icons.remove_circle_outline)))
+          left: 0,
+          top: 20,
+          child: IconButton(
+            onPressed: () => widget.mealsProvider.removeSuggestedMeal(widget.tileIndex),
+            icon: const Icon(Icons.remove_circle_outline),
+          ),
+        ),
       ],
     );
   }
 }
+
 
 class AddSuggestionTile extends StatelessWidget {
   const AddSuggestionTile(
