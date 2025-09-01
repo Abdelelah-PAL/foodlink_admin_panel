@@ -56,7 +56,7 @@ class _AddSuggestionsScreenState extends State<AddSuggestionsScreen> {
         child: SingleChildScrollView(
           child: Center(
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 ListView.builder(
@@ -87,8 +87,8 @@ class _AddSuggestionsScreenState extends State<AddSuggestionsScreen> {
                     mealsProvider.addSuggestedMeals(storageProvider);
                   },
                   text: 'confirm',
-                  width: 100,
-                  height: 50,
+                  width: SizeConfig.getProperVerticalSpace(18),
+                  height: SizeConfig.getProperVerticalSpace(13),
                 )
               ],
             ),
