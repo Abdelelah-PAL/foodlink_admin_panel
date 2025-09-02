@@ -20,6 +20,7 @@ class CustomAppTextField extends StatelessWidget {
     required this.settingsProvider,
     required this.isCentered,
     this.textAlign,
+    this.onChanged,
   });
 
   final double width;
@@ -33,64 +34,72 @@ class CustomAppTextField extends StatelessWidget {
   final SettingsProvider settingsProvider;
   final bool isCentered;
   final TextAlign? textAlign;
+  final ValueChanged<String>? onChanged;
 
   @override
   Widget build(BuildContext context) {
     return Row(
-        textDirection: settingsProvider.language == 'en'
-            ? TextDirection.ltr
-            : TextDirection.rtl,
-        mainAxisAlignment:
-            isCentered ? MainAxisAlignment.center : MainAxisAlignment.start,
-        children: [
-          if (icon != null)
-            Align(
-                alignment: Alignment.centerLeft,
-                child: icon != null
-                    ? SizeConfig.customSizedBox(
-                        iconSizeFactor, iconSizeFactor, Image.asset(icon!))
-                    : null),
-          if (headerText != null)
-            CustomText(
-              isCenter: false,
-              text: TranslationService().translate(headerText!),
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-            ),
-          if (headerText != null && icon != null)
-            SizeConfig.customSizedBox(15, null, null),
-          Container(
-            width: SizeConfig.getProportionalWidth(width),
-            height: SizeConfig.getProportionalHeight(height),
-            margin: EdgeInsets.symmetric(
-                vertical: SizeConfig.getProportionalHeight(10)),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(15),
-              border: Border.all(width: 1.0, color: AppColors.widgetsColor),
-            ),
-            child: TextField(
-              maxLines: maxLines,
-              controller: controller,
-              textAlign: textAlign ??
-                  (settingsProvider.language == 'en'
-                      ? TextAlign.left
-                      : TextAlign.right),
-              decoration: InputDecoration(
-                  contentPadding: EdgeInsets.fromLTRB(
-                      SizeConfig.getProportionalWidth(10),
-                      SizeConfig.getProportionalHeight(10),
-                      SizeConfig.getProportionalWidth(10),
-                      SizeConfig.getProportionalHeight(10)),
-                  hintStyle: TextStyle(
-                      fontSize: 20,
-                      color: AppColors.hintTextColor,
-                      fontFamily: AppFonts.primaryFont),
-                  border: InputBorder.none,
-                  hintText: hintText != null
-                      ? TranslationService().translate(hintText!)
-                      : null),
+      textDirection: settingsProvider.language == 'en'
+          ? TextDirection.ltr
+          : TextDirection.rtl,
+      mainAxisAlignment:
+      isCentered ? MainAxisAlignment.center : MainAxisAlignment.start,
+      children: [
+        if (icon != null)
+          Align(
+            alignment: Alignment.centerLeft,
+            child: SizeConfig.customSizedBox(
+              iconSizeFactor,
+              iconSizeFactor,
+              Image.asset(icon!),
             ),
           ),
-        ]);
+        if (headerText != null)
+          CustomText(
+            isCenter: false,
+            text: TranslationService().translate(headerText!),
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+          ),
+        if (headerText != null && icon != null)
+          SizeConfig.customSizedBox(15, null, null),
+        Container(
+          width: SizeConfig.getProportionalWidth(width),
+          height: SizeConfig.getProportionalHeight(height),
+          margin: EdgeInsets.symmetric(
+              vertical: SizeConfig.getProportionalHeight(10)),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(15),
+            border: Border.all(width: 1.0, color: AppColors.widgetsColor),
+          ),
+          child: TextField(
+            maxLines: maxLines,
+            controller: controller,
+            textAlign: textAlign ??
+                (settingsProvider.language == 'en'
+                    ? TextAlign.left
+                    : TextAlign.right),
+            onChanged: onChanged,
+            decoration: InputDecoration(
+              contentPadding: EdgeInsets.fromLTRB(
+                SizeConfig.getProportionalWidth(10),
+                SizeConfig.getProportionalHeight(10),
+                SizeConfig.getProportionalWidth(10),
+                SizeConfig.getProportionalHeight(10),
+              ),
+              hintStyle: TextStyle(
+                fontSize: 20,
+                color: AppColors.hintTextColor,
+                fontFamily: AppFonts.primaryFont,
+              ),
+              border: InputBorder.none,
+              hintText: hintText != null
+                  ? TranslationService().translate(hintText!)
+                  : null,
+            ),
+          ),
+        ),
+      ],
+    );
   }
 }
