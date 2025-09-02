@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:foodlink_admin_panel/providers/storage_provider.dart';
@@ -54,10 +55,28 @@ class MealsServices with ChangeNotifier {
     await fireStore.collection('planned_meals').doc(docId).delete();
   }
 
+  Future<List<Meal>> getAllSuggestedMeals() async {
+    try {
+      final querySnapshot = await fireStore
+          .collection('meals')
+          .where(
+            "type_id",
+            isEqualTo: MealTypes.suggestedMeal,
+          )
+          .get();
+      return querySnapshot.docs.map((doc) {
+        return Meal.fromJson(doc.data(), doc.id);
+      }).toList();
+    } catch (ex) {
+      log("Error fetching planned meals: ${ex.toString()}");
+      rethrow;
+    }
+  }
+
   Future<List<Meal>> addSuggestedMeals(
-      List<Meal> suggestedMeals,
-      StorageProvider storageProvider,
-      ) async {
+    List<Meal> suggestedMeals,
+    StorageProvider storageProvider,
+  ) async {
     try {
       final batch = fireStore.batch();
       final mealsRef = fireStore.collection("meals");
@@ -96,6 +115,19 @@ class MealsServices with ChangeNotifier {
       return createdMeals;
     } catch (ex) {
       log("Error adding suggested meals: $ex");
+      rethrow;
+    }
+  }
+
+  Future<void> deleteSuggestedMeal(String docId) async {
+    await fireStore.collection('meals').doc(docId).delete();
+  }
+
+  Future<void> deleteImage(String imageUrl) async {
+    try {
+      Reference ref = FirebaseStorage.instance.refFromURL(imageUrl);
+      await ref.delete();
+    } catch (e) {
       rethrow;
     }
   }

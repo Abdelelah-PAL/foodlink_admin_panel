@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:foodlink_admin_panel/screens/food_screens/suggestion_meals_list_screen.dart';
 import '../screens/features_screens/beyond_calories_articles_screen.dart';
 import '../screens/features_screens/show_features_screen.dart';
 import '../screens/food_screens/add_dish_of_the_week_screen.dart';
 import '../screens/food_screens/add_suggestions_screen.dart';
-import '../screens/food_screens/meals_list_screen.dart';
+import '../screens/food_screens/planned_meals_list_screen.dart';
 import '../screens/settings_screen/settings_screen.dart';
 
 class DashboardController {
@@ -24,11 +25,11 @@ class DashboardController {
   }
 
   List<Widget> dashBoardList = [
-    const MealsListScreen(),
+    const PlannedMealsListScreen(),
     const AddDishOfTheWeekScreen(),
     const BeyondCaloriesArticlesScreen(),
     const ShowFeaturesScreen(),
-    const AddSuggestionsScreen(),
+    const SuggestionMealsListScreen(),
     const SettingsScreen(),
   ];
 }

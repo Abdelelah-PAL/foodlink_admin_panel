@@ -5,32 +5,32 @@ import '../../core/constants/fonts.dart';
 import '../../core/utils/size_config.dart';
 import '../../models/meal.dart';
 import '../../providers/meals_provider.dart';
-import '../../providers/settings_provider.dart';
 import '../../providers/storage_provider.dart';
 import '../../services/translation_services.dart';
-import 'add_meal_screen.dart';
+import 'add_suggestions_screen.dart';
 import 'widgets/list_header.dart';
-import 'widgets/plan_meal_tile.dart';
+import 'widgets/suggested_meal_tile.dart';
 
-class MealsListScreen extends StatefulWidget {
-  const MealsListScreen({
+class SuggestionMealsListScreen extends StatefulWidget {
+  const SuggestionMealsListScreen({
     super.key,
   });
 
   @override
-  State<MealsListScreen> createState() => _MealsListScreenState();
+  State<SuggestionMealsListScreen> createState() =>
+      _SuggestionMealsListScreenState();
 }
 
-class _MealsListScreenState extends State<MealsListScreen> {
+class _SuggestionMealsListScreenState extends State<SuggestionMealsListScreen> {
   @override
   void initState() {
+    MealsProvider().getAllSuggestedMeals();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     MealsProvider mealsProviderWatcher = context.watch<MealsProvider>();
-    SettingsProvider settingsProvider = context.watch<SettingsProvider>();
     StorageProvider storageProvider = context.watch<StorageProvider>();
 
     return mealsProviderWatcher.isLoading
@@ -41,11 +41,10 @@ class _MealsListScreenState extends State<MealsListScreen> {
                   Size.fromHeight(SizeConfig.getProportionalHeight(100)),
               child: SafeArea(
                   child: ListHeader(
-                text: "planned_meals",
-                onTap: () {
+                     text: "suggested_meals",
+                     onTap: () {
                   MealsProvider().resetValues(storageProvider);
-                  Get.to(const AddMealScreen(
-                      isAddScreen: true, isUpdateScreen: false));
+                  Get.to(const AddSuggestionsScreen());
                 },
                 spaceFactor: 3,
               )),
@@ -54,7 +53,7 @@ class _MealsListScreenState extends State<MealsListScreen> {
               padding: EdgeInsets.symmetric(
                 horizontal: SizeConfig.getProportionalWidth(20),
               ),
-              child: mealsProviderWatcher.plannedMeals.isEmpty
+              child: mealsProviderWatcher.suggestions.isEmpty
                   ? SizeConfig.customSizedBox(
                       null,
                       null,
@@ -75,17 +74,13 @@ class _MealsListScreenState extends State<MealsListScreen> {
                           padding: EdgeInsets.only(
                               top: SizeConfig.getProportionalHeight(20)),
                           child: ListView.builder(
-                            itemCount: mealsProvider.plannedMeals.length,
+                            itemCount: mealsProvider.suggestions.length,
                             scrollDirection: Axis.vertical,
                             itemBuilder: (ctx, index) {
-                              Meal meal = mealsProvider.plannedMeals[index];
-                              return PlanMealTile(
-                                meal: mealsProvider.plannedMeals[index],
+                              Meal meal = mealsProvider.suggestions[index];
+                              return SuggestedMealTile(
+                                meal: meal,
                                 index: index,
-                                day: meal.day!,
-                                date: meal.date!,
-                                mealsProvider: mealsProvider,
-                                settingsProvider: settingsProvider,
                               );
                             },
                           ),

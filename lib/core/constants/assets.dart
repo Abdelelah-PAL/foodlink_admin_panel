@@ -49,5 +49,6 @@ class Assets {
   static String web ="$rootIcons/web.png";
   static String keyword ="$rootIcons/keyword.png";
   static String excel ="$rootIcons/excel.png";
-
+  static String defaultMealImage ="$rootIcons/default_meal_image.png";
+  static String defaultNotificationImage ="$rootIcons/default_notification_image.png";
 }

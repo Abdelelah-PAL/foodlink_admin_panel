@@ -9,7 +9,7 @@ import '../../providers/settings_provider.dart';
 import '../../services/translation_services.dart';
 import '../dashboard/dashboard.dart';
 import '../widgets/custom_button.dart';
-import 'add_meal_screen.dart';
+import 'add_planned_meal_screen.dart';
 import 'widgets/ingredients_meal_view.dart';
 import 'widgets/meal_image_container.dart';
 import 'widgets/name_row.dart';
@@ -95,8 +95,8 @@ class MealScreen extends StatelessWidget {
                       SizeConfig.customSizedBox(null, 20, null),
                       CustomButton(
                         onTap: () {
-                          MealsProvider().fillDataForEdition(meal);
-                          Get.to(AddMealScreen(isAddScreen: false, meal: meal, isUpdateScreen: true,));
+                          MealsProvider().fillDataForEditionPlannedMeal(meal);
+                          Get.to(AddPlannedMealScreen(isAddScreen: false, meal: meal, isUpdateScreen: true,));
                         },
                         text: TranslationService().translate("edit"),
                         width: 137,

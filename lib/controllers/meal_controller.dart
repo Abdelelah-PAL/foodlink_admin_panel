@@ -217,7 +217,6 @@ class MealController {
 
   Future<void> addSuggestionMeals(MealsProvider mealsProvider,StorageProvider storageProvider) async {
     await mealsProvider.addSuggestedMeals(storageProvider);
-
   }
 
   Future<void> updateSuggestionMeal(mealsProvider, suggestedMeal) async {

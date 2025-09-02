@@ -1,113 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:foodlink_admin_panel/screens/widgets/custom_button.dart';
 import '../../../controllers/meal_types.dart';
 import '../../../core/constants/assets.dart';
 import '../../../core/constants/colors.dart';
 import '../../../core/utils/size_config.dart';
-import '../../../models/feature.dart';
 import '../../../models/meal.dart';
 import '../../../providers/meals_provider.dart';
 import '../../../providers/settings_provider.dart';
 import '../../../providers/storage_provider.dart';
 import '../../../services/translation_services.dart';
 import '../../widgets/custom_app_textfield.dart';
+import '../../widgets/custom_button.dart';
 import 'ingredient_box.dart';
 import 'step_box.dart';
 
-class SuggestionTile extends StatelessWidget {
-  const SuggestionTile({
-    super.key,
-    required this.mealsProvider,
-    required this.settingsProvider,
-    required this.storageProvider,
-    required this.feature,
-    required this.index,
-    required this.length,
-  });
-
-  final MealsProvider mealsProvider;
-  final StorageProvider storageProvider;
-  final SettingsProvider settingsProvider;
-  final Feature feature;
-  final int index;
-  final int length;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(children: [
-      Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        textDirection: TextDirection.ltr,
-        children: [
-          CustomAppTextField(
-            width: SizeConfig.getProportionalWidth(100),
-            height: SizeConfig.getProportionalHeight(50),
-            icon: Assets.keyword,
-            controller: mealsProvider.suggestionMealNameControllers[index],
-            maxLines: 1,
-            iconSizeFactor: 1,
-            settingsProvider: settingsProvider,
-            isCentered: true,
-            textAlign: TextAlign.left,
-          ),
-          CustomAppTextField(
-            width: 100,
-            height: 500,
-            icon: Assets.keyword,
-            controller:
-                mealsProvider.suggestionMealIngredientsControllers[index],
-            maxLines: 20,
-            iconSizeFactor: 1,
-            settingsProvider: settingsProvider,
-            isCentered: true,
-            textAlign: TextAlign.left,
-          ),
-          CustomAppTextField(
-            width: 100,
-            height: 500,
-            icon: Assets.keyword,
-            controller: mealsProvider.suggestionMealRecipeControllers[index],
-            maxLines: 50,
-            iconSizeFactor: 1,
-            settingsProvider: settingsProvider,
-            isCentered: true,
-            textAlign: TextAlign.left,
-          ),
-          Stack(
-            alignment: Alignment.center,
-            children: [
-              Container(
-                width: SizeConfig.getProportionalWidth(200),
-                height: SizeConfig.getProportionalHeight(200),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(15),
-                  color: AppColors.widgetsColor,
-                ),
-                child: storageProvider.featuresImagesArePicked[index]
-                            ['ar_image_picked'] ==
-                        true
-                    ? Image.memory(
-                        storageProvider.featuresPickedImages[index]['ar_image']
-                            .files.first.bytes,
-                        fit: BoxFit.fill)
-                    : feature.arImageURL != ""
-                        ? Image.network(feature.arImageURL, fit: BoxFit.fill)
-                        : null,
-              ),
-            ],
-          ),
-          SizeConfig.customSizedBox(null, 10, null),
-          IconButton(
-              onPressed: () =>
-                  storageProvider.pickFeatureImage("ar_feature", index),
-              icon: const Icon(Icons.camera_alt_outlined)),
-          SizeConfig.customSizedBox(null, 35, null)
-        ],
-      ),
-      if (index != length) const Divider()
-    ]);
-  }
-}
 
 class EmptySuggestionTile extends StatefulWidget {
   const EmptySuggestionTile({

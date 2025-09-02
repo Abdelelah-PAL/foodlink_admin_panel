@@ -17,8 +17,8 @@ import 'widgets/meal_image_container.dart';
 import 'widgets/step_box.dart';
 import 'package:intl/intl.dart' as intl;
 
-class AddMealScreen extends StatefulWidget {
-  const AddMealScreen({
+class AddPlannedMealScreen extends StatefulWidget {
+  const AddPlannedMealScreen({
     super.key,
     required this.isAddScreen,
     this.meal, required this.isUpdateScreen,
@@ -29,10 +29,10 @@ class AddMealScreen extends StatefulWidget {
   final Meal? meal;
 
   @override
-  State<AddMealScreen> createState() => _AddMealScreenState();
+  State<AddPlannedMealScreen> createState() => _AddPlannedMealScreenState();
 }
 
-class _AddMealScreenState extends State<AddMealScreen> {
+class _AddPlannedMealScreenState extends State<AddPlannedMealScreen> {
   @override
   void initState() {
     super.initState();
