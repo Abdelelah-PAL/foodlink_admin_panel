@@ -79,7 +79,7 @@ class _AddPlannedMealScreenState extends State<AddPlannedMealScreen> {
                         height: 100,
                         headerText: "meal_name",
                         icon: Assets.mealNameIcon,
-                        controller: MealController().nameController,
+                        controller: MealController().plannedMealNameController,
                         maxLines: 2,
                         iconSizeFactor: 31,
                         settingsProvider: settingsProvider,
@@ -147,7 +147,7 @@ class _AddPlannedMealScreenState extends State<AddPlannedMealScreen> {
                                 return IngredientBox(
                                     settingsProvider: settingsProvider,
                                     controller: mealsProvider
-                                        .ingredientsControllers[index]);
+                                        .plannedMealIngredientsControllers[index]);
                               },
                             ),
                           )),
@@ -186,7 +186,7 @@ class _AddPlannedMealScreenState extends State<AddPlannedMealScreen> {
                           return StepBox(
                               settingsProvider: settingsProvider,
                               controller:
-                              mealsProvider.stepsControllers[index]);
+                              mealsProvider.plannedMealStepsControllers[index]);
                         },
                       )),
                   SizeConfig.customSizedBox(null, 20, null),
@@ -207,7 +207,7 @@ class _AddPlannedMealScreenState extends State<AddPlannedMealScreen> {
                       widget.isAddScreen
                           ? {
                       if (MealController()
-                          .nameController
+                          .plannedMealNameController
                           .text
                           .isEmpty ||
                       mealsProvider.day == null ||
@@ -221,7 +221,7 @@ class _AddPlannedMealScreenState extends State<AddPlannedMealScreen> {
                       await MealController().addPlannedMeal(mealsProvider, storageProvider)
                     }: {
                       if (MealController()
-                          .nameController
+                          .plannedMealNameController
                           .text
                           .isEmpty ||
                       mealsProvider.day == null ||

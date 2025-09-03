@@ -17,11 +17,8 @@ class MealController {
 
   MealController._internal();
 
-  TextEditingController nameController = TextEditingController();
-  TextEditingController ingredientsController = TextEditingController();
-  TextEditingController recipeController = TextEditingController();
-  TextEditingController addNoteController = TextEditingController();
-  TextEditingController noteController = TextEditingController();
+  TextEditingController plannedMealNameController = TextEditingController();
+  TextEditingController suggestedMealNameController = TextEditingController();
   TextEditingController sourceController = TextEditingController();
 
   DateTime? selectedDate;
@@ -33,12 +30,12 @@ class MealController {
   ];
   List<String> missingIngredients = [];
   List<String> ingredients = MealsProvider()
-      .ingredientsControllers
+      .plannedMealIngredientsControllers
       .map((controller) => controller.text)
       .where((text) => text.isNotEmpty)
       .toList();
   List<String> steps = MealsProvider()
-      .stepsControllers
+      .plannedMealStepsControllers
       .map((controller) => controller.text)
       .where((text) => text.isNotEmpty)
       .toList();
@@ -64,18 +61,18 @@ class MealController {
           .uploadFile(storageProvider.pickedMealImage!, "planned_meals_images");
     }
     List<String> ingredients = MealsProvider()
-        .ingredientsControllers
+        .plannedMealIngredientsControllers
         .map((controller) => controller.text)
         .where((text) => text.isNotEmpty)
         .toList();
     List<String> steps = MealsProvider()
-        .stepsControllers
+        .plannedMealStepsControllers
         .map((controller) => controller.text)
         .where((text) => text.isNotEmpty)
         .toList();
 
     var addedPlannedMeal = await MealsProvider().addPlannedMeal(Meal(
-        name: nameController.text,
+        name: plannedMealNameController.text,
         ingredients: ingredients,
         recipe: steps,
         source: sourceController.text,
@@ -85,7 +82,7 @@ class MealController {
         typeId: MealTypes.plannedMeal));
 
     FeaturesProvider().resetArticleValues(storageProvider);
-    Get.to(MealScreen(meal: addedPlannedMeal));
+    Get.to(MealScreen(meal: addedPlannedMeal, source: "planned",));
   }
 
   Future<void> updatePlannedMeal(mealsProvider, meal) async {
@@ -98,18 +95,18 @@ class MealController {
           .uploadFile(mealsProvider.pickedMealImage, "planned_meals_images");
     }
     List<String> ingredients = MealsProvider()
-        .ingredientsControllers
+        .plannedMealIngredientsControllers
         .map((controller) => controller.text)
         .where((text) => text.isNotEmpty)
         .toList();
     List<String> steps = MealsProvider()
-        .stepsControllers
+        .plannedMealStepsControllers
         .map((controller) => controller.text)
         .where((text) => text.isNotEmpty)
         .toList();
     var updatedPlannedMeal = await MealsProvider().updatePlannedMeal(Meal(
         documentId: meal.documentId,
-        name: nameController.text,
+        name: plannedMealNameController.text,
         ingredients: ingredients,
         recipe: steps,
         source: sourceController.text,
@@ -119,7 +116,7 @@ class MealController {
         typeId: MealTypes.plannedMeal));
     mealsProvider.resetArticleValues();
 
-    Get.to(MealScreen(meal: updatedPlannedMeal));
+    Get.to(MealScreen(meal: updatedPlannedMeal, source: 'planned',));
   }
 
   Meal findPlannedMealById(meals, id) {
@@ -229,18 +226,18 @@ class MealController {
           .uploadFile(mealsProvider.pickedMealImage, "planned_meals_images");
     }
     List<String> ingredients = MealsProvider()
-        .ingredientsControllers
+        .plannedMealIngredientsControllers
         .map((controller) => controller.text)
         .where((text) => text.isNotEmpty)
         .toList();
     List<String> steps = MealsProvider()
-        .stepsControllers
+        .plannedMealStepsControllers
         .map((controller) => controller.text)
         .where((text) => text.isNotEmpty)
         .toList();
     var updatedPlannedMeal = await MealsProvider().updatePlannedMeal(Meal(
         documentId: suggestedMeal.documentId,
-        name: nameController.text,
+        name: plannedMealNameController.text,
         ingredients: ingredients,
         recipe: steps,
         source: sourceController.text,
@@ -250,7 +247,7 @@ class MealController {
         typeId: MealTypes.plannedMeal));
     mealsProvider.resetArticleValues();
 
-    Get.to(MealScreen(meal: updatedPlannedMeal));
+    Get.to(MealScreen(meal: updatedPlannedMeal, source: 'planned',));
   }
 
   Meal findSuggestedMealById(meals, id) {

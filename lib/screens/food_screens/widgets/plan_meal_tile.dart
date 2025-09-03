@@ -42,7 +42,7 @@ class _PlanMealTileState extends State<PlanMealTile> {
 
   onTap() {
     Get.to(MealScreen(
-      meal: widget.meal,
+      meal: widget.meal, source: 'planned',
     ));
   }
 

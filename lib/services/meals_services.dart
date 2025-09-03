@@ -119,6 +119,22 @@ class MealsServices with ChangeNotifier {
     }
   }
 
+  Future<Meal> updateSuggestedMeal(Meal meal) async {
+    try {
+      await fireStore.collection('meals').doc(meal.documentId).set(
+        meal.toMap(),
+        SetOptions(merge: false),
+      );
+      var docRef = fireStore.collection('meals').doc(meal.documentId);
+      var docSnapshot = await docRef.get();
+
+      Meal updatedMeal = Meal.fromJson(docSnapshot.data()!, meal.documentId);
+      return updatedMeal;
+    } catch (ex) {
+      log("Error updating meal: ${ex.toString()}");
+      rethrow;
+    }
+  }
   Future<void> deleteSuggestedMeal(String docId) async {
     await fireStore.collection('meals').doc(docId).delete();
   }

@@ -15,17 +15,14 @@ import '../widgets/custom_text.dart';
 import 'widgets/ingredient_box.dart';
 import 'widgets/meal_image_container.dart';
 import 'widgets/step_box.dart';
-import 'package:intl/intl.dart' as intl;
 
 class EditSuggestionMealScreen extends StatefulWidget {
   const EditSuggestionMealScreen({
     super.key,
     required this.meal,
-    required this.index,
   });
 
   final Meal meal;
-  final int index;
 
   @override
   State<EditSuggestionMealScreen> createState() => _EditSuggestionMealScreenState();
@@ -78,7 +75,7 @@ class _EditSuggestionMealScreenState extends State<EditSuggestionMealScreen> {
                         height: 100,
                         headerText: "meal_name",
                         icon: Assets.mealNameIcon,
-                        controller: MealsProvider().suggestionMealNameControllers[widget.index],
+                        controller: MealController().suggestedMealNameController,
                         maxLines: 2,
                         iconSizeFactor: 31,
                         settingsProvider: settingsProvider,
@@ -119,17 +116,20 @@ class _EditSuggestionMealScreenState extends State<EditSuggestionMealScreen> {
                                   crossAxisSpacing: 4,
                                   mainAxisSpacing: 3,
                                   childAspectRatio: 10),
-                              itemCount: mealsProvider.numberOfSuggestedMealSteps,
+                              itemCount: mealsProvider.numberOfEditedSuggestedMealIngredients,
                               itemBuilder: (context, index) {
                                 if (index ==
-                                    mealsProvider.numberOfSuggestedMealIngredients - 1) {
+                                    mealsProvider.numberOfEditedSuggestedMealIngredients - 1) {
                                   return AddIngredientBox(
+                                    onTap: () {
+                                      mealsProvider.increaseSuggestedMealIngredients();
+                                    },
                                       mealsProvider: mealsProvider);
                                 }
                                 return IngredientBox(
                                     settingsProvider: settingsProvider,
                                     controller: mealsProvider
-                                        .suggestionMealIngredientsControllers[index]);
+                                        .editedSuggestedMealIngredientsControllers[index]);
                               },
                             ),
                           )),
@@ -158,9 +158,9 @@ class _EditSuggestionMealScreenState extends State<EditSuggestionMealScreen> {
                       margin: EdgeInsets.symmetric(
                           horizontal: SizeConfig.getProportionalWidth(26)),
                       child: ListView.builder(
-                        itemCount: mealsProvider.numberOfSuggestedMealSteps,
+                        itemCount: mealsProvider.numberOfEditedSuggestedMealSteps,
                         itemBuilder: (context, index) {
-                          if (index == mealsProvider.numberOfSuggestedMealSteps - 1) {
+                          if (index == mealsProvider.numberOfEditedSuggestedMealSteps - 1) {
                             return AddStepBox(
                               mealsProvider: mealsProvider,
                             );
@@ -168,24 +168,24 @@ class _EditSuggestionMealScreenState extends State<EditSuggestionMealScreen> {
                           return StepBox(
                               settingsProvider: settingsProvider,
                               controller:
-                              mealsProvider.suggestionMealRecipeControllers[index]);
+                              mealsProvider.editedSuggestedMealStepsControllers[index]);
                         },
                       )),
                   SizeConfig.customSizedBox(null, 20, null),
                   CustomButton(
                     onTap: () async {
                       if (MealController()
-                          .nameController
+                          .suggestedMealNameController
                           .text
                           .isEmpty ||
-                      mealsProvider.suggestionMealIngredientsControllers.isEmpty)
+                      mealsProvider.addedSuggestedMealIngredientsControllers.isEmpty)
                       {
                       MealController().showFailedAddDialog(
                       context, settingsProvider);
                       }
                       else {
                         await MealController()
-                          .updatePlannedMeal(mealsProvider, widget.meal);
+                          .updateSuggestionMeal(mealsProvider, widget.meal);
                       }
                     },
                     text: TranslationService()

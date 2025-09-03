@@ -57,7 +57,7 @@ class AddIngredientBox extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: onTap ?? mealsProvider.increaseIngredients,
+      onTap: onTap ?? mealsProvider.increasePlannedMealIngredients,
       child: Container(
           margin: EdgeInsets.symmetric(
             vertical: SizeConfig.getProportionalHeight(10),
@@ -81,7 +81,7 @@ class AddIngredientBoxForSuggestion extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: onTap ?? mealsProvider.increaseIngredients,
+      onTap: onTap ?? mealsProvider.increasePlannedMealIngredients,
       child: Container(
           width: SizeConfig.getProperHorizontalSpace(10),
           height: SizeConfig.getProportionalWidth(15),

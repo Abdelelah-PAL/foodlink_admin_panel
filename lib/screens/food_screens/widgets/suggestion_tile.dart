@@ -123,7 +123,7 @@ class _EmptySuggestionTileState extends State<EmptySuggestionTile> {
                     width: SizeConfig.getProperHorizontalSpace(20),
                     height: SizeConfig.getProportionalHeight(50),
                     icon: Assets.keyword,
-                    controller: widget.mealsProvider.suggestionMealNameControllers[widget.tileIndex],
+                    controller: widget.mealsProvider.addedSuggestedMealNameControllers[widget.tileIndex],
                     hintText: TranslationService().translate("meal_name"),
                     maxLines: 1,
                     iconSizeFactor: 1,

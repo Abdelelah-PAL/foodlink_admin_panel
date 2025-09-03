@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:foodlink_admin_panel/providers/storage_provider.dart';
+import 'package:foodlink_admin_panel/screens/food_screens/edit_suggestion_meal_screen.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import '../../core/utils/size_config.dart';
@@ -17,10 +18,11 @@ import 'widgets/recipe_meal_view.dart';
 import 'widgets/source_meal_view.dart';
 
 class MealScreen extends StatelessWidget {
-  const MealScreen({super.key, required this.meal, this.index});
+  const MealScreen({super.key, required this.meal, this.index, required this.source});
 
   final Meal meal;
   final int? index;
+  final String source;
 
   @override
   Widget build(BuildContext context) {
@@ -95,8 +97,15 @@ class MealScreen extends StatelessWidget {
                       SizeConfig.customSizedBox(null, 20, null),
                       CustomButton(
                         onTap: () {
-                          MealsProvider().fillDataForEditionPlannedMeal(meal);
-                          Get.to(AddPlannedMealScreen(isAddScreen: false, meal: meal, isUpdateScreen: true,));
+                          if (source == "planned") {
+                            MealsProvider().fillDataForEditionPlannedMeal(meal);
+                            Get.to(AddPlannedMealScreen(isAddScreen: false, meal: meal, isUpdateScreen: true,));
+
+                          } else {
+                            MealsProvider().fillDataForEditionSuggestedMeal(meal, index);
+                            Get.to( EditSuggestionMealScreen(meal: meal));
+
+                          }
                         },
                         text: TranslationService().translate("edit"),
                         width: 137,
