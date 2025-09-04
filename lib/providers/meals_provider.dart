@@ -98,7 +98,7 @@ class MealsProvider with ChangeNotifier {
     await _ms.deletePlannedMeal(docId);
   }
 
-  void getAllSuggestedMeals() async {
+  Future<void> getAllSuggestedMeals() async {
     try {
       isLoading = true;
       suggestions.clear();
@@ -140,7 +140,7 @@ class MealsProvider with ChangeNotifier {
     await _ms.deleteImage(imageUrl);
   }
 
-  void resetValues(StorageProvider storageProvider) {
+  void resetPlannedMealValues(StorageProvider storageProvider) {
     selectedDate = null;
     storageProvider.mealImageIsPicked = false;
     storageProvider.pickedMealImage = null;
@@ -159,6 +159,24 @@ class MealsProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  void resetSuggestedMealValues(StorageProvider storageProvider) {
+    storageProvider.mealImageIsPicked = false;
+    storageProvider.pickedMealImage = null;
+    numberOfEditedSuggestedMealIngredients = 2;
+    numberOfEditedSuggestedMealSteps = 2;
+    MealController().suggestedMealNameController.clear();
+    editedSuggestedMealIngredientsControllers = [
+      TextEditingController(),
+    ];
+    editedSuggestedMealStepsControllers = [
+      TextEditingController(),
+    ];
+    editedSuggestedMealIngredientsControllers.map((controller) => {controller.clear()});
+    editedSuggestedMealStepsControllers.map((controller) => {controller.clear()});
+    notifyListeners();
+  }
+
+
   void increasePlannedMealIngredients() {
     numberOfPlannedMealIngredients++;
     plannedMealIngredientsControllers.add(TextEditingController());
@@ -168,6 +186,11 @@ class MealsProvider with ChangeNotifier {
   void increaseSuggestedMealIngredients() {
     numberOfEditedSuggestedMealIngredients++;
     editedSuggestedMealIngredientsControllers.add(TextEditingController());
+    notifyListeners();
+  }
+  void increaseSuggestedMealSteps() {
+    numberOfEditedSuggestedMealSteps++;
+    editedSuggestedMealStepsControllers.add(TextEditingController());
     notifyListeners();
   }
 
@@ -193,21 +216,21 @@ class MealsProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void fillDataForEditionSuggestedMeal(suggestedMeal, index) {
+  void fillDataForEditionSuggestedMeal(suggestedMeal) {
     MealController().suggestedMealNameController.text = suggestedMeal.name;
     numberOfEditedSuggestedMealIngredients = suggestedMeal.ingredients.length + 1;
     suggestedMeal.ingredients.asMap().forEach((index, controller) {
       if (index + 1 > addedSuggestedMealIngredientsControllers.length) {
-        addedSuggestedMealIngredientsControllers.add(TextEditingController());
+        editedSuggestedMealIngredientsControllers.add(TextEditingController());
       }
-      addedSuggestedMealIngredientsControllers[index].text = suggestedMeal.ingredients[index];
+      editedSuggestedMealIngredientsControllers[index].text = suggestedMeal.ingredients[index];
     });
     numberOfEditedSuggestedMealSteps = suggestedMeal.recipe.length + 1;
     suggestedMeal.recipe.asMap().forEach((index, controller) {
       if (index + 1 > addedSuggestedMealRecipeControllers.length) {
-        addedSuggestedMealRecipeControllers.add(TextEditingController());
+        editedSuggestedMealStepsControllers.add(TextEditingController());
       }
-      addedSuggestedMealRecipeControllers[index].text = suggestedMeal.recipe[index];
+      editedSuggestedMealStepsControllers[index].text = suggestedMeal.recipe[index];
     });
     notifyListeners();
   }

@@ -125,7 +125,7 @@ class _AddDishOfTheWeekScreenState extends State<AddDishOfTheWeekScreen> {
                       if (!context.mounted) return;
                       MealController().showSuccessUploadingDialog(
                           context, settingsProvider);
-                      mealsProvider.resetValues(storageProvider);
+                      mealsProvider.resetPlannedMealValues(storageProvider);
                     } catch (e) {
                       log('uploadImage : $e');
                     }

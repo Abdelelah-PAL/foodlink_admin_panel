@@ -43,7 +43,7 @@ class _SuggestionMealsListScreenState extends State<SuggestionMealsListScreen> {
                   child: ListHeader(
                      text: "suggested_meals",
                      onTap: () {
-                  MealsProvider().resetValues(storageProvider);
+                  MealsProvider().resetPlannedMealValues(storageProvider);
                   Get.to(const AddSuggestionsScreen());
                 },
                 spaceFactor: 3,

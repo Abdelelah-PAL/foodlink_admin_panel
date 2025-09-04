@@ -43,7 +43,7 @@ class _PlannedMealsListScreenState extends State<PlannedMealsListScreen> {
                   child: ListHeader(
                 text: "planned_meals",
                 onTap: () {
-                  MealsProvider().resetValues(storageProvider);
+                  MealsProvider().resetPlannedMealValues(storageProvider);
                   Get.to(const AddPlannedMealScreen(
                       isAddScreen: true, isUpdateScreen: false));
                 },

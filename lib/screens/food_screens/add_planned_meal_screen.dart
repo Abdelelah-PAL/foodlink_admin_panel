@@ -63,7 +63,7 @@ class _AddPlannedMealScreenState extends State<AddPlannedMealScreen> {
                     isUpdateSource: widget.isUpdateScreen,
                     imageUrl: widget.meal?.imageUrl,
                     backButtonOnPressed: () {
-                        MealsProvider().resetValues(storageProvider);
+                        MealsProvider().resetPlannedMealValues(storageProvider);
                         Get.back();
                     },
                   ),
@@ -233,7 +233,7 @@ class _AddPlannedMealScreenState extends State<AddPlannedMealScreen> {
                       }
                       else
                       await MealController()
-                          .updatePlannedMeal(mealsProvider, widget.meal)
+                          .updatePlannedMeal(mealsProvider,storageProvider, widget.meal!)
                       };
                     },
                     text: TranslationService()

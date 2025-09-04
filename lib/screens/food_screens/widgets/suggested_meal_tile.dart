@@ -96,19 +96,19 @@ class _SuggestedMealTileState extends State<SuggestedMealTile> {
                             Column(
                               children: [
                                 IconButton(
-                                    onPressed: () async {
+                                    onPressed: ()   {
+                                         MealsProvider().fillDataForEditionSuggestedMeal(widget.meal);
+                                        Get.to(() =>  EditSuggestionMealScreen(meal: widget.meal,));
+                                    },
+                                    icon: const Icon(Icons.edit)),
+                                IconButton(
+                                    onPressed: () async{
                                       await MealsProvider()
                                           .deleteSuggestedMeal(
                                           widget.meal.documentId!);
                                       setState(() {
                                         MealsProvider().getAllSuggestedMeals();
                                       });
-                                    },
-                                    icon: const Icon(Icons.edit)),
-                                IconButton(
-                                    onPressed: () {
-                                      MealsProvider().updateSuggestedMeal(widget.meal);
-                                      Get.to(EditSuggestionMealScreen);
                                     },
                                     icon: const Icon(Icons.delete)),
                               ],

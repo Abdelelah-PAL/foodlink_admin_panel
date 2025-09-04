@@ -18,7 +18,8 @@ import 'widgets/recipe_meal_view.dart';
 import 'widgets/source_meal_view.dart';
 
 class MealScreen extends StatelessWidget {
-  const MealScreen({super.key, required this.meal, this.index, required this.source});
+  const MealScreen(
+      {super.key, required this.meal, this.index, required this.source});
 
   final Meal meal;
   final int? index;
@@ -34,9 +35,15 @@ class MealScreen extends StatelessWidget {
         child: Column(
           children: [
             MealImageContainer(
-              imageUrl: meal.imageUrl, isAddSource: false, isUpdateSource: false,
+              imageUrl: meal.imageUrl,
+              isAddSource: false,
+              isUpdateSource: false,
               backButtonOnPressed: () {
-                MealsProvider().resetValues(storageProvider);
+                if (source == "planned") {
+                  MealsProvider().resetPlannedMealValues(storageProvider);
+                } else {
+                  MealsProvider().resetSuggestedMealValues(storageProvider);
+                }
                 Get.back();
               },
             ),
@@ -53,7 +60,8 @@ class MealScreen extends StatelessWidget {
                     : CrossAxisAlignment.end,
                 children: [
                   Padding(
-                    padding: EdgeInsets.symmetric(horizontal: SizeConfig.getProportionalWidth(10)),
+                    padding: EdgeInsets.symmetric(
+                        horizontal: SizeConfig.getProportionalWidth(10)),
                     child: NameRow(
                       name: meal.name,
                       fontSize: 20,
@@ -74,9 +82,9 @@ class MealScreen extends StatelessWidget {
                   ),
                   SizeConfig.customSizedBox(null, 30, null),
                   SourceMealView(
-                      meal: meal,
-                      settingsProvider: settingsProvider,
-                      )
+                    meal: meal,
+                    settingsProvider: settingsProvider,
+                  )
                 ],
               ),
             ),
@@ -99,12 +107,15 @@ class MealScreen extends StatelessWidget {
                         onTap: () {
                           if (source == "planned") {
                             MealsProvider().fillDataForEditionPlannedMeal(meal);
-                            Get.to(AddPlannedMealScreen(isAddScreen: false, meal: meal, isUpdateScreen: true,));
-
+                            Get.to(AddPlannedMealScreen(
+                              isAddScreen: false,
+                              meal: meal,
+                              isUpdateScreen: true,
+                            ));
                           } else {
-                            MealsProvider().fillDataForEditionSuggestedMeal(meal, index);
-                            Get.to( EditSuggestionMealScreen(meal: meal));
-
+                            MealsProvider()
+                                .fillDataForEditionSuggestedMeal(meal);
+                            Get.to(EditSuggestionMealScreen(meal: meal));
                           }
                         },
                         text: TranslationService().translate("edit"),

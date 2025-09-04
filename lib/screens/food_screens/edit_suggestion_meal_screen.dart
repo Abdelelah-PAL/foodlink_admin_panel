@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:foodlink_admin_panel/screens/food_screens/suggestion_meals_list_screen.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import '../../controllers/meal_controller.dart';
@@ -25,7 +26,8 @@ class EditSuggestionMealScreen extends StatefulWidget {
   final Meal meal;
 
   @override
-  State<EditSuggestionMealScreen> createState() => _EditSuggestionMealScreenState();
+  State<EditSuggestionMealScreen> createState() =>
+      _EditSuggestionMealScreenState();
 }
 
 class _EditSuggestionMealScreenState extends State<EditSuggestionMealScreen> {
@@ -37,11 +39,10 @@ class _EditSuggestionMealScreenState extends State<EditSuggestionMealScreen> {
   @override
   Widget build(BuildContext context) {
     MealsProvider mealsProvider =
-    Provider.of<MealsProvider>(context, listen: true);
-    StorageProvider storageProvider = Provider.of<StorageProvider>(
-        context, listen: true);
+        Provider.of<MealsProvider>(context, listen: true);
+    StorageProvider storageProvider =
+        Provider.of<StorageProvider>(context, listen: true);
     SettingsProvider settingsProvider = Provider.of<SettingsProvider>(context);
-
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: SingleChildScrollView(
@@ -59,8 +60,8 @@ class _EditSuggestionMealScreenState extends State<EditSuggestionMealScreen> {
                     isUpdateSource: true,
                     imageUrl: widget.meal.imageUrl,
                     backButtonOnPressed: () {
-                        MealsProvider().resetValues(storageProvider);
-                        Get.back();
+                      MealsProvider().resetPlannedMealValues(storageProvider);
+                      Get.back();
                     },
                   ),
                   SizeConfig.customSizedBox(null, 20, null),
@@ -75,7 +76,8 @@ class _EditSuggestionMealScreenState extends State<EditSuggestionMealScreen> {
                         height: 100,
                         headerText: "meal_name",
                         icon: Assets.mealNameIcon,
-                        controller: MealController().suggestedMealNameController,
+                        controller:
+                            MealController().suggestedMealNameController,
                         maxLines: 2,
                         iconSizeFactor: 31,
                         settingsProvider: settingsProvider,
@@ -110,26 +112,31 @@ class _EditSuggestionMealScreenState extends State<EditSuggestionMealScreen> {
                                 : TextDirection.ltr,
                             child: GridView.builder(
                               gridDelegate:
-                              const SliverGridDelegateWithFixedCrossAxisCount(
-                                  mainAxisExtent: 50,
-                                  crossAxisCount: 4,
-                                  crossAxisSpacing: 4,
-                                  mainAxisSpacing: 3,
-                                  childAspectRatio: 10),
-                              itemCount: mealsProvider.numberOfEditedSuggestedMealIngredients,
+                                  const SliverGridDelegateWithFixedCrossAxisCount(
+                                      mainAxisExtent: 50,
+                                      crossAxisCount: 4,
+                                      crossAxisSpacing: 4,
+                                      mainAxisSpacing: 3,
+                                      childAspectRatio: 10),
+                              itemCount: mealsProvider
+                                  .numberOfEditedSuggestedMealIngredients,
                               itemBuilder: (context, index) {
                                 if (index ==
-                                    mealsProvider.numberOfEditedSuggestedMealIngredients - 1) {
+                                    mealsProvider
+                                            .numberOfEditedSuggestedMealIngredients -
+                                        1) {
                                   return AddIngredientBox(
-                                    onTap: () {
-                                      mealsProvider.increaseSuggestedMealIngredients();
-                                    },
+                                      onTap: () {
+                                        mealsProvider
+                                            .increaseSuggestedMealIngredients();
+                                      },
                                       mealsProvider: mealsProvider);
                                 }
                                 return IngredientBox(
                                     settingsProvider: settingsProvider,
                                     controller: mealsProvider
-                                        .editedSuggestedMealIngredientsControllers[index]);
+                                            .editedSuggestedMealIngredientsControllers[
+                                        index]);
                               },
                             ),
                           )),
@@ -158,38 +165,42 @@ class _EditSuggestionMealScreenState extends State<EditSuggestionMealScreen> {
                       margin: EdgeInsets.symmetric(
                           horizontal: SizeConfig.getProportionalWidth(26)),
                       child: ListView.builder(
-                        itemCount: mealsProvider.numberOfEditedSuggestedMealSteps,
+                        itemCount:
+                            mealsProvider.numberOfEditedSuggestedMealSteps,
                         itemBuilder: (context, index) {
-                          if (index == mealsProvider.numberOfEditedSuggestedMealSteps - 1) {
+                          if (index ==
+                              mealsProvider.numberOfEditedSuggestedMealSteps -
+                                  1) {
                             return AddStepBox(
+                              onTap: () {
+                                mealsProvider.increaseSuggestedMealSteps();
+                              },
                               mealsProvider: mealsProvider,
                             );
                           }
                           return StepBox(
                               settingsProvider: settingsProvider,
-                              controller:
-                              mealsProvider.editedSuggestedMealStepsControllers[index]);
+                              controller: mealsProvider
+                                  .editedSuggestedMealStepsControllers[index]);
                         },
                       )),
                   SizeConfig.customSizedBox(null, 20, null),
                   CustomButton(
                     onTap: () async {
+                      print("meow");
                       if (MealController()
                           .suggestedMealNameController
                           .text
-                          .isEmpty ||
-                      mealsProvider.addedSuggestedMealIngredientsControllers.isEmpty)
-                      {
-                      MealController().showFailedAddDialog(
-                      context, settingsProvider);
-                      }
-                      else {
-                        await MealController()
-                          .updateSuggestionMeal(mealsProvider, widget.meal);
+                          .isEmpty) {
+                        MealController()
+                            .showFailedAddDialog(context, settingsProvider);
+                      } else {
+                        await MealController().updateSuggestionMeal(
+                            mealsProvider, storageProvider, widget.meal);
+                        await MealsProvider().getAllSuggestedMeals();
                       }
                     },
-                    text: TranslationService()
-                        .translate("edit"),
+                    text: TranslationService().translate("edit"),
                     width: SizeConfig.getProperHorizontalSpace(8),
                     height: SizeConfig.getProperVerticalSpace(10),
                   )

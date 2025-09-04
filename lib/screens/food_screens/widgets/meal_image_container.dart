@@ -82,7 +82,7 @@ class _MealImageContainerState extends State<MealImageContainer> {
                 ),
                 CustomBackButton(
                   onPressed: () =>
-                      {MealsProvider().resetValues(storageProvider)},
+                      {MealsProvider().resetPlannedMealValues(storageProvider)},
                 ),
               ],
             )
