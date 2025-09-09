@@ -56,14 +56,15 @@ class MealController {
   }
 
 
-  final categories = [
-    TranslationService().translate("Breakfast"),
-    TranslationService().translate("Lunch"),
-    TranslationService().translate("Dinner"),
-    TranslationService().translate("Sweets"),
-    TranslationService().translate("Snacks"),
-    TranslationService().translate("Drinks"),
+  final List<Map<String, dynamic>> categories = [
+  {"id": 1, "name": TranslationService().translate("Breakfast")},
+  {"id": 2, "name": TranslationService().translate("Lunch")},
+  {"id": 3, "name": TranslationService().translate("Dinner")},
+  {"id": 4, "name": TranslationService().translate("Sweets")},
+  {"id": 5, "name": TranslationService().translate("Snacks")},
+  {"id": 6, "name": TranslationService().translate("Drinks")},
   ];
+
   Future<void> addPlannedMeal(MealsProvider mealsProvider, StorageProvider storageProvider) async {
     String? imageUrl;
     if (storageProvider.mealImageIsPicked) {
@@ -229,13 +230,12 @@ class MealController {
 
   Future<void> updateSuggestionMeal(MealsProvider mealsProvider, StorageProvider storageProvider, Meal  suggestedMeal) async {
     String? imageUrl = '';
-    print(suggestedMeal.imageUrl);
     if (storageProvider.mealImageIsPicked) {
       if (suggestedMeal.imageUrl != null && suggestedMeal.imageUrl != "") {
         await StorageProvider().deleteImage(suggestedMeal.imageUrl);
       }
       imageUrl = await StorageProvider()
-          .uploadFile(storageProvider.pickedMealImage!, "planned_meals_images");
+          .uploadFile(storageProvider.pickedMealImage!, "suggested_meals_images");
     }
     List<String> ingredients = MealsProvider()
         .editedSuggestedMealIngredientsControllers

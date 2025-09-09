@@ -87,17 +87,16 @@ class _EditSuggestionMealScreenState extends State<EditSuggestionMealScreen> {
                       SizedBox(
                         width: SizeConfig.getProportionalWidth(50),
                         child: DropdownButton<int>(
-                          value: mealsProvider.suggestedMealCategoryId - 1,
+                          value: mealsProvider.suggestedMealCategoryId,
                           hint: const Text("Select meal type"),
                           isExpanded: true,
-                          items: MealController().categories.asMap().entries.map((entry) {
-                            final idx = entry.key;
-                            final value = entry.value;
-                            return DropdownMenuItem<int>(
-                              value: idx,
-                              child: Text(value),
-                            );
-                          }).toList(),
+                          items: MealController()
+                              .categories
+                              .map((category) => DropdownMenuItem<int>(
+                            value: category["id"] as int, // 👈 use map key
+                            child: Text(category["name"] as String), // 👈 use map key
+                          ))
+                              .toList(),
                           onChanged: (newValue) {
                             if (newValue != null) {
                               mealsProvider.changeSuggestedMealCategoryId(newValue);
@@ -105,6 +104,7 @@ class _EditSuggestionMealScreenState extends State<EditSuggestionMealScreen> {
                           },
                         ),
                       ),
+
                     ],
                   ),
                   Row(

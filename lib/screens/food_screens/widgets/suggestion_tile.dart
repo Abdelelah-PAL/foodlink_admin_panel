@@ -89,7 +89,7 @@ class _EmptySuggestionTileState extends State<EmptySuggestionTile> {
                   SizedBox(
                     width: SizeConfig.getProportionalWidth(50),
                     child: DropdownButton<int>(
-                      value: meal.categoryId,
+                      value: meal.categoryId! > 0 ? meal.categoryId! - 1 : 0,
                       hint: const Text("Select meal type"),
                       isExpanded: true,
                       items: MealController().categories.asMap().entries.map((entry) {
@@ -97,12 +97,12 @@ class _EmptySuggestionTileState extends State<EmptySuggestionTile> {
                         final value = entry.value;
                         return DropdownMenuItem<int>(
                           value: idx,
-                          child: Text(value),
+                          child: Text(value['name']),
                         );
                       }).toList(),
                       onChanged: (newValue) {
                         if (newValue != null) {
-                          setState(() => meal.categoryId = newValue);
+                          setState(() => meal.categoryId = newValue + 1);
                         }
                       },
                     ),
@@ -201,7 +201,7 @@ class _EmptySuggestionTileState extends State<EmptySuggestionTile> {
                         onPressed: () async {
                           await StorageProvider().pickSuggestionImage(widget.tileIndex);
                           setState(() {
-                            meal.imageUrl = ""; // update if needed
+                            meal.imageUrl = "";
                           });
                         },
                         icon: const Icon(Icons.camera_alt_outlined),
