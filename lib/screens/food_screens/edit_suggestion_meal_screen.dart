@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:foodlink_admin_panel/screens/food_screens/meal_screen.dart';
 import 'package:foodlink_admin_panel/screens/food_screens/suggestion_meals_list_screen.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
@@ -60,7 +61,7 @@ class _EditSuggestionMealScreenState extends State<EditSuggestionMealScreen> {
                     isUpdateSource: true,
                     imageUrl: widget.meal.imageUrl,
                     backButtonOnPressed: () {
-                      MealsProvider().resetPlannedMealValues(storageProvider);
+                      MealsProvider().resetSuggestedMealValues(storageProvider);
                       Get.back();
                     },
                   ),
@@ -82,6 +83,27 @@ class _EditSuggestionMealScreenState extends State<EditSuggestionMealScreen> {
                         iconSizeFactor: 31,
                         settingsProvider: settingsProvider,
                         isCentered: false,
+                      ),
+                      SizedBox(
+                        width: SizeConfig.getProportionalWidth(50),
+                        child: DropdownButton<int>(
+                          value: mealsProvider.suggestedMealCategoryId - 1,
+                          hint: const Text("Select meal type"),
+                          isExpanded: true,
+                          items: MealController().categories.asMap().entries.map((entry) {
+                            final idx = entry.key;
+                            final value = entry.value;
+                            return DropdownMenuItem<int>(
+                              value: idx,
+                              child: Text(value),
+                            );
+                          }).toList(),
+                          onChanged: (newValue) {
+                            if (newValue != null) {
+                              mealsProvider.changeSuggestedMealCategoryId(newValue);
+                            }
+                          },
+                        ),
                       ),
                     ],
                   ),
@@ -187,7 +209,6 @@ class _EditSuggestionMealScreenState extends State<EditSuggestionMealScreen> {
                   SizeConfig.customSizedBox(null, 20, null),
                   CustomButton(
                     onTap: () async {
-                      print("meow");
                       if (MealController()
                           .suggestedMealNameController
                           .text

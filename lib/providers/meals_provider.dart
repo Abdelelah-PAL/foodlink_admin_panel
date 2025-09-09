@@ -25,6 +25,7 @@ class MealsProvider with ChangeNotifier {
   ];
 
   final MealsServices _ms = MealsServices();
+  int suggestedMealCategoryId = 0;
   bool isLoading = false;
   int numberOfPlannedMealIngredients = 2;
   int numberOfPlannedMealSteps = 2;
@@ -216,7 +217,7 @@ class MealsProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void fillDataForEditionSuggestedMeal(suggestedMeal) {
+  void fillDataForEditionSuggestedMeal(Meal suggestedMeal) {
     MealController().suggestedMealNameController.text = suggestedMeal.name;
     numberOfEditedSuggestedMealIngredients = suggestedMeal.ingredients.length + 1;
     suggestedMeal.ingredients.asMap().forEach((index, controller) {
@@ -225,13 +226,14 @@ class MealsProvider with ChangeNotifier {
       }
       editedSuggestedMealIngredientsControllers[index].text = suggestedMeal.ingredients[index];
     });
-    numberOfEditedSuggestedMealSteps = suggestedMeal.recipe.length + 1;
-    suggestedMeal.recipe.asMap().forEach((index, controller) {
+    numberOfEditedSuggestedMealSteps = suggestedMeal.recipe!.length + 1;
+    suggestedMeal.recipe!.asMap().forEach((index, controller) {
       if (index + 1 > addedSuggestedMealRecipeControllers.length) {
         editedSuggestedMealStepsControllers.add(TextEditingController());
       }
-      editedSuggestedMealStepsControllers[index].text = suggestedMeal.recipe[index];
+      editedSuggestedMealStepsControllers[index].text = suggestedMeal.recipe![index];
     });
+    suggestedMealCategoryId = suggestedMeal.categoryId!;
     notifyListeners();
   }
 
@@ -295,5 +297,10 @@ class MealsProvider with ChangeNotifier {
       addedSuggestedMealNameControllers.removeAt(index);
       notifyListeners();
     }
+  }
+
+  void changeSuggestedMealCategoryId(int categoryId) {
+    suggestedMealCategoryId = categoryId;
+    notifyListeners();
   }
 }

@@ -14,7 +14,8 @@ class MealImageContainer extends StatefulWidget {
       {super.key,
       this.imageUrl,
       required this.isAddSource,
-      required this.isUpdateSource,  this.backButtonOnPressed});
+      required this.isUpdateSource,
+      this.backButtonOnPressed});
 
   final bool isAddSource;
   final bool isUpdateSource;
@@ -81,9 +82,9 @@ class _MealImageContainerState extends State<MealImageContainer> {
                   ),
                 ),
                 CustomBackButton(
-                  onPressed: () =>
-                      {MealsProvider().resetPlannedMealValues(storageProvider)},
+                  onPressed: widget.backButtonOnPressed ?? () => Get.back(),
                 ),
+
               ],
             )
           : Stack(

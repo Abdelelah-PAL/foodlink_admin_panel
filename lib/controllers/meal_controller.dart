@@ -8,6 +8,7 @@ import '../providers/storage_provider.dart';
 import '../screens/food_screens/meal_screen.dart';
 import '../screens/widgets/custom_text.dart';
 import '../services/meals_services.dart';
+import '../services/translation_services.dart';
 import 'meal_types.dart';
 
 class MealController {
@@ -54,6 +55,15 @@ class MealController {
     return languageCode;
   }
 
+
+  final categories = [
+    TranslationService().translate("Breakfast"),
+    TranslationService().translate("Lunch"),
+    TranslationService().translate("Dinner"),
+    TranslationService().translate("Sweets"),
+    TranslationService().translate("Snacks"),
+    TranslationService().translate("Drinks"),
+  ];
   Future<void> addPlannedMeal(MealsProvider mealsProvider, StorageProvider storageProvider) async {
     String? imageUrl;
     if (storageProvider.mealImageIsPicked) {
@@ -219,8 +229,9 @@ class MealController {
 
   Future<void> updateSuggestionMeal(MealsProvider mealsProvider, StorageProvider storageProvider, Meal  suggestedMeal) async {
     String? imageUrl = '';
+    print(suggestedMeal.imageUrl);
     if (storageProvider.mealImageIsPicked) {
-      if (suggestedMeal.imageUrl != null || suggestedMeal.imageUrl != "") {
+      if (suggestedMeal.imageUrl != null && suggestedMeal.imageUrl != "") {
         await StorageProvider().deleteImage(suggestedMeal.imageUrl);
       }
       imageUrl = await StorageProvider()
@@ -242,6 +253,7 @@ class MealController {
         ingredients: ingredients,
         recipe: steps,
         imageUrl: (imageUrl?.isNotEmpty ?? false) ? imageUrl : null,
+        categoryId: mealsProvider.suggestedMealCategoryId,
         typeId: MealTypes.suggestedMeal));
     mealsProvider.resetSuggestedMealValues(storageProvider);
 

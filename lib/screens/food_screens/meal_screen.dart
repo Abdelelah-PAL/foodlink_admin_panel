@@ -81,10 +81,6 @@ class MealScreen extends StatelessWidget {
                     settingsProvider: settingsProvider,
                   ),
                   SizeConfig.customSizedBox(null, 30, null),
-                  SourceMealView(
-                    meal: meal,
-                    settingsProvider: settingsProvider,
-                  )
                 ],
               ),
             ),

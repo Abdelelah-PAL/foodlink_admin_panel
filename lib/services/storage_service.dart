@@ -50,9 +50,15 @@ class StorageServices with ChangeNotifier {
 
   Future<void> deleteImage(String fileUrl) async {
     try {
-      if(fileUrl != "") {
+      if (fileUrl.isNotEmpty) {
         Reference ref = _storage.refFromURL(fileUrl);
         await ref.delete();
+      }
+    } on FirebaseException catch (e) {
+      if (e.code == 'object-not-found') {
+        return;
+      } else {
+        rethrow;
       }
     } catch (e) {
       rethrow;

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../../controllers/meal_types.dart';
+import '../../../controllers/meal_controller.dart';
 import '../../../core/constants/assets.dart';
 import '../../../core/constants/colors.dart';
 import '../../../core/utils/size_config.dart';
@@ -9,7 +9,6 @@ import '../../../providers/settings_provider.dart';
 import '../../../providers/storage_provider.dart';
 import '../../../services/translation_services.dart';
 import '../../widgets/custom_app_textfield.dart';
-import '../../widgets/custom_button.dart';
 import 'ingredient_box.dart';
 import 'step_box.dart';
 
@@ -33,14 +32,7 @@ class EmptySuggestionTile extends StatefulWidget {
 }
 
 class _EmptySuggestionTileState extends State<EmptySuggestionTile> {
-  final items = [
-    TranslationService().translate("Breakfast"),
-    TranslationService().translate("Lunch"),
-    TranslationService().translate("Dinner"),
-    TranslationService().translate("Sweets"),
-    TranslationService().translate("Snacks"),
-    TranslationService().translate("Drinks"),
-  ];
+
 
   List<TextEditingController> ingredientControllers = [];
   List<TextEditingController> stepsControllers = [];
@@ -55,7 +47,7 @@ class _EmptySuggestionTileState extends State<EmptySuggestionTile> {
     stepsControllers.add(TextEditingController(text: meal.recipe != null && meal.recipe!.isNotEmpty ? meal.recipe![0] : ""));
     // ensure meal lists have at least one item
     if (meal.ingredients.isEmpty) meal.ingredients.add("");
-    if (meal.recipe == null) meal.recipe = [""];
+    meal.recipe ??= [""];
   }
 
   void addIngredient() {
@@ -94,14 +86,13 @@ class _EmptySuggestionTileState extends State<EmptySuggestionTile> {
               Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Meal type dropdown
                   SizedBox(
                     width: SizeConfig.getProportionalWidth(50),
                     child: DropdownButton<int>(
                       value: meal.categoryId,
                       hint: const Text("Select meal type"),
                       isExpanded: true,
-                      items: items.asMap().entries.map((entry) {
+                      items: MealController().categories.asMap().entries.map((entry) {
                         final idx = entry.key;
                         final value = entry.value;
                         return DropdownMenuItem<int>(
@@ -143,7 +134,9 @@ class _EmptySuggestionTileState extends State<EmptySuggestionTile> {
                         ...ingredientControllers.asMap().entries.map((entry) {
                           final i = entry.key;
                           final controller = entry.value;
-                          while (meal.ingredients.length <= i) meal.ingredients.add("");
+                          while (meal.ingredients.length <= i) {
+                            meal.ingredients.add("");
+                          }
                           return IngredientBox(
                             settingsProvider: widget.settingsProvider,
                             controller: controller,
@@ -168,7 +161,9 @@ class _EmptySuggestionTileState extends State<EmptySuggestionTile> {
                         ...stepsControllers.asMap().entries.map((entry) {
                           final i = entry.key;
                           final controller = entry.value;
-                          while (meal.recipe!.length <= i) meal.recipe!.add("");
+                          while (meal.recipe!.length <= i) {
+                            meal.recipe!.add("");
+                          }
                           return StepBox(
                             settingsProvider: widget.settingsProvider,
                             controller: controller,
