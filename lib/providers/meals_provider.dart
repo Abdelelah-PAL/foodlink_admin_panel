@@ -134,7 +134,7 @@ class MealsProvider with ChangeNotifier {
   }
 
   Future<void> deleteSuggestedMeal(String docId) async {
-    await _ms.deletePlannedMeal(docId);
+    await _ms.deleteSuggestedMeal(docId);
   }
 
   Future<void> deleteImage(imageUrl) async {

@@ -50,11 +50,11 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          _buildNavItem(Icons.list, 0, null),
+          _buildNavItem(Icons.next_plan_outlined, 0, null),
           _buildNavItem(Icons.add_a_photo_outlined, 1, null),
           _buildNavItem(Icons.article_outlined, 2, null),
           _buildNavItem(Icons.design_services, 3, null),
-          _buildNavItem(Icons.file_present, 4, null),
+          _buildNavItem(Icons.set_meal, 4, null),
           _buildNavItem(Icons.settings, 5, null),
         ],
       ),

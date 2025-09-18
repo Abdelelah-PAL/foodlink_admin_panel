@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:foodlink_admin_panel/controllers/meal_controller.dart';
+import 'package:foodlink_admin_panel/screens/food_screens/suggestion_meals_list_screen.dart';
+import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import '../../../core/constants/colors.dart';
 import '../../../core/utils/size_config.dart';
@@ -82,7 +85,8 @@ class _AddSuggestionsScreenState extends State<AddSuggestionsScreen> {
                 SizeConfig.customSizedBox(null, 20, null),
                 CustomButton(
                   onTap: () async {
-                    mealsProvider.addSuggestedMeals(storageProvider);
+                    await MealController().addSuggestionMeals(mealsProvider, settingsProvider, storageProvider, context);
+                    Get.to(() => const SuggestionMealsListScreen());
                   },
                   text: 'confirm',
                   width: SizeConfig.getProperVerticalSpace(18),

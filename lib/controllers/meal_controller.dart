@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:foodlink_admin_panel/providers/settings_provider.dart';
 import 'package:get/get.dart';
 import '../core/utils/size_config.dart';
 import '../models/meal.dart';
@@ -55,17 +56,17 @@ class MealController {
     return languageCode;
   }
 
-
   final List<Map<String, dynamic>> categories = [
-  {"id": 1, "name": TranslationService().translate("Breakfast")},
-  {"id": 2, "name": TranslationService().translate("Lunch")},
-  {"id": 3, "name": TranslationService().translate("Dinner")},
-  {"id": 4, "name": TranslationService().translate("Sweets")},
-  {"id": 5, "name": TranslationService().translate("Snacks")},
-  {"id": 6, "name": TranslationService().translate("Drinks")},
+    {"id": 1, "name": TranslationService().translate("Breakfast")},
+    {"id": 2, "name": TranslationService().translate("Lunch")},
+    {"id": 3, "name": TranslationService().translate("Dinner")},
+    {"id": 4, "name": TranslationService().translate("Sweets")},
+    {"id": 5, "name": TranslationService().translate("Snacks")},
+    {"id": 6, "name": TranslationService().translate("Drinks")},
   ];
 
-  Future<void> addPlannedMeal(MealsProvider mealsProvider, StorageProvider storageProvider) async {
+  Future<void> addPlannedMeal(
+      MealsProvider mealsProvider, StorageProvider storageProvider) async {
     String? imageUrl;
     if (storageProvider.mealImageIsPicked) {
       imageUrl = await StorageProvider()
@@ -93,10 +94,14 @@ class MealController {
         typeId: MealTypes.plannedMeal));
 
     FeaturesProvider().resetArticleValues(storageProvider);
-    Get.to(MealScreen(meal: addedPlannedMeal, source: "planned",));
+    Get.to(MealScreen(
+      meal: addedPlannedMeal,
+      source: "planned",
+    ));
   }
 
-  Future<void> updatePlannedMeal(MealsProvider mealsProvider,StorageProvider storageProvider, Meal meal) async {
+  Future<void> updatePlannedMeal(MealsProvider mealsProvider,
+      StorageProvider storageProvider, Meal meal) async {
     String? imageUrl = '';
     if (storageProvider.mealImageIsPicked) {
       if (meal.imageUrl != null || meal.imageUrl != "") {
@@ -128,14 +133,16 @@ class MealController {
 
     mealsProvider.resetPlannedMealValues(storageProvider);
 
-    Get.to(MealScreen(meal: updatedPlannedMeal, source: 'planned',));
+    Get.to(MealScreen(
+      meal: updatedPlannedMeal,
+      source: 'planned',
+    ));
   }
 
   Meal findPlannedMealById(meals, id) {
     Meal plannedMeal = meals.firstWhere((meal) => meal.documentId == id);
     return plannedMeal;
   }
-
 
   void showSuccessUploadingDialog(BuildContext context, settingsProvider) {
     showDialog(
@@ -224,18 +231,24 @@ class MealController {
     return days[date.weekday - 1];
   }
 
-  Future<void> addSuggestionMeals(MealsProvider mealsProvider,StorageProvider storageProvider) async {
+  Future<void> addSuggestionMeals(
+      MealsProvider mealsProvider,
+      SettingsProvider settingsProvider,
+      StorageProvider storageProvider,
+      context) async {
     await mealsProvider.addSuggestedMeals(storageProvider);
+    await mealsProvider.getAllSuggestedMeals();
   }
 
-  Future<void> updateSuggestionMeal(MealsProvider mealsProvider, StorageProvider storageProvider, Meal  suggestedMeal) async {
+  Future<void> updateSuggestionMeal(MealsProvider mealsProvider,
+      StorageProvider storageProvider, Meal suggestedMeal) async {
     String? imageUrl = '';
     if (storageProvider.mealImageIsPicked) {
       if (suggestedMeal.imageUrl != null && suggestedMeal.imageUrl != "") {
         await StorageProvider().deleteImage(suggestedMeal.imageUrl);
       }
-      imageUrl = await StorageProvider()
-          .uploadFile(storageProvider.pickedMealImage!, "suggested_meals_images");
+      imageUrl = await StorageProvider().uploadFile(
+          storageProvider.pickedMealImage!, "suggested_meals_images");
     }
     List<String> ingredients = MealsProvider()
         .editedSuggestedMealIngredientsControllers
@@ -257,7 +270,10 @@ class MealController {
         typeId: MealTypes.suggestedMeal));
     mealsProvider.resetSuggestedMealValues(storageProvider);
 
-    Get.to(MealScreen(meal: updatedSuggestedMeal, source: 'suggested',));
+    Get.to(MealScreen(
+      meal: updatedSuggestedMeal,
+      source: 'suggested',
+    ));
   }
 
   Meal findSuggestedMealById(meals, id) {
