@@ -104,7 +104,7 @@ class MealController {
       StorageProvider storageProvider, Meal meal) async {
     String? imageUrl = '';
     if (storageProvider.mealImageIsPicked) {
-      if (meal.imageUrl != null || meal.imageUrl != "") {
+      if (meal.imageUrl != null && meal.imageUrl != "") {
         await StorageProvider().deleteImage(meal.imageUrl);
       }
       imageUrl = await StorageProvider()
