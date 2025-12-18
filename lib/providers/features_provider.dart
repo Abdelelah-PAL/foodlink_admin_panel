@@ -112,6 +112,10 @@ class FeaturesProvider with ChangeNotifier {
 
   Future<void> deleteArticle(id) async {
     await _fs.deleteArticle(id);
+    articles.removeWhere(
+          (article) => article.documentId == id,
+    );
+    notifyListeners();
   }
 
   void resetArticleValues(StorageProvider storageProvider) {
