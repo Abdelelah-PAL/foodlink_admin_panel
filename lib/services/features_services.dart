@@ -27,7 +27,6 @@ class FeaturesServices with ChangeNotifier {
 
   Future<Feature> addFeature(feature) async {
     try {
-      print(feature);
       var addedFeature =
           await _firebaseFireStore.collection('features').add(feature.toMap());
       var featureSnapshot = await addedFeature.get();

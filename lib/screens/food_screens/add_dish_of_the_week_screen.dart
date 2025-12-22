@@ -1,9 +1,9 @@
 import 'dart:developer';
 import 'package:flutter/material.dart';
+import 'package:foodlink_admin_panel/screens/food_screens/dish_of_the_week_list_screen.dart';
+import 'package:get/get.dart';
 import 'package:provider/provider.dart';
-
 import '../../controllers/meal_controller.dart';
-import '../../core/constants/assets.dart';
 import '../../core/constants/colors.dart';
 import '../../core/utils/size_config.dart';
 import '../../providers/meals_provider.dart';
@@ -19,24 +19,8 @@ class AddDishOfTheWeekScreen extends StatefulWidget {
 }
 
 class _AddDishOfTheWeekScreenState extends State<AddDishOfTheWeekScreen> {
-  Offset _position = Offset.zero;
   late MealsProvider mealsProvider;
   late StorageProvider storageProvider;
-  final GlobalKey imageKey = GlobalKey();
-
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      final screenSize = MediaQuery.of(context).size;
-      setState(() {
-        _position = Offset(
-          (screenSize.width - 100) / 2,
-          (screenSize.height - 100) / 2,
-        );
-      });
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -49,33 +33,17 @@ class _AddDishOfTheWeekScreenState extends State<AddDishOfTheWeekScreen> {
       body: Stack(
         children: [
           Center(
-            child: Image.asset(
-              Assets.dishOfTheWeek,
-              key: imageKey,
-              fit: BoxFit.cover,
-            ),
-          ),
-          Center(
             child: IconButton(
               onPressed: () => storageProvider.pickFile("DOW"),
               icon: const Icon(Icons.add_a_photo, size: 30),
             ),
           ),
           if (storageProvider.dOWIsPicked && storageProvider.pickedDOW != null)
-            Positioned(
-              left: _position.dx,
-              top: _position.dy,
-              child: GestureDetector(
-                onPanUpdate: (details) {
-                  setState(() {
-                    _position += details.delta;
-                  });
-                },
-                child: Image.memory(
-                  storageProvider.pickedDOW!.files.first.bytes!,
-                  width: SizeConfig.getProperHorizontalSpace(7),
-                  height: SizeConfig.getProperVerticalSpace(5),
-                ),
+            Center(
+              child: Image.memory(
+                storageProvider.pickedDOW!.files.first.bytes!,
+                width: SizeConfig.getProperHorizontalSpace(7),
+                height: SizeConfig.getProperVerticalSpace(5),
               ),
             ),
           Align(
@@ -90,42 +58,20 @@ class _AddDishOfTheWeekScreenState extends State<AddDishOfTheWeekScreen> {
                       if (storageProvider.pickedDOW == null) {
                         throw Exception('pickedDOW is null');
                       }
-
                       var imageUrl = await storageProvider.uploadFile(
                         storageProvider.pickedDOW!,
                         "dish_of_the_week",
-                      );
-
-                      final RenderBox imageBox = imageKey.currentContext
-                          ?.findRenderObject() as RenderBox;
-                      final Offset imageTopLeft =
-                          imageBox.localToGlobal(Offset.zero);
-                      final Offset relativePosition = _position - imageTopLeft;
-
-                      final double x =
-                          relativePosition.dx / imageBox.size.width;
-                      final double y =
-                          relativePosition.dy / imageBox.size.height;
-
-                      final double rawWidth =
-                          SizeConfig.getProperHorizontalSpace(7);
-                      final double rawHeight =
-                          SizeConfig.getProperVerticalSpace(5);
-
-                      final double width = rawWidth / imageBox.size.width;
-                      final double height = rawHeight / imageBox.size.height;
-                      await storageProvider.saveImageMetadata(
-                        imageUrl!,
-                        x,
-                        y,
-                        width,
-                        height,
                       );
 
                       if (!context.mounted) return;
                       MealController().showSuccessUploadingDialog(
                           context, settingsProvider);
                       mealsProvider.resetPlannedMealValues(storageProvider);
+                      await storageProvider.saveImageMetadata(
+                        imageUrl!,
+                        true,
+                      );
+                      Get.to(const DishOfTheWeekScreen());
                     } catch (e) {
                       log('uploadImage : $e');
                     }

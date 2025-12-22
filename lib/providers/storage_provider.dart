@@ -1,5 +1,8 @@
+import 'dart:async';
+
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
+import '../models/dish_of_the_week.dart';
 import '../services/storage_service.dart';
 
 class StorageProvider with ChangeNotifier {
@@ -27,34 +30,34 @@ class StorageProvider with ChangeNotifier {
     'ar_image': null,
     'en_image': null
   };
+  List<DishOfTheWeek> dowImageURLs = [];
 
-  List<bool> suggestionsImagesArePicked = [
-    false
-  ];
-  List<dynamic> suggestionsPickedImages = [
-    null
-  ];
+  List<bool> suggestionsImagesArePicked = [false];
+  List<dynamic> suggestionsPickedImages = [null];
+
+  bool isLoading = false;
+  StreamSubscription? _dowSubscription;
 
   Future<void> pickFile(String source) async {
     try {
-      FilePickerResult? file  = await FilePicker.platform.pickFiles(
+      FilePickerResult? file = await FilePicker.platform.pickFiles(
         type: FileType.image,
       );
 
-        if (file != null) {
-          switch (source) {
-            case "meal":
-              pickedMealImage = file;
-              mealImageIsPicked = true;
-              break;
-            case "DOW":
-              pickedDOW = file;
-              dOWIsPicked = true;
-              break;
-            case "articles":
-              pickedArticleImage = file;
-              articleImageIsPicked = true;
-              break;
+      if (file != null) {
+        switch (source) {
+          case "meal":
+            pickedMealImage = file;
+            mealImageIsPicked = true;
+            break;
+          case "DOW":
+            pickedDOW = file;
+            dOWIsPicked = true;
+            break;
+          case "articles":
+            pickedArticleImage = file;
+            articleImageIsPicked = true;
+            break;
         }
       }
       notifyListeners();
@@ -130,15 +133,12 @@ class StorageProvider with ChangeNotifier {
     }
   }
 
-
   Future<String?> uploadFile(FilePickerResult path, String tag) async {
     return _ss.uploadFile(path, tag);
   }
 
-  Future<void> saveImageMetadata(String imageUrl, double dx, double dy,
-      double width, double height) async {
-    _ss.saveImageMetadata(
-        imageUrl: imageUrl, dx: dx, dy: dy, width: width, height: height);
+  Future<void> saveImageMetadata(String imageUrl, bool active) async {
+    _ss.saveImageMetadata(imageUrl: imageUrl);
   }
 
   Future<void> deleteImage(imageUrl) async {
@@ -151,5 +151,23 @@ class StorageProvider with ChangeNotifier {
     featuresPickedImages
         .insert(index, {'ar_image': arImage, 'en_image': enImage});
     notifyListeners();
+  }
+
+  void listenToDowImages() {
+    isLoading = true;
+    notifyListeners();
+
+    _dowSubscription = _ss.getDishOfTheWeek().listen(
+      (dishes) {
+        dowImageURLs = dishes;
+        isLoading = false;
+        notifyListeners();
+      },
+      onError: (e) {
+        debugPrint('Error fetching DOW images: $e');
+        isLoading = false;
+        notifyListeners();
+      },
+    );
   }
 }

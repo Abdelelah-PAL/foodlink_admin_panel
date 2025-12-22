@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:foodlink_admin_panel/models/dish_of_the_week.dart';
 
 class StorageServices with ChangeNotifier {
   final FirebaseStorage _storage = FirebaseStorage.instance;
@@ -28,21 +29,13 @@ class StorageServices with ChangeNotifier {
   }
 
   Future<void> saveImageMetadata(
-      {required String imageUrl,
-      required double dx,
-      required double dy,
-      required double width,
-      required double height}) async {
+      {required String imageUrl}) async {
     try {
-      final data = {
-        "imageUrl": imageUrl,
-        "position": {"x": dx, "y": dy},
-        "width": width,
-        "height": height,
-        "uploadedAt": FieldValue.serverTimestamp(),
-      };
-
-      await FirebaseFirestore.instance.collection("dish_of_the_week").add(data);
+      DishOfTheWeek dishOfTheWeek =
+          DishOfTheWeek(imageUrl: imageUrl);
+      await FirebaseFirestore.instance
+          .collection('dish_of_the_week')
+          .add(dishOfTheWeek.toFirestore());
     } catch (ex) {
       log("Error saving image metadata: ${ex.toString()}");
     }
@@ -64,4 +57,18 @@ class StorageServices with ChangeNotifier {
       rethrow;
     }
   }
+
+  Stream<List<DishOfTheWeek>> getDishOfTheWeek() {
+    return FirebaseFirestore.instance
+        .collection('dish_of_the_week')
+        .orderBy('uploadedAt', descending: true)
+        .snapshots()
+        .map((snapshot) {
+      return snapshot.docs
+          .map((doc) => DishOfTheWeek.fromFirestore(doc))
+          .toList();
+    });
+  }
+
+
 }

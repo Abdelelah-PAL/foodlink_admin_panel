@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import '../controllers/features_controller.dart';
 import '../models/beyond_calories_article.dart';
 import '../models/feature.dart';
-import '../models/meal.dart';
 import '../services/features_services.dart';
 import 'storage_provider.dart';
 

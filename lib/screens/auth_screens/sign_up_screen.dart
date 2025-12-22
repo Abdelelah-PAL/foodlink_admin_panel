@@ -12,7 +12,6 @@ import '../../providers/admins_provider.dart';
 import '../../services/translation_services.dart';
 import '../widgets/custom_text.dart';
 import 'widgets/custom_auth_btn.dart';
-import 'widgets/custom_auth_divider.dart';
 import 'widgets/custom_auth_footer.dart';
 import 'widgets/custom_auth_textfield.dart';
 import 'widgets/custom_error_txt.dart';

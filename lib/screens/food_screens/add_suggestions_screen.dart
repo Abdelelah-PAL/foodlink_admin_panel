@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:foodlink_admin_panel/controllers/meal_controller.dart';
-import 'package:foodlink_admin_panel/screens/food_screens/suggestion_meals_list_screen.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import '../../../core/constants/colors.dart';
 import '../../../core/utils/size_config.dart';
+import '../../controllers/meal_controller.dart';
 import '../../providers/meals_provider.dart';
 import '../../providers/settings_provider.dart';
 import '../../providers/storage_provider.dart';
+import 'suggestion_meals_list_screen.dart';
 import 'widgets/suggestion_tile.dart';
 import '../widgets/custom_back_button.dart';
 import '../widgets/custom_button.dart';
