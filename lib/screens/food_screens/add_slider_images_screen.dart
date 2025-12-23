@@ -1,6 +1,5 @@
 import 'dart:developer';
 import 'package:flutter/material.dart';
-import 'package:foodlink_admin_panel/screens/food_screens/dish_of_the_week_list_screen.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import '../../controllers/meal_controller.dart';
@@ -9,16 +8,19 @@ import '../../core/utils/size_config.dart';
 import '../../providers/meals_provider.dart';
 import '../../providers/settings_provider.dart';
 import '../../providers/storage_provider.dart';
+import '../dashboard/dashboard.dart';
+import '../widgets/custom_back_button.dart';
 import '../widgets/custom_button.dart';
+import '../widgets/custom_text.dart';
 
-class AddDishOfTheWeekScreen extends StatefulWidget {
-  const AddDishOfTheWeekScreen({super.key});
+class AddSliderImagesScreen extends StatefulWidget {
+  const AddSliderImagesScreen({super.key});
 
   @override
-  State<AddDishOfTheWeekScreen> createState() => _AddDishOfTheWeekScreenState();
+  State<AddSliderImagesScreen> createState() => _AddSliderImagesScreenState();
 }
 
-class _AddDishOfTheWeekScreenState extends State<AddDishOfTheWeekScreen> {
+class _AddSliderImagesScreenState extends State<AddSliderImagesScreen> {
   late MealsProvider mealsProvider;
   late StorageProvider storageProvider;
 
@@ -30,6 +32,23 @@ class _AddDishOfTheWeekScreenState extends State<AddDishOfTheWeekScreen> {
 
     return Scaffold(
       backgroundColor: AppColors.backgroundColor,
+      appBar: PreferredSize(
+        preferredSize: const Size(double.infinity, 100),
+        child:  Row(
+          children: [
+            const CustomBackButton(),
+            SizedBox(
+              width: SizeConfig.getProperHorizontalSpace(2.3),
+            ),
+            const CustomText(
+              isCenter: true,
+              text: "slider_images",
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+            ),
+          ],
+        ),
+      ),
       body: Stack(
         children: [
           Center(
@@ -71,7 +90,7 @@ class _AddDishOfTheWeekScreenState extends State<AddDishOfTheWeekScreen> {
                         imageUrl!,
                         true,
                       );
-                      Get.to(const DishOfTheWeekScreen());
+                      Get.to(const Dashboard());
                     } catch (e) {
                       log('uploadImage : $e');
                     }

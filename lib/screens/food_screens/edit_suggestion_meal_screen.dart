@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:foodlink_admin_panel/screens/food_screens/meal_screen.dart';
-import 'package:foodlink_admin_panel/screens/food_screens/suggestion_meals_list_screen.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import '../../controllers/meal_controller.dart';

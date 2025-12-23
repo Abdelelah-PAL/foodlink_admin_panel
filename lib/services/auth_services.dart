@@ -1,11 +1,10 @@
 import 'package:flutter/foundation.dart';
-import 'package:foodlink_admin_panel/controllers/dashboard_controller.dart';
-import 'package:foodlink_admin_panel/providers/dashboard_provider.dart';
-import 'package:foodlink_admin_panel/screens/auth_screens/login_screen.dart';
 import 'package:get/get.dart';
 import '../controllers/auth_controller.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
+import '../providers/dashboard_provider.dart';
+import '../screens/auth_screens/login_screen.dart';
 import 'translation_services.dart';
 
 class AuthService with ChangeNotifier {
@@ -52,7 +51,9 @@ class AuthService with ChangeNotifier {
       DashboardProvider().changeIndex(0);
       Get.to(const LoginScreen());
     } catch (e) {
-      print('Error logging out: $e');
+      if (kDebugMode) {
+        print('Error logging out: $e');
+      }
     }
   }
 }

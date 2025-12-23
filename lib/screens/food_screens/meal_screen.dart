@@ -1,21 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:foodlink_admin_panel/providers/storage_provider.dart';
-import 'package:foodlink_admin_panel/screens/food_screens/edit_suggestion_meal_screen.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import '../../core/utils/size_config.dart';
 import '../../models/meal.dart';
 import '../../providers/meals_provider.dart';
 import '../../providers/settings_provider.dart';
+import '../../providers/storage_provider.dart';
 import '../../services/translation_services.dart';
 import '../dashboard/dashboard.dart';
 import '../widgets/custom_button.dart';
 import 'add_planned_meal_screen.dart';
+import 'edit_suggestion_meal_screen.dart';
 import 'widgets/ingredients_meal_view.dart';
 import 'widgets/meal_image_container.dart';
 import 'widgets/name_row.dart';
 import 'widgets/recipe_meal_view.dart';
-import 'widgets/source_meal_view.dart';
 
 class MealScreen extends StatelessWidget {
   const MealScreen(

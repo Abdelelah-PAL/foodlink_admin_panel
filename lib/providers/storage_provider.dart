@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
-import '../models/dish_of_the_week.dart';
+import '../models/slider_image.dart';
 import '../services/storage_service.dart';
 
 class StorageProvider with ChangeNotifier {
@@ -30,7 +30,7 @@ class StorageProvider with ChangeNotifier {
     'ar_image': null,
     'en_image': null
   };
-  List<DishOfTheWeek> dowImageURLs = [];
+  List<SliderImage> dowImageURLs = [];
 
   List<bool> suggestionsImagesArePicked = [false];
   List<dynamic> suggestionsPickedImages = [null];
@@ -139,6 +139,9 @@ class StorageProvider with ChangeNotifier {
 
   Future<void> saveImageMetadata(String imageUrl, bool active) async {
     _ss.saveImageMetadata(imageUrl: imageUrl);
+    dOWIsPicked = false;
+    pickedDOW = null;
+    notifyListeners();
   }
 
   Future<void> deleteImage(imageUrl) async {
@@ -169,5 +172,20 @@ class StorageProvider with ChangeNotifier {
         notifyListeners();
       },
     );
+  }
+
+  Future<void> deleteDOW(SliderImage sliderImage) async {
+    await deleteImage(sliderImage.imageUrl);
+    await _ss.deleteDOWRecord(sliderImage.imageUrl);
+    dowImageURLs.removeWhere(
+      (item) => item.imageUrl == sliderImage.imageUrl,
+    );
+    notifyListeners();
+  }
+
+  Future<void> updateActiveDOW(SliderImage sliderImage) async {
+    await _ss.updateDOWActiveByImageUrl(
+        sliderImage.imageUrl, sliderImage.active!);
+    notifyListeners();
   }
 }

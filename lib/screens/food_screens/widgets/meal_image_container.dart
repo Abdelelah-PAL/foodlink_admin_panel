@@ -4,7 +4,6 @@ import 'package:provider/provider.dart';
 import '../../../core/constants/colors.dart';
 import '../../../core/constants/fonts.dart';
 import '../../../core/utils/size_config.dart';
-import '../../../providers/meals_provider.dart';
 import '../../../providers/storage_provider.dart';
 import '../../../services/translation_services.dart';
 import '../../widgets/custom_back_button.dart';

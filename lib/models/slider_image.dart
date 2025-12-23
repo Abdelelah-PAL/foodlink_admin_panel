@@ -1,22 +1,22 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class DishOfTheWeek {
+class SliderImage {
   String? id;
   final String imageUrl;
   final bool? active;
   final DateTime? uploadedAt;
 
-  DishOfTheWeek({
+  SliderImage({
     this.id,
     required this.imageUrl,
     this.active,
     this.uploadedAt,
   });
 
-  factory DishOfTheWeek.fromFirestore(
+  factory SliderImage.fromFirestore(
       DocumentSnapshot doc) {
     final data = doc.data() as Map<String, dynamic>;
-    return DishOfTheWeek(
+    return SliderImage(
       id: doc.id,
       imageUrl: data['imageUrl'],
       active: data['active'],
