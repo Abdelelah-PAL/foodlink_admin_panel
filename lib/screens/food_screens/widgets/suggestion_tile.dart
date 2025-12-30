@@ -139,7 +139,9 @@ class _EmptySuggestionTileState extends State<EmptySuggestionTile> {
                           }
                           return IngredientBox(
                             settingsProvider: widget.settingsProvider,
-                            controller: controller,
+                            mealsProvider: widget.mealsProvider,
+                            index: i,
+                            edition: true,
                             onChanged: (val) => meal.ingredients[i] = val,
                           );
                         }),

@@ -91,18 +91,20 @@ class _EditSuggestionMealScreenState extends State<EditSuggestionMealScreen> {
                           items: MealController()
                               .categories
                               .map((category) => DropdownMenuItem<int>(
-                            value: category["id"] as int, // 👈 use map key
-                            child: Text(category["name"] as String), // 👈 use map key
-                          ))
+                                    value:
+                                        category["id"] as int, // 👈 use map key
+                                    child: Text(category["name"]
+                                        as String), // 👈 use map key
+                                  ))
                               .toList(),
                           onChanged: (newValue) {
                             if (newValue != null) {
-                              mealsProvider.changeSuggestedMealCategoryId(newValue);
+                              mealsProvider
+                                  .changeSuggestedMealCategoryId(newValue);
                             }
                           },
                         ),
                       ),
-
                     ],
                   ),
                   Row(
@@ -153,10 +155,11 @@ class _EditSuggestionMealScreenState extends State<EditSuggestionMealScreen> {
                                       mealsProvider: mealsProvider);
                                 }
                                 return IngredientBox(
-                                    settingsProvider: settingsProvider,
-                                    controller: mealsProvider
-                                            .editedSuggestedMealIngredientsControllers[
-                                        index]);
+                                  settingsProvider: settingsProvider,
+                                  mealsProvider: mealsProvider,
+                                  index: index,
+                                  edition: true,
+                                );
                               },
                             ),
                           )),

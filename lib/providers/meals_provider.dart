@@ -31,6 +31,8 @@ class MealsProvider with ChangeNotifier {
   int numberOfPlannedMealSteps = 2;
   int numberOfEditedSuggestedMealIngredients = 2;
   int numberOfEditedSuggestedMealSteps = 2;
+  int numberOfAddedSuggestedMealIngredients = 2;
+  int numberOfAddedSuggestedMealSteps = 2;
   int numberOfSuggestionsToAdd = 2;
   DateTime? selectedDate;
   String? day;
@@ -301,6 +303,28 @@ class MealsProvider with ChangeNotifier {
 
   void changeSuggestedMealCategoryId(int categoryId) {
     suggestedMealCategoryId = categoryId;
+    notifyListeners();
+  }
+
+  void removeAdditionIngredient(index) {
+    numberOfAddedSuggestedMealIngredients--;
+    addedSuggestedMealIngredientsControllers.removeAt(index);
+    notifyListeners();
+  }
+  void removeAdditionStep(index) {
+    numberOfAddedSuggestedMealSteps--;
+    addedSuggestedMealRecipeControllers.removeAt(index);
+    notifyListeners();
+  }
+
+  void removeEditionIngredient(index) {
+    numberOfEditedSuggestedMealIngredients--;
+    editedSuggestedMealIngredientsControllers.removeAt(index);
+    notifyListeners();
+  }
+  void removeEditionStep(index) {
+    numberOfEditedSuggestedMealIngredients--;
+    editedSuggestedMealStepsControllers.removeAt(index);
     notifyListeners();
   }
 }
