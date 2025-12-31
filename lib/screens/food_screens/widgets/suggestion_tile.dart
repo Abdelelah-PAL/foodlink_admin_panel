@@ -64,6 +64,26 @@ class _EmptySuggestionTileState extends State<EmptySuggestionTile> {
     });
   }
 
+  void removeIngredient(int index) {
+    if (index >= 0 && index < ingredientControllers.length) {
+      setState(() {
+        ingredientControllers[index].dispose();
+        ingredientControllers.removeAt(index);
+        meal.ingredients.removeAt(index);
+      });
+    }
+  }
+
+  void removeStep(int index) {
+    if (index >= 0 && index < stepsControllers.length) {
+      setState(() {
+        stepsControllers[index].dispose();
+        stepsControllers.removeAt(index);
+        meal.recipe!.removeAt(index);
+      });
+    }
+  }
+
   @override
   void dispose() {
     for (var c in ingredientControllers) {
@@ -137,12 +157,20 @@ class _EmptySuggestionTileState extends State<EmptySuggestionTile> {
                           while (meal.ingredients.length <= i) {
                             meal.ingredients.add("");
                           }
-                          return IngredientBox(
-                            settingsProvider: widget.settingsProvider,
-                            mealsProvider: widget.mealsProvider,
-                            index: i,
-                            edition: true,
-                            onChanged: (val) => meal.ingredients[i] = val,
+                          return Row(
+                            children: [
+                              Expanded(
+                                child: IngredientBox(
+                                  settingsProvider: widget.settingsProvider,
+                                  controller: controller,
+                                  onChanged: (val) => meal.ingredients[i] = val,
+                                ),
+                              ),
+                              IconButton(
+                                onPressed: () => removeIngredient(i),
+                                icon: const Icon(Icons.remove_circle_outline, color: Colors.red),
+                              ),
+                            ],
                           );
                         }),
                         AddIngredientBoxForSuggestion(
@@ -166,10 +194,20 @@ class _EmptySuggestionTileState extends State<EmptySuggestionTile> {
                           while (meal.recipe!.length <= i) {
                             meal.recipe!.add("");
                           }
-                          return StepBox(
-                            settingsProvider: widget.settingsProvider,
-                            controller: controller,
-                            onChanged: (val) => meal.recipe![i] = val,
+                          return Row(
+                            children: [
+                              Expanded(
+                                child: StepBox(
+                                  settingsProvider: widget.settingsProvider,
+                                  controller: controller,
+                                  onChanged: (val) => meal.recipe![i] = val,
+                                ),
+                              ),
+                              IconButton(
+                                onPressed: () => removeStep(i),
+                                icon: const Icon(Icons.remove_circle_outline, color: Colors.red),
+                              ),
+                            ],
                           );
                         }),
                         AddStepBox(

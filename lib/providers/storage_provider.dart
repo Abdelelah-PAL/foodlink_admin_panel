@@ -38,6 +38,8 @@ class StorageProvider with ChangeNotifier {
   bool isLoading = false;
   StreamSubscription? _dowSubscription;
 
+  bool mealImageIsDeleted = false;
+
   Future<void> pickFile(String source) async {
     try {
       FilePickerResult? file = await FilePicker.platform.pickFiles(
@@ -49,6 +51,7 @@ class StorageProvider with ChangeNotifier {
           case "meal":
             pickedMealImage = file;
             mealImageIsPicked = true;
+            mealImageIsDeleted = false;
             break;
           case "DOW":
             pickedDOW = file;
@@ -67,6 +70,13 @@ class StorageProvider with ChangeNotifier {
       }
       rethrow;
     }
+  }
+
+  void deleteMealImage() {
+    mealImageIsDeleted = true;
+    mealImageIsPicked = false;
+    pickedMealImage = null;
+    notifyListeners();
   }
 
   Future<void> pickFeatureImage(String source, int index) async {

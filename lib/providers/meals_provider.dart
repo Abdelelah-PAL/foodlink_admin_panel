@@ -31,8 +31,6 @@ class MealsProvider with ChangeNotifier {
   int numberOfPlannedMealSteps = 2;
   int numberOfEditedSuggestedMealIngredients = 2;
   int numberOfEditedSuggestedMealSteps = 2;
-  int numberOfAddedSuggestedMealIngredients = 2;
-  int numberOfAddedSuggestedMealSteps = 2;
   int numberOfSuggestionsToAdd = 2;
   DateTime? selectedDate;
   String? day;
@@ -146,6 +144,7 @@ class MealsProvider with ChangeNotifier {
   void resetPlannedMealValues(StorageProvider storageProvider) {
     selectedDate = null;
     storageProvider.mealImageIsPicked = false;
+    storageProvider.mealImageIsDeleted = false;
     storageProvider.pickedMealImage = null;
     numberOfPlannedMealIngredients = 2;
     numberOfPlannedMealSteps = 2;
@@ -164,6 +163,7 @@ class MealsProvider with ChangeNotifier {
 
   void resetSuggestedMealValues(StorageProvider storageProvider) {
     storageProvider.mealImageIsPicked = false;
+    storageProvider.mealImageIsDeleted = false;
     storageProvider.pickedMealImage = null;
     numberOfEditedSuggestedMealIngredients = 2;
     numberOfEditedSuggestedMealSteps = 2;
@@ -195,6 +195,22 @@ class MealsProvider with ChangeNotifier {
     numberOfEditedSuggestedMealSteps++;
     editedSuggestedMealStepsControllers.add(TextEditingController());
     notifyListeners();
+  }
+
+  void removeSuggestedMealIngredient(int index) {
+    if (index >= 0 && index < editedSuggestedMealIngredientsControllers.length) {
+      editedSuggestedMealIngredientsControllers.removeAt(index);
+      numberOfEditedSuggestedMealIngredients--;
+      notifyListeners();
+    }
+  }
+
+  void removeSuggestedMealStep(int index) {
+    if (index >= 0 && index < editedSuggestedMealStepsControllers.length) {
+      editedSuggestedMealStepsControllers.removeAt(index);
+      numberOfEditedSuggestedMealSteps--;
+      notifyListeners();
+    }
   }
 
   void fillDataForEditionPlannedMeal(plannedMeal) {
@@ -303,28 +319,6 @@ class MealsProvider with ChangeNotifier {
 
   void changeSuggestedMealCategoryId(int categoryId) {
     suggestedMealCategoryId = categoryId;
-    notifyListeners();
-  }
-
-  void removeAdditionIngredient(index) {
-    numberOfAddedSuggestedMealIngredients--;
-    addedSuggestedMealIngredientsControllers.removeAt(index);
-    notifyListeners();
-  }
-  void removeAdditionStep(index) {
-    numberOfAddedSuggestedMealSteps--;
-    addedSuggestedMealRecipeControllers.removeAt(index);
-    notifyListeners();
-  }
-
-  void removeEditionIngredient(index) {
-    numberOfEditedSuggestedMealIngredients--;
-    editedSuggestedMealIngredientsControllers.removeAt(index);
-    notifyListeners();
-  }
-  void removeEditionStep(index) {
-    numberOfEditedSuggestedMealIngredients--;
-    editedSuggestedMealStepsControllers.removeAt(index);
     notifyListeners();
   }
 }

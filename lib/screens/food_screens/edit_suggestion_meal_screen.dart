@@ -38,9 +38,9 @@ class _EditSuggestionMealScreenState extends State<EditSuggestionMealScreen> {
   @override
   Widget build(BuildContext context) {
     MealsProvider mealsProvider =
-        Provider.of<MealsProvider>(context, listen: true);
+    Provider.of<MealsProvider>(context, listen: true);
     StorageProvider storageProvider =
-        Provider.of<StorageProvider>(context, listen: true);
+    Provider.of<StorageProvider>(context, listen: true);
     SettingsProvider settingsProvider = Provider.of<SettingsProvider>(context);
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -76,7 +76,7 @@ class _EditSuggestionMealScreenState extends State<EditSuggestionMealScreen> {
                         headerText: "meal_name",
                         icon: Assets.mealNameIcon,
                         controller:
-                            MealController().suggestedMealNameController,
+                        MealController().suggestedMealNameController,
                         maxLines: 2,
                         iconSizeFactor: 31,
                         settingsProvider: settingsProvider,
@@ -91,20 +91,18 @@ class _EditSuggestionMealScreenState extends State<EditSuggestionMealScreen> {
                           items: MealController()
                               .categories
                               .map((category) => DropdownMenuItem<int>(
-                                    value:
-                                        category["id"] as int, // 👈 use map key
-                                    child: Text(category["name"]
-                                        as String), // 👈 use map key
-                                  ))
+                            value: category["id"] as int, // 👈 use map key
+                            child: Text(category["name"] as String), // 👈 use map key
+                          ))
                               .toList(),
                           onChanged: (newValue) {
                             if (newValue != null) {
-                              mealsProvider
-                                  .changeSuggestedMealCategoryId(newValue);
+                              mealsProvider.changeSuggestedMealCategoryId(newValue);
                             }
                           },
                         ),
                       ),
+
                     ],
                   ),
                   Row(
@@ -134,18 +132,18 @@ class _EditSuggestionMealScreenState extends State<EditSuggestionMealScreen> {
                                 : TextDirection.ltr,
                             child: GridView.builder(
                               gridDelegate:
-                                  const SliverGridDelegateWithFixedCrossAxisCount(
-                                      mainAxisExtent: 50,
-                                      crossAxisCount: 4,
-                                      crossAxisSpacing: 4,
-                                      mainAxisSpacing: 3,
-                                      childAspectRatio: 10),
+                              const SliverGridDelegateWithFixedCrossAxisCount(
+                                  mainAxisExtent: 50,
+                                  crossAxisCount: 4,
+                                  crossAxisSpacing: 4,
+                                  mainAxisSpacing: 3,
+                                  childAspectRatio: 10),
                               itemCount: mealsProvider
                                   .numberOfEditedSuggestedMealIngredients,
                               itemBuilder: (context, index) {
                                 if (index ==
                                     mealsProvider
-                                            .numberOfEditedSuggestedMealIngredients -
+                                        .numberOfEditedSuggestedMealIngredients -
                                         1) {
                                   return AddIngredientBox(
                                       onTap: () {
@@ -154,11 +152,29 @@ class _EditSuggestionMealScreenState extends State<EditSuggestionMealScreen> {
                                       },
                                       mealsProvider: mealsProvider);
                                 }
-                                return IngredientBox(
-                                  settingsProvider: settingsProvider,
-                                  mealsProvider: mealsProvider,
-                                  index: index,
-                                  edition: true,
+                                return Stack(
+                                  children: [
+                                    IngredientBox(
+                                        settingsProvider: settingsProvider,
+                                        controller: mealsProvider
+                                            .editedSuggestedMealIngredientsControllers[
+                                        index]),
+                                    Positioned(
+                                      right: 0,
+                                      top: 0,
+                                      child: InkWell(
+                                        onTap: () {
+                                          mealsProvider
+                                              .removeSuggestedMealIngredient(index);
+                                        },
+                                        child: const Icon(
+                                          Icons.remove_circle,
+                                          color: Colors.red,
+                                          size: 20,
+                                        ),
+                                      ),
+                                    )
+                                  ],
                                 );
                               },
                             ),
@@ -189,7 +205,7 @@ class _EditSuggestionMealScreenState extends State<EditSuggestionMealScreen> {
                           horizontal: SizeConfig.getProportionalWidth(26)),
                       child: ListView.builder(
                         itemCount:
-                            mealsProvider.numberOfEditedSuggestedMealSteps,
+                        mealsProvider.numberOfEditedSuggestedMealSteps,
                         itemBuilder: (context, index) {
                           if (index ==
                               mealsProvider.numberOfEditedSuggestedMealSteps -
@@ -201,10 +217,28 @@ class _EditSuggestionMealScreenState extends State<EditSuggestionMealScreen> {
                               mealsProvider: mealsProvider,
                             );
                           }
-                          return StepBox(
-                              settingsProvider: settingsProvider,
-                              controller: mealsProvider
-                                  .editedSuggestedMealStepsControllers[index]);
+                          return Stack(
+                            children: [
+                              StepBox(
+                                  settingsProvider: settingsProvider,
+                                  controller: mealsProvider
+                                      .editedSuggestedMealStepsControllers[index]),
+                              Positioned(
+                                right: 0,
+                                top: 0,
+                                child: InkWell(
+                                  onTap: () {
+                                    mealsProvider.removeSuggestedMealStep(index);
+                                  },
+                                  child: const Icon(
+                                    Icons.remove_circle,
+                                    color: Colors.red,
+                                    size: 20,
+                                  ),
+                                ),
+                              )
+                            ],
+                          );
                         },
                       )),
                   SizeConfig.customSizedBox(null, 20, null),

@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
@@ -21,8 +22,7 @@ class AddPlannedMealScreen extends StatefulWidget {
   const AddPlannedMealScreen({
     super.key,
     required this.isAddScreen,
-    this.meal,
-    required this.isUpdateScreen,
+    this.meal, required this.isUpdateScreen,
   });
 
   final bool isUpdateScreen;
@@ -42,9 +42,9 @@ class _AddPlannedMealScreenState extends State<AddPlannedMealScreen> {
   @override
   Widget build(BuildContext context) {
     MealsProvider mealsProvider =
-        Provider.of<MealsProvider>(context, listen: true);
-    StorageProvider storageProvider =
-        Provider.of<StorageProvider>(context, listen: true);
+    Provider.of<MealsProvider>(context, listen: true);
+    StorageProvider storageProvider = Provider.of<StorageProvider>(
+        context, listen: true);
     SettingsProvider settingsProvider = Provider.of<SettingsProvider>(context);
 
     return Scaffold(
@@ -96,8 +96,8 @@ class _AddPlannedMealScreenState extends State<AddPlannedMealScreen> {
                             text: mealsProvider.selectedDate == null
                                 ? "pick_date"
                                 : intl.DateFormat('yyyy-MM-dd')
-                                    .format(mealsProvider.selectedDate!)
-                                    .toString(),
+                                .format(mealsProvider.selectedDate!)
+                                .toString(),
                             width: 100,
                             height: 100,
                           ),
@@ -132,28 +132,23 @@ class _AddPlannedMealScreenState extends State<AddPlannedMealScreen> {
                                 : TextDirection.ltr,
                             child: GridView.builder(
                               gridDelegate:
-                                  const SliverGridDelegateWithFixedCrossAxisCount(
-                                      mainAxisExtent: 50,
-                                      crossAxisCount: 4,
-                                      crossAxisSpacing: 4,
-                                      mainAxisSpacing: 3,
-                                      childAspectRatio: 10),
-                              itemCount:
-                                  mealsProvider.numberOfPlannedMealIngredients,
+                              const SliverGridDelegateWithFixedCrossAxisCount(
+                                  mainAxisExtent: 50,
+                                  crossAxisCount: 4,
+                                  crossAxisSpacing: 4,
+                                  mainAxisSpacing: 3,
+                                  childAspectRatio: 10),
+                              itemCount: mealsProvider.numberOfPlannedMealIngredients,
                               itemBuilder: (context, index) {
                                 if (index ==
-                                    mealsProvider
-                                            .numberOfPlannedMealIngredients -
-                                        1) {
+                                    mealsProvider.numberOfPlannedMealIngredients - 1) {
                                   return AddIngredientBox(
                                       mealsProvider: mealsProvider);
                                 }
                                 return IngredientBox(
-                                  settingsProvider: settingsProvider,
-                                  mealsProvider: mealsProvider,
-                                  edition: false,
-                                  index: index,
-                                );
+                                    settingsProvider: settingsProvider,
+                                    controller: mealsProvider
+                                        .plannedMealIngredientsControllers[index]);
                               },
                             ),
                           )),
@@ -184,16 +179,15 @@ class _AddPlannedMealScreenState extends State<AddPlannedMealScreen> {
                       child: ListView.builder(
                         itemCount: mealsProvider.numberOfPlannedMealSteps,
                         itemBuilder: (context, index) {
-                          if (index ==
-                              mealsProvider.numberOfPlannedMealSteps - 1) {
+                          if (index == mealsProvider.numberOfPlannedMealSteps - 1) {
                             return AddStepBox(
                               mealsProvider: mealsProvider,
                             );
                           }
                           return StepBox(
                               settingsProvider: settingsProvider,
-                              controller: mealsProvider
-                                  .plannedMealStepsControllers[index]);
+                              controller:
+                              mealsProvider.plannedMealStepsControllers[index]);
                         },
                       )),
                   SizeConfig.customSizedBox(null, 20, null),
@@ -213,39 +207,35 @@ class _AddPlannedMealScreenState extends State<AddPlannedMealScreen> {
                     onTap: () async {
                       widget.isAddScreen
                           ? {
-                              if (MealController()
-                                      .plannedMealNameController
-                                      .text
-                                      .isEmpty ||
-                                  mealsProvider.day == null ||
-                                  mealsProvider.day!.isEmpty ||
-                                  mealsProvider.selectedDate == null)
-                                {
-                                  MealController().showFailedAddDialog(
-                                      context, settingsProvider),
-                                }
-                              else
-                                await MealController().addPlannedMeal(
-                                    mealsProvider, storageProvider)
-                            }
-                          : {
-                              if (MealController()
-                                      .plannedMealNameController
-                                      .text
-                                      .isEmpty ||
-                                  mealsProvider.day == null ||
-                                  mealsProvider.day!.isEmpty ||
-                                  mealsProvider.selectedDate == null)
-                                {
-                                  MealController().showFailedAddDialog(
-                                      context, settingsProvider),
-                                }
-                              else
-                                await MealController().updatePlannedMeal(
-                                    mealsProvider,
-                                    storageProvider,
-                                    widget.meal!)
-                            };
+                        if (MealController()
+                            .plannedMealNameController
+                            .text
+                            .isEmpty ||
+                            mealsProvider.day == null ||
+                            mealsProvider.day!.isEmpty ||
+                            mealsProvider.selectedDate == null)
+                          {
+                            MealController().showFailedAddDialog(
+                                context, settingsProvider),
+                          }
+                        else
+                          await MealController().addPlannedMeal(mealsProvider, storageProvider)
+                      }: {
+                        if (MealController()
+                            .plannedMealNameController
+                            .text
+                            .isEmpty ||
+                            mealsProvider.day == null ||
+                            mealsProvider.day!.isEmpty ||
+                            mealsProvider.selectedDate == null)
+                          {
+                            MealController().showFailedAddDialog(
+                                context, settingsProvider),
+                          }
+                        else
+                          await MealController()
+                              .updatePlannedMeal(mealsProvider,storageProvider, widget.meal!)
+                      };
                     },
                     text: TranslationService()
                         .translate(widget.isAddScreen ? "confirm" : "edit"),

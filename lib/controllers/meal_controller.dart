@@ -102,9 +102,17 @@ class MealController {
 
   Future<void> updatePlannedMeal(MealsProvider mealsProvider,
       StorageProvider storageProvider, Meal meal) async {
-    String? imageUrl = '';
+    String? imageUrl = meal.imageUrl;
+    
+    if (storageProvider.mealImageIsDeleted) {
+       if (meal.imageUrl != null && meal.imageUrl!.isNotEmpty) {
+           await StorageProvider().deleteImage(meal.imageUrl);
+       }
+       imageUrl = null;
+    }
+
     if (storageProvider.mealImageIsPicked) {
-      if (meal.imageUrl != null && meal.imageUrl != "") {
+      if (meal.imageUrl != null && meal.imageUrl != "" && !storageProvider.mealImageIsDeleted) {
         await StorageProvider().deleteImage(meal.imageUrl);
       }
       imageUrl = await StorageProvider()
@@ -242,9 +250,17 @@ class MealController {
 
   Future<void> updateSuggestionMeal(MealsProvider mealsProvider,
       StorageProvider storageProvider, Meal suggestedMeal) async {
-    String? imageUrl = '';
+    String? imageUrl = suggestedMeal.imageUrl;
+    
+    if (storageProvider.mealImageIsDeleted) {
+       if (suggestedMeal.imageUrl != null && suggestedMeal.imageUrl!.isNotEmpty) {
+           await StorageProvider().deleteImage(suggestedMeal.imageUrl);
+       }
+       imageUrl = null;
+    }
+
     if (storageProvider.mealImageIsPicked) {
-      if (suggestedMeal.imageUrl != null && suggestedMeal.imageUrl != "") {
+      if (suggestedMeal.imageUrl != null && suggestedMeal.imageUrl != "" && !storageProvider.mealImageIsDeleted) {
         await StorageProvider().deleteImage(suggestedMeal.imageUrl);
       }
       imageUrl = await StorageProvider().uploadFile(

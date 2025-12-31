@@ -56,7 +56,9 @@ class _MealImageContainerState extends State<MealImageContainer> {
                           storageProvider.pickedMealImage!.files.first.bytes!,
                           fit: BoxFit.cover,
                         )
-                      : widget.imageUrl != null && widget.imageUrl!.isNotEmpty
+                      : (!storageProvider.mealImageIsDeleted &&
+                              widget.imageUrl != null &&
+                              widget.imageUrl!.isNotEmpty)
                           ? Image.network(
                               widget.imageUrl!,
                               fit: BoxFit.fill,
@@ -64,8 +66,8 @@ class _MealImageContainerState extends State<MealImageContainer> {
                           : null,
                 ),
                 Padding(
-                  padding: EdgeInsets.only(
-                      top: SizeConfig.getProperVerticalSpace(12)),
+                  padding:
+                      EdgeInsets.only(top: SizeConfig.getProperVerticalSpace(12)),
                   child: Center(
                     child: IconButton(
                       onPressed: () async {
@@ -80,10 +82,28 @@ class _MealImageContainerState extends State<MealImageContainer> {
                     ),
                   ),
                 ),
+                if (storageProvider.mealImageIsPicked ||
+                    (!storageProvider.mealImageIsDeleted &&
+                        widget.imageUrl != null &&
+                        widget.imageUrl!.isNotEmpty))
+                  Positioned(
+                    top: 10,
+                    right: 10,
+                    child: IconButton(
+                      onPressed: () {
+                        storageProvider.deleteMealImage();
+                        if (mounted) setState(() {});
+                      },
+                      icon: const Icon(
+                        Icons.delete,
+                        color: Colors.red,
+                        size: 30,
+                      ),
+                    ),
+                  ),
                 CustomBackButton(
                   onPressed: widget.backButtonOnPressed ?? () => Get.back(),
                 ),
-
               ],
             )
           : Stack(
